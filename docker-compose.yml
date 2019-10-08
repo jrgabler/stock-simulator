@@ -1,0 +1,19 @@
+version: '3.3'
+
+services:
+    api:
+        image: stocksimulator-api:1.0
+        build: ./api
+        ports:
+            - '5000:5000'
+
+    database:
+        image: postgres:11
+        build: ./data
+        ports:
+            - '5432:5432'
+        volumes:
+            - dbdata:/var/lib/postgresql/data
+
+volumes:
+    dbdata:
