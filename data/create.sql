@@ -1,20 +1,15 @@
-DROP DATABASE IF EXISTS StockSimulator
-
-CREATE DATABASE StockSimulator
-CONNECTION LIMIT = MAX_CONCURRENT_CONNECTIONS
-
-CREATE TABLE User(
+CREATE TABLE IF NOT EXISTS myschema.User(
     id INT PRIMARY,
     username VARCHAR(15) NOT NULL UNIQUE,
 )
 
-CREATE TABLE LoginData(
+CREATE TABLE IF NOT EXISTS myschema.LoginData(
     id INT PRIMARY,
     user_id INT NOT NULL REFERENCES User(id),
     password VARCHAR(20) NOT NULL /* TODO - this will require cryptographic functions on the application level */
 )
 
-CREATE TABLE Stock(
+CREATE TABLE IF NOT EXISTS myschema.Stock(
     id INT PRIMARY,
     open NUMERIC,
     close NUMERIC,
@@ -24,19 +19,19 @@ CREATE TABLE Stock(
     market_cap REAL,
     peratio NUMERIC,
     dividend_yield NUMERIC,
-    type VARCHAR(10),
+    asset_type VARCHAR(10),
     last NUMERIC NOT NULL,
     symbol VARCHAR(8) NOT NULL,
     prev_close NUMERIC
 )
 
-CREATE TABLE WatchList(
+CREATE TABLE IF NOT EXISTS myschema.WatchList(
     id INT PRIMARY,
     stock_id INT NOT NULL REFERENCES Stock(id),
     user_id INT NOT NULL REFERENCES User(id)
 )
 
-CREATE TABLE SoldAssetsList(
+CREATE TABLE IF NOT EXISTS myschema.SoldAssetsList(
     id INT PRIMARY,
     stock_id INT NOT NULL REFERENCES Stock(id),
     user_id INT NOT NULL REFERENCES User(id),
@@ -48,7 +43,7 @@ CREATE TABLE SoldAssetsList(
     position NUMERIC NOT NULL,
 )
 
-CREATE TABLE OwnedAssetsList(
+CREATE TABLE IF NOT EXISTS myschema.OwnedAssetsList(
     id INT PRIMARY,
     stock_id INT NOT NULL REFERENCES Stock(id),
     user_id INT NOT NULL REFERENCES USER(id),
