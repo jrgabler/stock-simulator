@@ -1,16 +1,19 @@
-CREATE TABLE IF NOT EXISTS myschema.User(
-    id INT PRIMARY,
-    username VARCHAR(15) NOT NULL UNIQUE,
-)
+CREATE DATABASE StockSimulator;
+USE StockSimulator;
 
-CREATE TABLE IF NOT EXISTS myschema.LoginData(
-    id INT PRIMARY,
-    user_id INT NOT NULL REFERENCES User(id),
-    password VARCHAR(20) NOT NULL /* TODO - this will require cryptographic functions on the application level */
-)
+CREATE TABLE IF NOT EXISTS UserTable(
+    id INT PRIMARY KEY,
+    username VARCHAR(15) NOT NULL UNIQUE
+);
 
-CREATE TABLE IF NOT EXISTS myschema.Stock(
-    id INT PRIMARY,
+CREATE TABLE IF NOT EXISTS LoginData(
+    id INT PRIMARY KEY,
+    user_id INT NOT NULL REFERENCES UserTable(id),
+    password VARCHAR(20) NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS Stock(
+    id INT PRIMARY KEY,
     open NUMERIC,
     close NUMERIC,
     high NUMERIC,
@@ -23,35 +26,35 @@ CREATE TABLE IF NOT EXISTS myschema.Stock(
     last NUMERIC NOT NULL,
     symbol VARCHAR(8) NOT NULL,
     prev_close NUMERIC
-)
+);
 
-CREATE TABLE IF NOT EXISTS myschema.WatchList(
-    id INT PRIMARY,
+CREATE TABLE IF NOT EXISTS WatchList(
+    id INT PRIMARY KEY,
     stock_id INT NOT NULL REFERENCES Stock(id),
-    user_id INT NOT NULL REFERENCES User(id)
-)
+    user_id INT NOT NULL REFERENCES UserTable(id)
+);
 
-CREATE TABLE IF NOT EXISTS myschema.SoldAssetsList(
-    id INT PRIMARY,
+CREATE TABLE IF NOT EXISTS SoldAssetsList(
+    id INT PRIMARY KEY,
     stock_id INT NOT NULL REFERENCES Stock(id),
-    user_id INT NOT NULL REFERENCES User(id),
+    user_id INT NOT NULL REFERENCES UserTable(id),
     quantity INT,
     date_purchased TIMESTAMP,
     date_sold TIMESTAMP,
     purchase_price NUMERIC NOT NULL,
     sale_price NUMERIC NOT NULL,
-    position NUMERIC NOT NULL,
-)
+    position NUMERIC NOT NULL
+);
 
-CREATE TABLE IF NOT EXISTS myschema.OwnedAssetsList(
-    id INT PRIMARY,
+CREATE TABLE IF NOT EXISTS OwnedAssetsList(
+    id INT PRIMARY KEY,
     stock_id INT NOT NULL REFERENCES Stock(id),
-    user_id INT NOT NULL REFERENCES USER(id),
+    user_id INT NOT NULL REFERENCES UserTable(id),
     quantity INT,
     purchase_price NUMERIC NOT NULL,
     date_purchased TIMESTAMP NOT NULL,
-    total_equity LONG NOT NULL,
-)
+    total_equity NUMERIC NOT NULL
+);
 
 CREATE OR REPLACE FUNCTION computed_position() 
     RETURNS trigger AS $BODY$
