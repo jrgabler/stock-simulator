@@ -1,5 +1,5 @@
 
-# Stock Stimulator Proposal
+# Stock Simulator Proposal
 ## Summary
 A simulated stock trading application implementing the multiple realtime and historical stock APIs to execute simulated user trades versus the NYSE and NASDAQ in real time. Users are able to set a starting amount of virtual money and execute trades as if it was the actual Stock Market.
 
