@@ -3,20 +3,8 @@ version: '3.3'
 services:
     api:
         image: stocksimulator-api:1.0
+        container_name: stocksimulator-api
         build: ./api
         ports:
             - '5000:5000'
 
-    database:
-        image: postgres:11
-        restart: always
-        environment:
-            POSTGERS_USER: user
-            POSTGRES_PASSWORD: password
-        ports:
-            - '5432:5432'
-        volumes:
-            - dbdata:/var/lib/postgresql/data
-
-volumes:
-    dbdata:
