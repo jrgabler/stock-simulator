@@ -1,21 +1,25 @@
-CREATE DATABASE StockSimulator;
-USE StockSimulator;
+DROP DATABASE IF EXISTS stocksimulator;
+CREATE DATABASE stocksimulator;
+\connect stocksimulator;
 
-CREATE TABLE IF NOT EXISTS UserTable(
+DROP TABLE IF EXISTS UserTable;
+CREATE TABLE UserTable(
     id INT PRIMARY KEY,
     username VARCHAR(15) NOT NULL UNIQUE
 );
 
-CREATE TABLE IF NOT EXISTS LoginData(
+DROP TABLE IF EXISTS LoginData;
+CREATE TABLE LoginData(
     id INT PRIMARY KEY,
     user_id INT NOT NULL REFERENCES UserTable(id),
     password VARCHAR(20) NOT NULL
 );
 
-CREATE TABLE IF NOT EXISTS Stock(
+DROP TABLE IF EXISTS Stock;
+CREATE TABLE Stock(
     id INT PRIMARY KEY,
-    open NUMERIC,
-    close NUMERIC,
+    open_price NUMERIC,
+    close_price NUMERIC,
     high NUMERIC,
     low NUMERIC,
     average_volume REAL,
@@ -28,13 +32,15 @@ CREATE TABLE IF NOT EXISTS Stock(
     prev_close NUMERIC
 );
 
-CREATE TABLE IF NOT EXISTS WatchList(
+DROP TABLE IF EXISTS WatchList;
+CREATE TABLE WatchList(
     id INT PRIMARY KEY,
     stock_id INT NOT NULL REFERENCES Stock(id),
     user_id INT NOT NULL REFERENCES UserTable(id)
 );
 
-CREATE TABLE IF NOT EXISTS SoldAssetsList(
+DROP TABLE IF EXISTS SoldAssetsList;
+CREATE TABLE SoldAssetsList(
     id INT PRIMARY KEY,
     stock_id INT NOT NULL REFERENCES Stock(id),
     user_id INT NOT NULL REFERENCES UserTable(id),
@@ -46,7 +52,8 @@ CREATE TABLE IF NOT EXISTS SoldAssetsList(
     position NUMERIC NOT NULL
 );
 
-CREATE TABLE IF NOT EXISTS OwnedAssetsList(
+DROP TABLE IF EXISTS OwnedAssetsList;
+CREATE TABLE OwnedAssetsList(
     id INT PRIMARY KEY,
     stock_id INT NOT NULL REFERENCES Stock(id),
     user_id INT NOT NULL REFERENCES UserTable(id),
