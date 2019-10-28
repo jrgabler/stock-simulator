@@ -4,8 +4,9 @@ from src.models.Stock import Stock
 
 class MarketService:
 
-    API_TOKEN = ""
-    API_URL = "https://sandbox.tradier.com/v1/"
+    # GLOBALS
+    API_TOKEN = ""  # NEVER EVER COMMIT THIS
+    API_URL = "https://sandbox.tradier.com/v1/"     # If you change the API you have to update the objects dumped to
 
     HEADERS = {"Content-Type": "application/json", "Authorization": "Bearer {0}".format(API_TOKEN)}
 

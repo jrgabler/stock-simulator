@@ -1,3 +1,4 @@
+# This object has to match the API being used in order to make json.dumps() work
 class Stock:
     def __init__(self, open: float, close: float, high: float, low: float, average_volume: float, dividend_yield: float, type: string, last: float, symbol: string, prevclose: float):
         self.open = open
