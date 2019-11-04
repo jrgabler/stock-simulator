@@ -4,21 +4,21 @@ CREATE DATABASE stocksimulator;
 
 DROP TABLE IF EXISTS UserTable;
 CREATE TABLE UserTable(
-    id INT PRIMARY KEY,
+    id SERIAL PRIMARY KEY,
     username VARCHAR(15) NOT NULL UNIQUE,
     archived BOOLEAN NOT NULL DEFAULT FALSE
 );
 
 DROP TABLE IF EXISTS LoginData;
 CREATE TABLE LoginData(
-    id INT PRIMARY KEY,
+    id SERIAL PRIMARY KEY,
     user_id INT NOT NULL REFERENCES UserTable(id),
     password VARCHAR(20) NOT NULL
 );
 
 DROP TABLE IF EXISTS Stock;
 CREATE TABLE Stock(
-    id INT PRIMARY KEY,
+    id SERIAL PRIMARY KEY,
     open_price NUMERIC,
     close_price NUMERIC,
     high NUMERIC,
@@ -35,14 +35,14 @@ CREATE TABLE Stock(
 
 DROP TABLE IF EXISTS WatchList;
 CREATE TABLE WatchList(
-    id INT PRIMARY KEY,
+    id SERIAL PRIMARY KEY,
     stock_id INT NOT NULL REFERENCES Stock(id),
     user_id INT NOT NULL REFERENCES UserTable(id)
 );
 
 DROP TABLE IF EXISTS SoldAssetsList;
 CREATE TABLE SoldAssetsList(
-    id INT PRIMARY KEY,
+    id SERIAL PRIMARY KEY,
     stock_id INT NOT NULL REFERENCES Stock(id),
     user_id INT NOT NULL REFERENCES UserTable(id),
     quantity INT,
@@ -55,7 +55,7 @@ CREATE TABLE SoldAssetsList(
 
 DROP TABLE IF EXISTS OwnedAssetsList;
 CREATE TABLE OwnedAssetsList(
-    id INT PRIMARY KEY,
+    id SERIAL PRIMARY KEY,
     stock_id INT NOT NULL REFERENCES Stock(id),
     user_id INT NOT NULL REFERENCES UserTable(id),
     quantity INT,
