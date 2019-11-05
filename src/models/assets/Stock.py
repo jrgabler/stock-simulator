@@ -1,4 +1,4 @@
-from src.models.Asset import Asset
+from src.models.assets.Asset import Asset
 
 # This object has to match the API being used in order to make json.dumps() work
 class Stock(Asset):
