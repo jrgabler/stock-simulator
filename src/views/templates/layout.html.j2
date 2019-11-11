@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    {% block head %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles/main.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles/header.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles/footer.css') }}">
+    <title>{% block title %}{% endblock %} - Stock Simulator</title>
+    {% endblock %}
+  </head>
+  <body>
+    {% include "header-footer/header.html.j2" %}
+
+    <div id="content">
+      {% block content %}{% endblock %}
+    </div>
+
+    {% include "header-footer/footer.html.j2" %}
+  </body>
+</html>

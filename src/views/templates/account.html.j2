@@ -1,0 +1,12 @@
+{% extends "layout.html.j2" %}
+
+{% block title %}My Account{% endblock %}
+
+{% block head %}
+  {{ super() }}
+  <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/account.css') }}">
+{% endblock %}
+
+{% block content %}
+  <h1> My Account</h2>
+{% endblock %}
