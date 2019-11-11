@@ -1,0 +1,17 @@
+footer {
+  background-color: #2799fa;
+  color: white;
+  position: fixed;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  min-height: 30px;
+  overflow: hidden;
+  padding: 10px 20px;
+}
+
+.copyright {
+  float: right;
+  font-size: 75%;
+  padding-right: 40px;
+}

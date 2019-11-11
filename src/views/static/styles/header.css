@@ -1,0 +1,28 @@
+header {
+  background-color: #2799fa;
+  color: white;
+  min-height: 30px;
+  padding: 20px 15px 10px;
+  overflow: hidden;
+}
+
+.menu-item {
+  float: right;
+}
+
+header ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+}
+
+header ul li a {
+  color: white;
+  display: block;
+  text-decoration: none;
+}
+
+.logo {
+  text-align: center;
+  clear: none;
+}
