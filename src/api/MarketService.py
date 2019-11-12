@@ -1,6 +1,6 @@
 import json
 import requests
-from src.models.Stock import Stock
+from src.models.assets.Stock import Stock
 
 class MarketService:
 
