@@ -1,2 +1,2 @@
 docker-compose up -d --build
-mysql -u user -p < db.sql
+mysql -u user -p < "./../data/create.sql"
