@@ -1,2 +1,2 @@
 docker-compose up -d --build
-psql postgres -c "\i ./data/create.sql"
+mysql -u user -p < db.sql
