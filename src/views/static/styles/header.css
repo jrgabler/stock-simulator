@@ -1,5 +1,5 @@
 header {
-  background-color: #2799fa;
+  background-color: #2699FB;
   color: white;
   min-height: 30px;
   padding: 20px 15px 10px;
@@ -8,6 +8,8 @@ header {
 
 .menu-item {
   float: right;
+  margin-top: -18px;
+  font-size: 0.875em;
 }
 
 header ul {
@@ -23,6 +25,14 @@ header ul li a {
 }
 
 .logo {
+  margin: 0 auto;
+  width: 70%;
   text-align: center;
-  clear: none;
+  font-size: 1.2em; /* 24pt */
+}
+
+@media only screen and (max-width: 480px) {
+  .menu-item {
+    display: none;
+  }
 }

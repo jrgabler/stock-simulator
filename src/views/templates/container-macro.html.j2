@@ -1,0 +1,15 @@
+{% macro container(content, title='', subtitle='') -%}
+    <div class="container">
+
+      {% if title %}
+        <h3 class="title">{{ title }}</h3>
+      {% endif %}
+
+      {% if subtitle %}
+        <p class="subtitle">{{ subtitle }}</p>
+      {% endif %}
+      <div class="content">
+          {{ content }}
+      </div>
+    </div>
+{%- endmacro %}

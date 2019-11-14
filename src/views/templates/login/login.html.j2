@@ -12,7 +12,7 @@
   <form method="post">
     <div class="error">
     </div>
-    <div class="container">
+    <div class="form-container">
       <h2>Login</h2>
 
        <label for="username"><b>Username</b></label>
@@ -21,16 +21,16 @@
        <label for="pwd"><b>Password</b></label>
        <input type="password" placeholder="Enter Password" name="pwd" required>
 
-       <button type="submit">Login</button>
+       <button type="submit" class="btn btn--full-width">Login</button>
        <label>
          <input type="checkbox" name="remember"> Remember me
        </label>
-       <span class="pwd">Forgot <a href="/reset-password">password</a>?</span>
+       <div class="pwd">Forgot <a href="/reset-password">password</a>?</div>
     </div>
 
-    <div class="container container-alt">
-      <button type="button" class="cancelbtn">Cancel</button>
-      <span class="pwd">Don't have an account? <a href="/register">Register here</a>.</span>
+    <div class="form-container form-container-alt">
+      <button type="button" class="btn--outline cancelbtn">Cancel</button>
+      <div class="pwd">Don't have an account? <a href="/register">Register here</a>.</div>
     </div>
   </form>
 
