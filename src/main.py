@@ -1,12 +1,6 @@
 #!/usr/bin/env python
-<<<<<<< HEAD
 import os
 from flask import Flask, render_template, redirect, url_for
-=======
-
-import os
-from flask import Flask, render_template
->>>>>>> master
 from flask import request
 
 # refactor into config.py file
