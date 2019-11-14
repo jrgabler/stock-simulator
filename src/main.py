@@ -43,5 +43,14 @@ def reset_password():
 def account():
     return render_template('account.html.j2')
 
+@app.route("/stock/purchase")
+def stock_purchase():
+    return render_template('stocks/purchase.html.j2')
+
+@app.route("/stock/sell")
+def stock_sell():
+    return render_template('stocks/sell.html.j2')
+
+
 if __name__ == "__main__":
     app.run(debug=True)

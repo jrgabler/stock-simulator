@@ -1,18 +1,46 @@
-.container {
-  padding: 25px;
-/* }
+.outer-container {
+  display: flex;
+  justify-content: space-evenly;
+}
 
-.container--outline { */
+.container-item {
+  padding: 40px 25px;
+  margin: 10px;
+}
+
+.container-item--outline {
   border: 2px solid #BCE0FD;
   border-radius: 4px;
+}
+
+.container-item--half {
+  width: 50%;
+}
+
+.container-item--third {
+  width: 33%;
+}
+
+.container-item--full {
+  width: 100%;
 }
 
 .title {
   font-size: 2em;
   margin-bottom: 20px;
   border-bottom: 0.5px solid #ccc;
+  padding-bottom: 10px;
 }
 
 .field {
   margin: 10px 0;
+}
+
+.field span.label {
+  font-weight: bold;
+  color: black;
+}
+
+.field {
+  color: #484848;
 }

@@ -1,0 +1,17 @@
+/* Add padding to form-containers */
+.form-container {
+ padding: 16px;
+}
+
+.form-container input {
+  margin-bottom: 25px;
+}
+
+.form-container-alt {
+  background-color: #BCE0FD;
+}
+
+.form-container h2,
+.form-container p {
+  margin: 20px 0;
+}

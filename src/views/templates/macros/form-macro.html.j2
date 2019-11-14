@@ -1,0 +1,23 @@
+
+{% macro form(formContent, buttonContent='', title='', subtitle='', className='') -%}
+  <form method="post">
+    <div class="error">
+    </div>
+    <div class="{{ 'form-container ' + className if className else 'form-container' }}">
+      {% if title %}
+        <h3 class="title">{{ title }}</h3>
+      {% endif %}
+
+      {% if subtitle %}
+        <p class="subtitle">{{ subtitle }}</p>
+      {% endif %}
+
+       {{ formContent }}
+    </div>
+
+    {% if buttonContent %}
+        {{ buttonContent }}
+    {% endif %}
+  </form>
+
+{%- endmacro %}
