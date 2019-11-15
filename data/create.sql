@@ -85,15 +85,6 @@ BEGIN
 	from SoldAssetsList;
 END//
 DELIMITER ;
-/*    
-CREATE OR REPLACE FUNCTION computed_position() 
-    RETURNS trigger AS $BODY$
-    BEGIN
-        NEW.position = NEW.sale_price - NEW.purchase_price;
-        RETURN NEW;
-    END
-    $BODY$ LANGUAGE plpgsql;
-*/
 
 DROP TRIGGER IF EXISTS position_trigger;
 DELIMITER //
@@ -105,13 +96,6 @@ CREATE TRIGGER position_trigger
         CALL computed_position();
 	END;//
 DELIMITER ;
-/*
-CREATE TRIGGER position_trigger
-    BEFORE INSERT OR UPDATE
-    ON SoldAssetsList
-    FOR EACH ROW
-        EXECUTE PROCEDURE computed_position();
-*/
 
 DROP PROCEDURE IF EXISTS computed_equity;
 DELIMITER //
@@ -121,15 +105,6 @@ BEGIN
 	from OwnedAssetsList;
 END//
 DELIMITER ;
-/*
-CREATE OR REPLACE FUNCTION computed_equity()
-    RETURNS trigger AS $BODY$
-    BEGIN
-        NEW.total_equity = NEW.quantity * NEW.purchase_price;
-        RETURN NEW;
-    END
-    $BODY$ LANGUAGE plpgsql;
-*/
 
 DROP TRIGGER IF EXISTS equity_trigger;
 DELIMITER //
@@ -141,10 +116,3 @@ CREATE TRIGGER equity_trigger
         CALL computed_equity();
 	END;//
 DELIMITER ;
-/*
-CREATE TRIGGER equity_trigger
-    BEFORE INSERT OR UPDATE
-    ON OwnedAssetsList
-    FOR EACH ROW
-        EXECUTE PROCEDURE computed_equity();
-*/
