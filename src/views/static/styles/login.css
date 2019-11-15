@@ -1,0 +1,29 @@
+@import "form.css";
+
+.terms {
+  text-align: center;
+  margin: 10px 0;
+}
+
+.terms-link {
+  color: dodgerblue;
+}
+
+/* The "Forgot password" text */
+div.pwd {
+ float: right;
+ padding-top: 16px;
+}
+
+/* Change styles for span and cancel button on extra small screens */
+@media only screen and (max-width: 480px) {
+   div.pwd {
+     display: block;
+     float: none;
+     text-align: center;
+   }
+
+   .cancelbtn {
+     width: 100%;
+   }
+}

@@ -1,0 +1,28 @@
+{% extends "layout.html.j2" %}
+
+{% block title %}Purchase Stock{% endblock %}
+
+{% block head %}
+  {{ super() }}
+  <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/account.css') }}">
+{% endblock %}
+
+<!--  -->
+{% block content %}
+<form>
+  <div class="form-container">
+    <h2>Purchase Stock</h2>
+    <p>Fill out the form below to invest in stocks</p>
+
+    <label for="stock_id"><b>Enter Stock ID</b></label>
+    <input type="text" placeholder="Enter Stock ID" name="stock_id" required>
+
+    <label for="stock_num"><b>Select number of stocks to purchase</b></label>
+    <input type="number" placeholder="0" name="stock_num" required>
+
+    <div class="stock-price">Total Amount: $<span class="">0.00</span></div>
+
+    <button type="submit" class="btn btn--full-width">Submit</button>
+ </div>
+</form>
+{% endblock %}

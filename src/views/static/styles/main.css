@@ -1,0 +1,159 @@
+@import "reset.css";
+/***********************************/
+/***********************************/
+/**
+  * dark blue:  #2699FB
+  ******* selected dark blue: #007FEB
+  * blue:       #7FC4FD
+  * mid blue:   #BCE0FD
+  * light blue: #F1F9FF
+  * white:      white or #FFF
+  * light gray: #ccc
+  * dark gray:  #484848
+*/
+/***********************************/
+/***********************************/
+/**
+   * MOBILE         @media only screen and (max-width: 480px)
+   * TABLET         @media only screen and (min-width: 768px) and (max-width: 1024px)
+   * DESKTOP        @media (min-width: 1025px)
+*/
+/***********************************/
+/***********************************/
+#content {
+  margin: 30px 75px;
+}
+
+body {
+  background-color: #F1F9FF;
+}
+/***********************************/
+/***********************************/
+/** font styles */
+/***********************************/
+/***********************************/
+h1 {
+  font-size: 2em;  /* 32pt */
+}
+
+h2 {
+  font-size: 1.5em; /* 24pt */
+}
+
+.headline {
+  font-size: 3em; /* 48pt */
+  font-weight: bold;
+}
+
+.subhead {
+  font-size: 1.5em; /* 24pt */
+}
+
+.quote {
+  font-size: 1.375em /* 20pt */
+  font-style: italic;
+}
+
+.body-emphasis { /** 16pt */
+  font-weight: bold;
+}
+
+label,
+.small-body {
+  font-size: 0.875em; /* 14pt */
+}
+
+.eyebrow { /** 12pt **/
+  text-transform: uppercase;
+  font-size: 0.75em;
+}
+
+/***********************************/
+/***********************************/
+/* button styles */
+/***********************************/
+/***********************************/
+button {
+  font-size: 0.875em; /* 14pt */
+  border-radius: 4px;
+  padding: 8px 40px;
+  margin: 20px 0;
+}
+
+.btn--full-width {
+  width: 100%;
+}
+
+.btn {
+  border: none;
+  background-color: #2699FB;
+  color: #FFF;
+}
+
+.btn:hover,
+.btn:active {
+  background-color: #007FEB
+}
+
+.btn--outline {
+  border: 1px solid #2699FB;
+  color: #2699FB;
+  background-color: #FFF;
+}
+
+.btn-clear {
+  background-color: transparent;
+  color: #2699FB;
+  border: none;
+}
+
+/***********************************/
+/***********************************/
+/** input styles */
+/* Full-width inputs */
+/***********************************/
+/***********************************/
+input[type=text],
+input[type=password] {
+   width: 100%;
+   padding: 12px 20px;
+   margin: 8px 0;
+   display: inline-block;
+   box-sizing: border-box;
+   border: 0;
+   outline: 0;
+   background: transparent;
+   border-bottom: 1px solid #2699FB;
+}
+
+input[type=text]:focus,
+input[type=password]:focus {
+  box-shadow: 0 0 5px rgba(81, 203, 238, 1);
+  border: 1px solid rgba(81, 203, 238, 1);
+}
+
+input[type="checkbox"] {
+
+}
+
+/***********************************/
+/***********************************/
+/** TABLET styles */
+/***********************************/
+/***********************************/
+ @media only screen and (max-width: 1024px) {
+   #content {
+     margin: 30px 40px;
+   }
+ }
+
+ /***********************************/
+ /***********************************/
+ /** MOBILE styles */
+ /***********************************/
+ /***********************************/
+ @media only screen and (max-width: 480px) {
+   #content {
+     margin: 30px 20px;
+   }
+ }

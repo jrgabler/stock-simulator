@@ -1,0 +1,45 @@
+{% extends "layout.html.j2" %}
+
+{% block title %}Register{% endblock %}
+
+{% block head %}
+  {{ super() }}
+  <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/login.css') }}">
+{% endblock %}
+
+{% block content %}
+
+  <form>
+   <div class="form-container">
+     <h2>Register</h2>
+     <p>Please fill in this form to create an account.</p>
+
+     <label for="fname"><b>First Name</b></label>
+     <input type="text" placeholder="Enter First Name" name="fname" required>
+
+     <label for="lname"><b>First Name</b></label>
+     <input type="text" placeholder="Enter Last Name" name="lname" required>
+
+     <label for="email"><b>Email</b></label>
+     <input type="text" placeholder="Enter Email" name="email" required>
+
+     <label for="pwd"><b>Password</b></label>
+     <input type="password" placeholder="Enter Password" name="pwd" required>
+
+     <label for="pwd-repeat"><b>Repeat Password</b></label>
+     <input type="password" placeholder="Repeat Password" name="pwd-repeat" required>
+
+     <!-- Do we care? -->
+     <p class="terms">By creating an account you agree to our <a href="#" class="terms-link">Terms & Privacy</a>.</p>
+
+     <div class="clearfix">
+       <button type="submit" class="btn btn--full-width">Sign Up</button>
+     </div>
+   </div>
+   <div class="form-container form-container-alt">
+       <div class="pwd">Already have an account? <a href="/login">Login here.</a></div>
+       <button type="button" class="btn--outline cancelbtn">Cancel</button>
+   </div>
+  </form>
+
+{% endblock %}

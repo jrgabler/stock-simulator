@@ -1,0 +1,32 @@
+{% extends "layout.html.j2" %}
+{% import 'macros/container-macro.html.j2' as macro %}
+
+{% block title %}My Account{% endblock %}
+
+{% block head %}
+  {{ super() }}
+  <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/container-macro.css') }}">
+  <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/account.css') }}">
+{% endblock %}
+
+<!--  -->
+{% macro userInfo(username, firstname, lastname, dateJoined) -%}
+  <p class="field"><span class="label">Username: </span>{{ username }}</p>
+  <p class="field"><span class="label">Name: </span>{{ firstname }} {{ lastname }}</p>
+  <p class="field"><span class="label">Date Joined: </span>{{ dateJoined }}</p>
+{%- endmacro %}
+
+<!--  -->
+{% block content %}
+  <div class="outer-container">
+    {{ macro.container(
+        userInfo('test123', 'John', 'Doe', 'Jan 20, 2019'),
+        'Account Info', '', 'container-item--outline container-item--half')
+    }}
+    <!-- refactor to use actual info -->
+    {{ macro.container(
+        userInfo('test123', 'John', 'Doe', 'Jan 20, 2019'),
+        'Account Info', '', 'container-item--outline container-item--half')
+    }}
+  </div>
+{% endblock %}

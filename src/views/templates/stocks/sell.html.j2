@@ -1,0 +1,39 @@
+{% extends "layout.html.j2" %}
+
+{% block title %}Sell Stock{% endblock %}
+
+{% block head %}
+  {{ super() }}
+  <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/form.css') }}">
+{% endblock %}
+
+<!--  -->
+{% block content %}
+<form>
+  <div class="form-container">
+    <h2>Sell Stock</h2>
+    <p>Please select the stocks you'd like to sell</p>
+
+    <div class="listbox-container">
+      <ul role="listbox" tabindex="0" aria-label="stock list">
+            <li tabindex="-1" role="option" aria-checked="false">
+                <input tabindex="-1" id="AMZN" class="o-checkbox" type="checkbox">
+                <label for="AMZN">AMZN: Amazon</label>
+            </li>
+            <li tabindex="-1" role="option" aria-checked="false">
+                <input tabindex="-1" id="NFLX" class="o-checkbox" type="checkbox">
+                <label for="NFLX">NFLX: Netflix</label>
+            </li>
+            <li tabindex="-1" role="option" aria-checked="false">
+                <input tabindex="-1" id="B" class="o-checkbox" type="checkbox">
+                <label for="AMZN">B: Barnes Group, Inc</label>
+            </li>
+        </ul>
+    </div>
+
+    <!-- <div class="stock-price">Total Amount: $<span class="">0.00</span></div> -->
+
+    <button type="submit" class="btn btn--full-width">Submit</button>
+ </div>
+</form>
+{% endblock %}

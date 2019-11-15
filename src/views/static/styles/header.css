@@ -1,0 +1,38 @@
+header {
+  background-color: #2699FB;
+  color: white;
+  min-height: 30px;
+  padding: 20px 15px 10px;
+  overflow: hidden;
+}
+
+.menu-item {
+  float: right;
+  margin-top: -18px;
+  font-size: 0.875em;
+}
+
+header ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+}
+
+header ul li a {
+  color: white;
+  display: block;
+  text-decoration: none;
+}
+
+.logo {
+  margin: 0 auto;
+  width: 70%;
+  text-align: center;
+  font-size: 1.2em; /* 24pt */
+}
+
+@media only screen and (max-width: 480px) {
+  .menu-item {
+    display: none;
+  }
+}
