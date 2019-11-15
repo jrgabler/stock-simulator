@@ -1,0 +1,10 @@
+version: '3.3'
+
+services:
+    app:
+        image: stocksimulator-app:1.0
+        container_name: stocksimulator-app
+        build: ./src
+        ports:
+            - '5000:5000'
+

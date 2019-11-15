@@ -1,24 +1,27 @@
 DROP DATABASE IF EXISTS stocksimulator;
 CREATE DATABASE stocksimulator;
-\connect stocksimulator;
+use stocksimulator;
 
 DROP TABLE IF EXISTS UserTable;
 CREATE TABLE UserTable(
-    id SERIAL PRIMARY KEY,
+    id int NOT NULL AUTO_INCREMENT,
     username VARCHAR(15) NOT NULL UNIQUE,
-    archived BOOLEAN NOT NULL DEFAULT FALSE
+    archived BOOLEAN NOT NULL DEFAULT FALSE,
+    PRIMARY KEY(id)
 );
 
 DROP TABLE IF EXISTS LoginData;
 CREATE TABLE LoginData(
-    id SERIAL PRIMARY KEY,
-    user_id INT NOT NULL REFERENCES UserTable(id),
-    password VARCHAR(20) NOT NULL
+    id int NOT NULL AUTO_INCREMENT,
+    user_id INT NOT NULL,
+    password VARCHAR(20) NOT NULL,
+    PRIMARY KEY(id),
+    FOREIGN  KEY (user_id) REFERENCES UserTable(id)
 );
 
 DROP TABLE IF EXISTS Stock;
 CREATE TABLE Stock(
-    id SERIAL PRIMARY KEY,
+    id int NOT NULL AUTO_INCREMENT,
     open_price NUMERIC,
     close_price NUMERIC,
     high NUMERIC,
@@ -30,64 +33,86 @@ CREATE TABLE Stock(
     asset_type VARCHAR(10),
     last NUMERIC NOT NULL,
     symbol VARCHAR(8) NOT NULL,
-    prev_close NUMERIC
+    prev_close NUMERIC,
+    PRIMARY KEY(id)
 );
 
 DROP TABLE IF EXISTS WatchList;
 CREATE TABLE WatchList(
-    id SERIAL PRIMARY KEY,
-    stock_id INT NOT NULL REFERENCES Stock(id),
-    user_id INT NOT NULL REFERENCES UserTable(id)
+    id int NOT NULL AUTO_INCREMENT,
+    stock_id INT NOT NULL,
+    user_id INT NOT NULL,
+    PRIMARY KEY(id),
+    FOREIGN  KEY (stock_id) REFERENCES Stock(id),
+	FOREIGN  KEY (user_id) REFERENCES UserTable(id)
 );
 
 DROP TABLE IF EXISTS SoldAssetsList;
 CREATE TABLE SoldAssetsList(
-    id SERIAL PRIMARY KEY,
-    stock_id INT NOT NULL REFERENCES Stock(id),
-    user_id INT NOT NULL REFERENCES UserTable(id),
+    id int NOT NULL AUTO_INCREMENT,
+    stock_id INT NOT NULL,
+    user_id INT NOT NULL,
     quantity INT,
     date_purchased TIMESTAMP,
     date_sold TIMESTAMP,
     purchase_price NUMERIC NOT NULL,
     sale_price NUMERIC NOT NULL,
-    position NUMERIC NOT NULL
+    position NUMERIC NOT NULL,
+    PRIMARY KEY(id),
+    FOREIGN  KEY (stock_id) REFERENCES Stock(id),
+	FOREIGN  KEY (user_id) REFERENCES UserTable(id)
 );
 
 DROP TABLE IF EXISTS OwnedAssetsList;
 CREATE TABLE OwnedAssetsList(
-    id SERIAL PRIMARY KEY,
-    stock_id INT NOT NULL REFERENCES Stock(id),
-    user_id INT NOT NULL REFERENCES UserTable(id),
+    id int NOT NULL AUTO_INCREMENT,
+    stock_id INT NOT NULL,
+    user_id INT NOT NULL,
     quantity INT,
     purchase_price NUMERIC NOT NULL,
     date_purchased TIMESTAMP NOT NULL,
-    total_equity NUMERIC NOT NULL
+    total_equity NUMERIC NOT NULL,
+    PRIMARY KEY(id),
+    FOREIGN  KEY (stock_id) REFERENCES Stock(id),
+	FOREIGN  KEY (user_id) REFERENCES UserTable(id)
 );
 
-CREATE OR REPLACE FUNCTION computed_position() 
-    RETURNS trigger AS $BODY$
-    BEGIN
-        NEW.position = NEW.sale_price - NEW.purchase_price;
-        RETURN NEW;
-    END
-    $BODY$ LANGUAGE plpgsql;
+DROP PROCEDURE IF EXISTS computed_position;
+DELIMITER //
+CREATE PROCEDURE computed_position()
+BEGIN
+	SELECT (NEW.sale_price - NEW.purchase_price) as compPrice
+	from SoldAssetsList;
+END//
+DELIMITER ;
 
+DROP TRIGGER IF EXISTS position_trigger;
+DELIMITER //
 CREATE TRIGGER position_trigger
-    BEFORE INSERT OR UPDATE
+    BEFORE UPDATE 
     ON SoldAssetsList
     FOR EACH ROW
-        EXECUTE PROCEDURE computed_position();
-
-CREATE OR REPLACE FUNCTION computed_equity()
-    RETURNS trigger AS $BODY$
     BEGIN
-        NEW.total_equity = NEW.quantity * NEW.purchase_price;
-        RETURN NEW;
-    END
-    $BODY$ LANGUAGE plpgsql;
+        CALL computed_position();
+	END;//
+DELIMITER ;
 
+DROP PROCEDURE IF EXISTS computed_equity;
+DELIMITER //
+CREATE PROCEDURE computed_equity()
+BEGIN
+	SELECT (quantity * purchase_price) as total_equity
+	from OwnedAssetsList;
+END//
+DELIMITER ;
+
+DROP TRIGGER IF EXISTS equity_trigger;
+DELIMITER //
 CREATE TRIGGER equity_trigger
-    BEFORE INSERT OR UPDATE
+    BEFORE UPDATE 
     ON OwnedAssetsList
     FOR EACH ROW
-        EXECUTE PROCEDURE computed_equity();
+    BEGIN
+        CALL computed_equity();
+	END;//
+DELIMITER ;
