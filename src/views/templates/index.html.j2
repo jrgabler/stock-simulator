@@ -3,10 +3,10 @@
 {% block title %}Home{% endblock %}
 
 {% block head %}
+  <link rel="stylesheet" href="{{ url_for('static', filename='styles/home.css') }}">
   {{ super() }}
 {% endblock %}
 
 {% block content %}
-  <h1> My First Try Using Flask </h1>
-  <p> Flask is Fun </p>
+  {% include "home/home-content.html.j2" %}
 {% endblock %}

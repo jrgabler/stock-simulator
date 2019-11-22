@@ -2,15 +2,26 @@
 /***********************************/
 /***********************************/
 /**
+  *****************
+  * primary:    #2699FB
+  * secondary:  #7FC4FD
+  * tertiary:   #1F3B73
+  *****************
+  * night blue: #1f3b73
   * dark blue:  #2699FB
-  ******* selected dark blue: #007FEB
+  * dark blue:  #007FEB
   * blue:       #7FC4FD
   * mid blue:   #BCE0FD
   * light blue: #F1F9FF
   * white:      white or #FFF
   * light gray: #ccc
+  * grey:       #edf0f1
   * dark gray:  #484848
 */
+*{
+  box-sizing: border-box;
+}
+
 /***********************************/
 /***********************************/
 /**
@@ -38,6 +49,8 @@ h1 {
 
 h2 {
   font-size: 1.5em; /* 24pt */
+  color: #7FC4FD;
+  font-weight: 400;
 }
 
 .headline {
@@ -134,6 +147,38 @@ input[type=password]:focus {
 
 input[type="checkbox"] {
 
+}
+
+/***********************************/
+/***********************************/
+/* table styles */
+/***********************************/
+/***********************************/
+
+table {
+  background-color: #FFF;
+  display: block;
+  margin: 20px;
+  padding: 10px;
+  border-radius: 5px;
+  height: 70%;
+  width: 410px; 
+}
+
+table thead th {
+  font-weight: 300;
+  font-size: 0.8em;
+  color: #969696;
+  border-bottom: solid 1px #000;
+}
+
+table tbody tr:hover {
+  cursor: pointer;
+  background-color: #EDF0F1;
+}
+
+table tr td {
+  font-size: 0.8em;
 }
 
 /***********************************/
