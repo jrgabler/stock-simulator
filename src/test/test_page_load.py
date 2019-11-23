@@ -62,7 +62,7 @@ class FlaskTestCase(unittest.TestCase):
     def test_sell_page_loads(self):
         tester = app.test_client(self)
         response = tester.get('stocks/sell.html.j2')
-        self.assertIn(b'Purchase Stock', response.data)
+        self.assertIn(b'Sell Stock', response.data)
 
 
 if __name__ == '__main__':
