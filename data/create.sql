@@ -15,6 +15,7 @@ CREATE TABLE LoginData(
     id int NOT NULL AUTO_INCREMENT,
     user_id INT NOT NULL,
     password VARCHAR(20) NOT NULL,
+    salt VARCHAR(64) NOT NULL,
     PRIMARY KEY(id),
     FOREIGN  KEY (user_id) REFERENCES UserTable(id)
 );
