@@ -5,7 +5,7 @@ from Resources import MarketProvider
 class StockController:
 
     # TODO - turn into env variable
-    CONN_STRING = "host='localhost' port=3306 user='user' password=''"
+    CONN_STRING = "host='localhost' port=3306 user='root' password=''"
 
     # Inserts a Stock object into the Stock table and returns the generated ID 
     # on success, -1 on failure

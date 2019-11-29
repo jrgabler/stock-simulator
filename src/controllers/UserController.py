@@ -5,7 +5,7 @@ from Models import User
 class UserController:
 
     # TODO - turn into env variable
-    CONN_STRING = "host='localhost' port=3306 user='user' password=''"
+    CONN_STRING = "host='localhost' port=3306 user='root' password=''"
 
     def findByUsername(self, username: str):
         connection = None
