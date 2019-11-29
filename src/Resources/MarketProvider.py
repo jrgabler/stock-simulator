@@ -1,9 +1,9 @@
-import json
-import requests
-from src.models.assets.Stock import Stock
+import json, requests
 
-class MarketService:
+from Models.assets import Stock
 
+class MarketProvider:
+    
     # GLOBALS
     API_TOKEN = ""  # NEVER EVER COMMIT THIS
     API_URL = "https://sandbox.tradier.com/v1/"     # If you change the API you have to update the objects dumped to
@@ -18,4 +18,3 @@ class MarketService:
         stock = Stock()
         json.dumps(stock)
         return stock
-

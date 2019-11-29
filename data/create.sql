@@ -20,6 +20,13 @@ CREATE TABLE LoginData(
     FOREIGN  KEY (user_id) REFERENCES UserTable(id)
 );
 
+DROP TABLE IF EXISTS RevokedTokens;
+CREATE TABLE RevokedTokens(
+    id int NOT NULL AUTO_INCREMENT,
+    jti VARCHAR(120) NOT NULL,
+    PRIMARY KEY(id)
+);
+
 DROP TABLE IF EXISTS Stock;
 CREATE TABLE Stock(
     id int NOT NULL AUTO_INCREMENT,
@@ -35,7 +42,8 @@ CREATE TABLE Stock(
     last NUMERIC NOT NULL,
     symbol VARCHAR(8) NOT NULL,
     prev_close NUMERIC,
-    PRIMARY KEY(id)
+    PRIMARY KEY (id),
+    UNIQUE KEY symbol (symbol)
 );
 
 DROP TABLE IF EXISTS WatchList;

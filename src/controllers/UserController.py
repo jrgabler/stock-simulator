@@ -17,6 +17,14 @@ class UserController:
             row = cursor.fetchone()
             if(row is None):
                 return False
+            
+            cursor.close()
+        except mysql.DatabaseError as error:
+            print(error)
+            return False
+        finally:
+            if(connection is not None):
+                connection.close()
             return True
 
     # Adds a new User to the database
@@ -138,3 +146,24 @@ class UserController:
             if(connection is not None):
                 connection.close()
             return True
+
+    def tokenIsBlacklisted(self, jti: str):
+        connection = None
+        try:
+            connection = mysql.connector.connect(CONN_STRING)
+            cursor = connection.cursor()
+
+            cursor.execute(f"SELECT * FROM RevokedTokens WHERE jti={jti}")
+            row = cursor.fetchone()
+
+            if(row is not None):
+                return True
+
+            cursor.close()
+        except mysql.DatabaseError as error:
+            print(error)
+            return True
+        finally:
+            if(connection is not None):
+                connection.close()
+            return False
