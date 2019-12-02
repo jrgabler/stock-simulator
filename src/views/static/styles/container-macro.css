@@ -1,6 +1,7 @@
 .outer-container {
   display: flex;
   justify-content: space-evenly;
+  flex-wrap: wrap;
 }
 
 .container-item {
@@ -13,16 +14,24 @@
   border-radius: 4px;
 }
 
-.container-item--half {
-  width: 50%;
-}
-
-.container-item--third {
-  width: 33%;
-}
-
+.container-item--half,
+.container-item--third,
 .container-item--full {
   width: 100%;
+}
+
+ @media only screen and (min-width: 768px) {
+   .container-item--half {
+     width: 50%;
+   }
+
+   .container-item--third {
+     width: 33%;
+   }
+
+   .outer-container {
+     flex-wrap: nowrap;
+   }
 }
 
 .title {

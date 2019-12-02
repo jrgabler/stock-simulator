@@ -18,7 +18,7 @@
   * grey:       #edf0f1
   * dark gray:  #484848
 */
-*{
+* {
   box-sizing: border-box;
 }
 
@@ -54,7 +54,7 @@ h2 {
 }
 
 h3 {
-  font-size: 1.2em; 
+  font-size: 1.2em;
   color: #7FC4FD;
   font-weight: 300;
 }
@@ -202,77 +202,13 @@ input[type="checkbox"] {
 
 /***********************************/
 /***********************************/
-/* table styles */
-/***********************************/
-/***********************************/
-
-table {
-  background-color: #FFF;
-  display: block;
-  margin: 20px;
-  padding: 10px;
-  border-radius: 5px;
-  height: 70%;
-  width: 410px; 
-}
-
-table thead th {
-  font-weight: 300;
-  font-size: 0.8em;
-  color: #969696;
-  border-bottom: solid 1px #000;
-}
-
-table tbody tr:hover {
-  cursor: pointer;
-  background-color: #EDF0F1;
-}
-
-table tr td {
-  font-size: 0.8em;
-}
-
-/***********************************/
-/***********************************/
-/* column styles */
-/***********************************/
-/***********************************/
-
-.col-sm {
-  width: 80px;
-  padding: 5px;
-}
-
-.col-md {
-  width: 150px;
-  padding: 5px;
-}
-
-.col-split-3 {
-  width: calc(100% / 3);
-  padding: 0 15px;
-  margin-top: 20px;
-  display: inline-block;
-  vertical-align: top;
-}
-
-.col-split-2 {
-  width: calc(99% / 2);
-  margin-top: 20px;
-  display: inline-block;
-  vertical-align: top;
-}
-
-
-/***********************************/
-/***********************************/
 /* div styles */
 /***********************************/
 /***********************************/
 
 .center-div {
   margin: 0 auto;
-  width: 60%; 
+  width: 60%;
 }
 
 

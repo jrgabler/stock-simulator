@@ -1,0 +1,141 @@
+/***********************************/
+/***********************************/
+/* table styles */
+/***********************************/
+/***********************************/
+
+table {
+  border-collapse: collapse;
+  margin: 0;
+  padding: 0;
+  border-radius: 5px;
+  width: 100%;
+  table-layout: fixed;
+}
+
+table tr {
+  border: none;
+  padding: .35em;
+  background-color: #FFF;
+}
+
+table th,
+table td {
+  padding: .625em;
+  text-align: center;
+}
+
+table tbody tr td {
+  font-weight: 300;
+  font-size: .75em
+}
+
+table tbody tr:even {
+  background-color: #ccc;
+}
+
+table th {
+  font-weight: bold;
+  font-size: 0.8em;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #484848;
+  border-bottom: solid 1px #000;
+}
+
+@media screen and (max-width: 480px) {
+  table {
+    border: 0;
+    width: 100%;
+  }
+
+  table thead {
+    border: none;
+    clip: rect(0 0 0 0);
+    height: 1px;
+    margin: -1px;
+    overflow: hidden;
+    padding: 0;
+    position: absolute;
+    width: 1px;
+  }
+
+  .card-style tr,
+  table tr {
+    border-bottom: 3px solid #ddd;
+    display: block;
+    margin-bottom: .625em;
+  }
+
+  table td {
+    border-bottom: 1px solid #ddd;
+    display: block;
+    font-size: .8em;
+    text-align: right;
+  }
+
+  table td::before {
+    /*
+    * aria-label has no advantage, it won't be read inside a table
+    content: attr(aria-label);
+    */
+    content: attr(data-label);
+    float: left;
+    font-weight: bold;
+    text-transform: uppercase;
+  }
+
+  table td:last-child {
+    border-bottom: 0;
+  }
+}
+
+table .card-style {
+  border: 0;
+  width: 100%;
+}
+
+.card-style thead {
+  border: none;
+  clip: rect(0 0 0 0);
+  height: 1px;
+  margin: -1px;
+  overflow: hidden;
+  padding: 0;
+  position: absolute;
+  width: 1px;
+}
+
+.card-style tr {
+  border-bottom: 0;
+  display: block;
+  margin-bottom: .625em;
+}
+
+@media only screen and (max-width: 768px) {
+  .card-style tr {
+    border-bottom: 3px solid #ddd;
+  }
+}
+
+.card-style td {
+  border-bottom: 1px solid #ddd;
+  display: block;
+  font-size: .8em;
+  text-align: right;
+}
+
+.card-style  td::before {
+  /*
+  * aria-label has no advantage, it won't be read inside a table
+  content: attr(aria-label);
+  */
+  content: attr(data-label);
+  float: left;
+  font-weight: bold;
+  text-transform: uppercase;
+}
+
+.card-style td:last-child {
+  border-bottom: 0;
+}
