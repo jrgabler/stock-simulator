@@ -6,7 +6,7 @@ from models import User
 
 parser = reqparse.RequestParser()
 parser.add_argument("username", help="This field cannot be blank", required=True)
-parser.add_argument("password", help="This field cannot be blank", require=True)
+parser.add_argument("password", help="This field cannot be blank", required=True)
 
 class UserRegistration(Resource):
     def post(self):

@@ -21,15 +21,15 @@ app.config["JWT_BLACKLIST_TOKEN_CHECKS"] = ["access", "refresh"]
 
 blacklist = set()
 
+jwt = JWTManager(app)
+
+api = Api(app)
+
 # called every time client tries to access a secure endpoint
 @jwt.token_in_blacklist_loader
 def check_if_token_in_blacklist(decrypted_token):
     jti = decrypted_token["jti"]
     return UserController.tokenIsBlacklisted(jti)
-
-jwt = JWTManager(app)
-
-api = Api(app)
 
 # User Service
 api.add_resource(UserService.UserRegistration, "/registration")

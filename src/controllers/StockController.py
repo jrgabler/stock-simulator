@@ -1,13 +1,15 @@
 import mysql.connector
 
 from Resources import MarketProvider
+from models.assets import Stock, Asset
+from models import User
 
 class StockController:
 
     # TODO - turn into env variable
     CONN_STRING = "host='localhost' port=3306 user='root' password=''"
 
-    # Inserts a Stock object into the Stock table and returns the generated ID 
+    # Inserts a Stock object into the Stock table and returns the generated ID
     # on success, -1 on failure
     def insertStock(self, stock: Stock):
         connection = None
@@ -23,7 +25,7 @@ class StockController:
             if(stockId is not None):
                 # TODO - potential optimization point
                 updatedStock = MarketProvider.getStock(stock.symbol)
-                
+
                 cursor.execute(f"UPDATE Stock SET open_price={stock.open} close_price={stock.close} high={stock.high} low={stock.low} average_volume={stock.average_volume} peratio={stock.peratio} didend_yield={stock.dividend_yield} asset_type={stock.asset_type} last={stock.last} symbol={stock.symbol} prev_close={stock.prev_close}")
                 cursor.execute(f"SELECT id FROM Stock WHERE symbol={stock.symbol}")
                 row=cursor.fetchone()
@@ -86,7 +88,12 @@ class StockController:
         try:
             connection = mysql.connector.connect(CONN_STRING)
             cursor = connection.cursor()
-
-            cursor.execute(f"INSERT INTO Stock VALUES({stock.open}, {stock.close}, {stock.high}, {stock.low}, {stock.average_volume}, {stock.dividend_yield}, {stock.type}, {stock.last}, {stock.symbol}, {stock.prevclose})")
             # there's a lot to do here
             # we need to get the purchase price
+            cursor.execute(f"INSERT INTO Stock VALUES({stock.open}, {stock.close}, {stock.high}, {stock.low}, {stock.average_volume}, {stock.dividend_yield}, {stock.type}, {stock.last}, {stock.symbol}, {stock.prevclose})")
+        except mysql.DatabaseError as error:
+            print(error) # TODO - log error
+        finally:
+            if(connection is not None):
+                connection.close()
+            return {"message": f"Purchased {stock.symbol}"}

@@ -1,9 +1,9 @@
 # import Asset
 
-# This object has to match the API being used in order to make json.dumps() 
+# This object has to match the API being used in order to make json.dumps()
 # work
-class Stock(Asset):
-    def __init__(self, open: float, close: float, high: float, low: float, average_volume: float, market_cap: float, peratio: float, dividend_yield: float, asset_type: string, last: float, symbol: string, prev_close: float):
+class Stock():
+    def __init__(self, open: float, close: float, high: float, low: float, average_volume: float, market_cap: float, peratio: float, dividend_yield: float, asset_type: str, last: float, symbol: str, prev_close: float):
         self.open = open
         self.close = close
         self.high = high
