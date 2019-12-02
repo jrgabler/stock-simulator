@@ -1,12 +1,12 @@
 from flask_restful import Resource, reqparse
 from flask_jwt_extended import (create_access_token, create_refresh_token, jwt_required, jwt_refresh_token_required, get_jwt_identity, get_raw_jwt)
 
-from Controllers import UserController
-from Models import User
+from controllers import UserController
+from models import User
 
 parser = reqparse.RequestParser()
 parser.add_argument("username", help="This field cannot be blank", required=True)
-parser.add_argument("password", help="This field cannot be blank", require=True)
+parser.add_argument("password", help="This field cannot be blank", required=True)
 
 class UserRegistration(Resource):
     def post(self):
@@ -14,12 +14,12 @@ class UserRegistration(Resource):
 
         if(UserController.findByUsername(data["username"])):
             return {"Error": f"User {data['username']} already exists"}
-        
+
         try:
             UserController.registration(data["username"], data["password"])
             access_token = create_access_token(identity = data["username"])
             refresh_token = create_refresh_token(identity = data["username"])
-            
+
             return {
                 "message": "User successfully created",
                 "access_token": access_token,
@@ -56,7 +56,7 @@ class UserLogoutAccess(Resource):
 class UserLogoutRefresh(Resource):
     @jwt_refresh_token_required
     def post(self):
-        
+
         return {"message": "User logout refresh"}
 
 class TokenRefresh(Resource):

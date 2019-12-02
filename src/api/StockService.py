@@ -1,8 +1,8 @@
 from flask_restful import Resource, reqparse
 from flask_jwt_extended import (create_access_token, create_refresh_token, jwt_required, jwt_refresh_token_required, get_jwt_identity, get_raw_jwt)
 
-from Controllers import StockController
-from Models.assets import Stock
+from controllers import StockController
+from models.assets import Stock
 from Resources import MarketProvider
 
 parser = reqparse.RequestParser()
@@ -19,14 +19,14 @@ class PurchaseAsset(Resource):
         stock = MarketProvider.getStock(data["stock_symbol"])
 
         # This is gonna be a hefty boi
-        
+
 
 class WatchAsset(Resource):
     @jwt_required
     def post(self):
         data = parser.parse_args()
         stock = MarketProvider.getStock(data["stock_symbol"])
-        
+
         return StockController.addWatch(stock, data["user_id"])
 
 class RemoveWatchedAsset(Resource):

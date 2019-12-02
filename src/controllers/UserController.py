@@ -1,6 +1,6 @@
 import mysql.connector, binascii, hashlib
 
-from Models import User
+from models import User
 
 class UserController:
 
@@ -17,7 +17,7 @@ class UserController:
             row = cursor.fetchone()
             if(row is None):
                 return False
-            
+
             cursor.close()
         except mysql.DatabaseError as error:
             print(error)
@@ -43,7 +43,7 @@ class UserController:
 
             cursor.execute(f"INSERT INTO UserTable(username) VALUES({username})")
             cursor.execute(f"INSERT INTO LoginData(user_id, password, salt) VALUES((SELECT id WHERE username={username}), {hashedPassword}, {salt})")
-            
+
             connection.commit()
             cursor.close()
         except mysql.DatabaseError as error:
@@ -95,7 +95,7 @@ class UserController:
             row = cursor.fetchone()
             if(row is None):
                 return False
-            
+
             if(validateLogin(User(username), row[0], password)):
                 return True
         except mysql.DatabaseError as error:
@@ -134,9 +134,9 @@ class UserController:
             row = cursor.fetchone()
             if(row is None):
                 return False
-            
+
             cursor.execute(f"INSERT INTO RevokedTokens(jti) VALUES({tokenId})")
-            
+
             connection.commit()
             cursor.close()
         except mysql.DatabaseError as error:
