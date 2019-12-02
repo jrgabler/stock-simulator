@@ -3,10 +3,10 @@ import os
 from flask import Flask, render_template, redirect, url_for
 from flask import request
 from flask_restful import Api
-from flast_jwt_extended import JWTManager
+from flask_jwt_extended import JWTManager
 
-from Api import UserService, StockService
-from Controllers import UserController
+from api import UserService, StockService
+from controllers import UserController
 
 # refactor into config.py file
 VIEW_DIRECTORY = "./views"
@@ -40,16 +40,6 @@ api.add_resource(UserService.TokenRefresh, "/token/refresh")
 # Stock Service
 api.add_resource(StockService.WatchAsset, "/watch/add")
 api.add_resource(StockService.RemoveWatchedAsset, "/watch/remove")
-# refactor later to appropiate place yo
-# def isLoggedIn(is_log):
-#     # add logic to actually check if logged in or not
-#     return is_log
-#
-# # refactor later to appropiate place yo
-# def redirectIfNotLoggedIn(is_log, redirect_url):
-#     is_logged_in = isLoggedIn(is_log)
-#     if is_logged_in == False:
-#         return redirect(url_for(redirect_url))
 
 @app.route("/")
 @app.route("/home")
