@@ -18,7 +18,7 @@
   * grey:       #edf0f1
   * dark gray:  #484848
 */
-*{
+* {
   box-sizing: border-box;
 }
 
@@ -53,6 +53,26 @@ h2 {
   font-weight: 400;
 }
 
+h3 {
+  font-size: 1.2em;
+  color: #7FC4FD;
+  font-weight: 300;
+}
+
+h4 {
+  font-size: 1em;
+  color: #484848;
+  font-weight: 200;
+}
+
+h5 {
+  font-size: 0.8em;
+  color: #000;
+  font-weight: 100;
+  opacity: 70%;
+}
+
+
 .headline {
   font-size: 3em; /* 48pt */
   font-weight: bold;
@@ -79,6 +99,37 @@ label,
 .eyebrow { /** 12pt **/
   text-transform: uppercase;
   font-size: 0.75em;
+}
+
+/***********************************/
+/***********************************/
+/* content wrapper */
+/***********************************/
+/***********************************/
+
+.content-wrapper {
+  background: #FFF;
+  margin: 0;
+  padding: 10px;
+}
+
+
+/***********************************/
+/***********************************/
+/* text align */
+/***********************************/
+/***********************************/
+
+.left-align {
+  text-align: left;
+}
+
+.right-align {
+  text-align: right;
+}
+
+.center-align {
+  text-align: center;
 }
 
 /***********************************/
@@ -151,35 +202,15 @@ input[type="checkbox"] {
 
 /***********************************/
 /***********************************/
-/* table styles */
+/* div styles */
 /***********************************/
 /***********************************/
 
-table {
-  background-color: #FFF;
-  display: block;
-  margin: 20px;
-  padding: 10px;
-  border-radius: 5px;
-  height: 70%;
-  width: 410px; 
+.center-div {
+  margin: 0 auto;
+  width: 60%;
 }
 
-table thead th {
-  font-weight: 300;
-  font-size: 0.8em;
-  color: #969696;
-  border-bottom: solid 1px #000;
-}
-
-table tbody tr:hover {
-  cursor: pointer;
-  background-color: #EDF0F1;
-}
-
-table tr td {
-  font-size: 0.8em;
-}
 
 /***********************************/
 /***********************************/
