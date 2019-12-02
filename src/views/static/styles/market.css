@@ -1,0 +1,14 @@
+#stock_table {
+  width: 90%;
+}
+
+.banner {
+  padding: 5px;
+  background: #2699fb;
+  height: 30px;
+}
+
+#search {
+  color: #fff;
+  float: right;
+}

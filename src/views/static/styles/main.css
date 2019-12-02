@@ -53,6 +53,26 @@ h2 {
   font-weight: 400;
 }
 
+h3 {
+  font-size: 1.2em; 
+  color: #7FC4FD;
+  font-weight: 300;
+}
+
+h4 {
+  font-size: 1em;
+  color: #484848;
+  font-weight: 200;
+}
+
+h5 {
+  font-size: 0.8em;
+  color: #000;
+  font-weight: 100;
+  opacity: 70%;
+}
+
+
 .headline {
   font-size: 3em; /* 48pt */
   font-weight: bold;
@@ -79,6 +99,37 @@ label,
 .eyebrow { /** 12pt **/
   text-transform: uppercase;
   font-size: 0.75em;
+}
+
+/***********************************/
+/***********************************/
+/* content wrapper */
+/***********************************/
+/***********************************/
+
+.content-wrapper {
+  background: #FFF;
+  margin: 0;
+  padding: 10px;
+}
+
+
+/***********************************/
+/***********************************/
+/* text align */
+/***********************************/
+/***********************************/
+
+.left-align {
+  text-align: left;
+}
+
+.right-align {
+  text-align: right;
+}
+
+.center-align {
+  text-align: center;
 }
 
 /***********************************/
@@ -180,6 +231,50 @@ table tbody tr:hover {
 table tr td {
   font-size: 0.8em;
 }
+
+/***********************************/
+/***********************************/
+/* column styles */
+/***********************************/
+/***********************************/
+
+.col-sm {
+  width: 80px;
+  padding: 5px;
+}
+
+.col-md {
+  width: 150px;
+  padding: 5px;
+}
+
+.col-split-3 {
+  width: calc(100% / 3);
+  padding: 0 15px;
+  margin-top: 20px;
+  display: inline-block;
+  vertical-align: top;
+}
+
+.col-split-2 {
+  width: calc(99% / 2);
+  margin-top: 20px;
+  display: inline-block;
+  vertical-align: top;
+}
+
+
+/***********************************/
+/***********************************/
+/* div styles */
+/***********************************/
+/***********************************/
+
+.center-div {
+  margin: 0 auto;
+  width: 60%; 
+}
+
 
 /***********************************/
 /***********************************/

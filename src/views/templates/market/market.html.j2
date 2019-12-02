@@ -1,0 +1,47 @@
+{% extends "layout.html.j2" %}
+
+{% block title %}Stock Market{% endblock %}
+
+{% block head %}
+  {{ super() }}
+  <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/market.css') }}">
+  <link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+{% endblock %}
+
+{% block content %}
+
+<div class="center-div">  
+    <div class="banner">
+        <i id="search">Search Icon</i>
+    </div>
+
+    <div class="content-wrapper">
+        <h4>Matching Stocks</h4>
+        <h5>Live pricing data. Currency in USD</h5>
+
+        <table id="stock_table" cellspacing=0>
+            <thead>
+                <th class="col-sm left-align">SYMBOL</th>
+                <th class="col-md left-align">NAME</th>
+                <th class="col-sm left-align">PRICE</th>
+                <th class="col-sm left-align">CHANGE</th>
+                <th class="col-sm left-align">% CHANGE</th>
+                <th class="col-sm left-align">VOLUME</th>
+                <th class="col-sm left-align">AVG. VOLUME</th>
+                <th class="col-md left-align">MARKET CAP</th>
+            </thead>
+            <tr>
+                <td class="col-sm">AMD</td>
+                <td class="col-md">Advanced Micro Devices, Inc.</td> 
+                <td class="col-sm">1.3900</td>
+                <td class="col-sm ">+0.100</td>
+                <td class="col-sm">+7.75%</td>
+                <td class="col-sm">67.61M</td>
+                <td class="col-sm">55.88M</td>
+                <td class="col-md">2.716B  </td>
+            </tr>
+        </table>
+    </div>
+</div>
+
+{% endblock %}

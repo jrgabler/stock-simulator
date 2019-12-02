@@ -46,6 +46,10 @@ api.add_resource(StockService.RemoveWatchedAsset, "/watch/remove")
 def index():
     return render_template("index.html.j2")
 
+@app.route("/market")
+def market():
+    return render_template("market/market.html.j2")
+
 @app.route("/login")
 def login():
     return render_template("login/login.html.j2")
