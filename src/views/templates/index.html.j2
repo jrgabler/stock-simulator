@@ -85,14 +85,12 @@
   </div>
 {%- endmacro %}
 
-
 {% block content %}
   <div class="outer-container">
   {{ macro.container(
       ownedAssets(),
       'Owned Assets', '', 'container-item--half')
   }}
-  <!-- col-split-3 -->
   <!-- refactor to use actual info -->
   {{ macro.container(
       watchlist(),
@@ -100,8 +98,4 @@
   }}
 </div>
 
-<!-- <div class="col-split-3">
-    <h2 class="center-align">Apple inc.</h2>
-
-</div> -->
 {% endblock %}
