@@ -5,8 +5,8 @@ from flask import request
 from flask_restful import Api
 from flask_jwt_extended import JWTManager
 
-from api import UserService, StockService
-from controllers import UserController
+from Api import UserService, StockService
+from Controllers import UserController
 
 # refactor into config.py file
 VIEW_DIRECTORY = "./views"
