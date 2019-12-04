@@ -1,55 +1,15 @@
-.div-wrapper {
+/* Stock information (center of page) */
+
+.stock_info table {
+  background-color: transparent;
   width: 100%;
-  display: block;
+  margin: 0 auto;
 }
 
-#content .div-wrapper .component {
-  width: calc(99% / 2);
-  display: inline-block;
-}
-
-.stock_info_table {
-  width: 100%;
-  margin-left: 0;
-  margin-right: 0;
-}
-
-.stock_info_table tr {
-  width: 100%;
-  border-spacing: 10px;
-}
-
-.col-title {
-  width: 50%;
+.stock_info table td {
   padding: 5px;
 }
 
-.left-align {
-  text-align: left;
-}
-
-.right-align {
-  text-align: right;
-}
-
-.center-align {
-  text-align: center;
-}
-
-.col-sm {
-  width: 80px;
-  padding: 5px;
-}
-
-.col-md {
-  width: 150px;
-  padding: 5px;
-}
-
-.col-md-4 {
-  width: calc(100% / 3);
-  padding: 0 15px;
-  margin-top: 20px;
-  display: inline-block;
-  vertical-align: top;
+.caption {
+  margin: 15px auto;
 }

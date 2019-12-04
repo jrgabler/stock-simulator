@@ -5,18 +5,18 @@ from Controllers import UserController
 from Models import User
 
 parser = reqparse.RequestParser()
-parser.add_argument("username", help="This field cannot be blank", required=False)
-parser.add_argument("password", help="This field cannot be blank", required=False)
+parser.add_argument("username", help="This field cannot be blank", required=True)
+parser.add_argument("password", help="This field cannot be blank", required=True)
 
 class UserRegistration(Resource):
     def post(self):
         data = parser.parse_args()
 
-        if(UserController().findByUsername(data["username"])):
+        if(UserController.findByUsername(data["username"])):
             return {"Error": f"User {data['username']} already exists"}
 
         try:
-            UserController().registration(data["username"], data["password"])
+            UserController.registration(data["username"], data["password"])
             access_token = create_access_token(identity = data["username"])
             refresh_token = create_refresh_token(identity = data["username"])
 
@@ -33,10 +33,10 @@ class UserLogin(Resource):
     def post(self):
         data = parser.parse_args()
 
-        if(not UserController().findByUsername(data["username"])):
+        if(not UserController.findByUsername(data["username"])):
             return {"message": f"User {data.username} doesn't exist"}
 
-        if(UserController().login(data["username"], data["passwors"])):
+        if(UserController.login(data["username"], data["passwors"])):
             access_token = create_access_token(identity = data["username"])
             refresh_token = create_refresh_token(identity = data["username"])
 

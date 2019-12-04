@@ -1,7 +1,6 @@
 import json, requests
 
-from models.assets.Stock import Stock
-from models.Quote import Quote
+from Models.Assets.Stock import Stock
 
 class MarketProvider:
 

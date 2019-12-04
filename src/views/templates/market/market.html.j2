@@ -1,0 +1,58 @@
+{% extends "layout.html.j2" %}
+
+{% block title %}Stock Market{% endblock %}
+
+{% block head %}
+  {{ super() }}
+  <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/market.css') }}">
+  <link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+  <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/table.css') }}">
+{% endblock %}
+
+{% block content %}
+
+{% macro matchingStockRow(symbol, name, price, change, pct, vol, avg, cap) -%}
+  <tr>
+      <td data-label="Symbol">{{ symbol }}</td>
+      <td data-label="Name">{{ name }}</td>
+      <td data-label="Price">{{ price }}</td>
+      <td data-label="Change">{{ change }}</td>
+      <td data-label="Pct. Changed">{{ pct }}</td>
+      <td data-label="Volume">{{ vol }}</td>
+      <td data-label="Avg. Volume">{{ avg }}</td>
+      <td data-label="Market Cap"> {{ cap }}</td>
+  </tr>
+{%- endmacro %}
+
+<div>
+    <div class="banner">
+        <i id="search">Search Icon</i>
+    </div>
+
+    <div class="content-wrapper">
+        <h4>Matching Stocks</h4>
+        <h5>Live pricing data. Currency in USD</h5>
+
+        <table class="stock-table">
+            <thead>
+              <tr>
+                <th scope="col">Symbol</th>
+                <th scope="col">Name</th>
+                <th scope="col">Price</th>
+                <th scope="col">Change</th>
+                <th scope="col">Pct. Changed</th>
+                <th scope="col">Volume</th>
+                <th scope="col">Avg. Volume</th>
+                <th scope="col">Market Cap</th>
+              </tr>
+            </thead>
+            <tbody>
+              {{ matchingStockRow( 'AMD', 'Advanced Micro Devices, Inc.', '1.3900', '+0.100', '+7.75%', '67.61M', '55.88M', '2.716B') }}
+              {{ matchingStockRow( 'AMD', 'Advanced Micro Devices, Inc.', '1.3900', '+0.100', '+7.75%', '67.61M', '55.88M', '2.716B') }}
+              {{ matchingStockRow( 'AMD', 'Advanced Micro Devices, Inc.', '1.3900', '+0.100', '+7.75%', '67.61M', '55.88M', '2.716B') }}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+{% endblock %}

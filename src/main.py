@@ -5,8 +5,8 @@ from flask import request
 from flask_restful import Api
 from flask_jwt_extended import JWTManager
 
-from api import UserService, StockService
-from controllers import UserController
+from Api import UserService, StockService
+from Controllers import UserController
 
 # refactor into config.py file
 VIEW_DIRECTORY = "./views"
@@ -46,6 +46,10 @@ api.add_resource(StockService.RemoveWatchedAsset, "/watch/remove")
 @app.route("/home")
 def index():
     return render_template("index.html.j2")
+
+@app.route("/market")
+def market():
+    return render_template("market/market.html.j2")
 
 @app.route("/login")
 def login():

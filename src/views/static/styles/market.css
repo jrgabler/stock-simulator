@@ -1,0 +1,25 @@
+.stock-table {
+  width: 100%;
+  margin-top: 20px;
+}
+
+.banner {
+  padding: 5px;
+  background: #BCE0FD;
+  height: 30px;
+}
+
+#search {
+  color: #484848;
+  float: right;
+}
+
+.content-wrapper h4 {
+  margin: 10px auto;
+}
+
+.content-wrapper h5 {
+  margin: 0;
+  padding: 0 0 20px;
+  border-bottom: 1px dashed #BCE0FD;
+}
