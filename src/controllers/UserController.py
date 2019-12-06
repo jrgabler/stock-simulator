@@ -7,10 +7,11 @@ class UserController:
     # TODO - turn into env variable
     CONN_STRING = "host='localhost' port=3306 user='root' password=''"
 
-    def findByUsername(self, username: str):
+    @classmethod
+    def findByUsername(cls, username: str):
         connection = None
         try:
-            connection = mysql.connector.connect(CONN_STRING)
+            connection = mysql.connector.connect(cls.CONN_STRING)
             cursor = connection.cursor()
 
             cursor.execute(f"SELECT * FROM UserTable WHERE username={username}")
@@ -73,10 +74,11 @@ class UserController:
             return {"message": "Subtract balance successful"}
 
     # Adds a new User to the database
-    def registration(self, username: str, password: str):
+    @classmethod
+    def registration(cls, username: str, password: str):
         connection = None
         try:
-            connection = mysql.connector.connect(CONN_STRING)
+            connection = mysql.connector.connect(cls.CONN_STRING)
             cursor = connection.cursor()
 
             cursor.execute(f"SELECT * FROM UserTable WHERE username={username}") # TODO
@@ -100,10 +102,11 @@ class UserController:
             return {"message": "Registration successful"}   # TODO
 
     # Marks existing user as archived
-    def archive(self, userId: int):
+    @classmethod
+    def archive(cls, userId: int):
         connection = None
         try:
-            connection = mysql.connector.connect(CONN_STRING)
+            connection = mysql.connector.connect(cls.CONN_STRING)
             cursor = connection.cursor()
 
             cursor.execute(f"SELECT * FROM UserTable WHERE id={userId}")
@@ -130,10 +133,11 @@ class UserController:
 
         return (salt + binascii.hexlify(hashedValue)), salt
 
-    def login(self, username: str, password: str):
+    @classmethod
+    def login(cls, username: str, password: str):
         connection = None
         try:
-            connection = mysql.connector.connect(CONN_STRING)
+            connection = mysql.connector.connect(cls.CONN_STRING)
             cursor = connection.cursor()
 
             cursor.execute("SELECT * FROM UserTable WHERE username={username}")
@@ -147,10 +151,11 @@ class UserController:
             print(error)
             return False
 
-    def validateLogin(self, user: User, userId: str, password: str):
+    @classmethod
+    def validateLogin(cls, user: User, userId: str, password: str):
         connection = None
         try:
-            connection = mysql.connector.connect(CONN_STRING)
+            connection = mysql.connector.connect(cls.CONN_STRING)
             cursor = connection.cursor()
 
             # get the salt and password
@@ -169,10 +174,11 @@ class UserController:
             print(error)
             return False
 
-    def logout(self, user: User, tokenId: str):
+    @classmethod
+    def logout(cls, user: User, tokenId: str):
         connection = None
         try:
-            connection = mysql.connector.connect(CONN_STRING)
+            connection = mysql.connector.connect(cls.CONN_STRING)
             cursor = connection.cursor()
 
             cursor.execute(f"SELECT * FROM RevokedTokens WHERE id={tokenId}")
@@ -192,10 +198,11 @@ class UserController:
                 connection.close()
             return True
 
-    def tokenIsBlacklisted(self, jti: str):
+    @classmethod
+    def tokenIsBlacklisted(cls, jti: str):
         connection = None
         try:
-            connection = mysql.connector.connect(CONN_STRING)
+            connection = mysql.connector.connect(cls.CONN_STRING)
             cursor = connection.cursor()
 
             cursor.execute(f"SELECT * FROM RevokedTokens WHERE jti={jti}")
