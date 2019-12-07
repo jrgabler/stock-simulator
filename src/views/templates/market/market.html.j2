@@ -23,11 +23,6 @@
   </tr>
 {%- endmacro %}
 
-{% macro addButtonPanel() -%}
-  <i class="fas fa-plus"></i>
-  <i class="fas fa-eye"></i>
-{%- endmacro %}
-
 <div>
     <div class="banner">
         <i id="search">Search Icon</i>
@@ -36,8 +31,6 @@
     <div class="content-wrapper">
         <h4>Matching Stocks</h4>
         <h5>Live pricing data. Currency in USD</h5>
-
-        {{ addButtonPanel() }}
 
         <table class="hover" id="stock-table">
             <thead>

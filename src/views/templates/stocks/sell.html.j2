@@ -1,39 +1,72 @@
 {% extends "layout.html.j2" %}
+{% import 'macros/container-macro.html.j2' as macro %}
 
-{% block title %}Sell Stock{% endblock %}
+{% block title %}Transaction{% endblock %}
 
 {% block head %}
   {{ super() }}
   <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/form.css') }}">
+  <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/container-macro.css') }}">
+  <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/sell.css') }}">
 {% endblock %}
 
-<!--  -->
+{% macro transactionForm() -%}
+  <form>
+    <table> 
+      <tr> 
+        <th>Stock Symbol:</th>
+        <td><input type="text" name="symbol"></td>
+        <td><span>Check Symbol</span></td>
+      </tr>
+      <tr> 
+        <th>Transaction:</th>
+        <td> 
+          <select>
+            <option value="buy">Buy</option>
+            <option value="sell">Sell</option>
+          </select>
+        </td>
+      </tr>
+      <tr> 
+        <th>Quantity:</th>
+        <td><input type="number" name="quantity"></td>
+      </tr>
+    </table>
+    <input class="btn btn--full-width" type="submit">
+  </form>
+{%- endmacro %}
+
+{% macro stockInfo() -%} 
+  <div class="owned container-item--outline"> 
+    <h3>Advanced Micro Devices, Inc.</h3> 
+    <table>
+      <tr>
+        <th>Quantity Owned</th>
+        <td>120</td>
+      </tr>
+      <tr>
+        <th>Sell Price</th>
+        <td>$5.00</td>
+      </tr>
+      <tr>
+        <th>Bought Price</th>
+        <td>$3.00</td>
+      </tr>
+    <table>
+  </div>
+{%- endmacro %}
+
 {% block content %}
-<form>
-  <div class="form-container">
-    <h2>Sell Stock</h2>
-    <p>Please select the stocks you'd like to sell</p>
+  <div class="outer-container">
+  {{ macro.container(
+      transactionForm(),
+      'Transaction', '', 'container-item--half')
+  }}
+  <!-- refactor to use actual info -->
+  {{ macro.container(
+      stockInfo(),
+      'Ownership', 'Stocks you own will be displayed here.', 'container-item--half')
+  }}
+</div>
 
-    <div class="listbox-container">
-      <ul role="listbox" tabindex="0" aria-label="stock list">
-            <li tabindex="-1" role="option" aria-checked="false">
-                <input tabindex="-1" id="AMZN" class="o-checkbox" type="checkbox">
-                <label for="AMZN">AMZN: Amazon</label>
-            </li>
-            <li tabindex="-1" role="option" aria-checked="false">
-                <input tabindex="-1" id="NFLX" class="o-checkbox" type="checkbox">
-                <label for="NFLX">NFLX: Netflix</label>
-            </li>
-            <li tabindex="-1" role="option" aria-checked="false">
-                <input tabindex="-1" id="B" class="o-checkbox" type="checkbox">
-                <label for="AMZN">B: Barnes Group, Inc</label>
-            </li>
-        </ul>
-    </div>
-
-    <!-- <div class="stock-price">Total Amount: $<span class="">0.00</span></div> -->
-
-    <button type="submit" class="btn btn--full-width">Submit</button>
- </div>
-</form>
 {% endblock %}
