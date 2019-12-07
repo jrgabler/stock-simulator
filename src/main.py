@@ -38,6 +38,7 @@ api.add_resource(UserService.UserLogoutAccess, "/logout/access")
 api.add_resource(UserService.UserLogoutRefresh, "/logout/refresh")
 api.add_resource(UserService.TokenRefresh, "/token/refresh")
 # Stock Service
+api.add_resource(StockService.GetStock, "/stock")
 api.add_resource(StockService.WatchAsset, "/watch/add")
 api.add_resource(StockService.RemoveWatchedAsset, "/watch/remove")
 

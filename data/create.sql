@@ -6,6 +6,7 @@ DROP TABLE IF EXISTS UserTable;
 CREATE TABLE UserTable(
     id int NOT NULL AUTO_INCREMENT,
     username VARCHAR(15) NOT NULL UNIQUE,
+    balance NUMERIC NOT NULL DEFAULT 10000.0,
     archived BOOLEAN NOT NULL DEFAULT FALSE,
     PRIMARY KEY(id)
 );
@@ -62,8 +63,8 @@ CREATE TABLE SoldAssetsList(
     stock_id INT NOT NULL,
     user_id INT NOT NULL,
     quantity INT,
-    date_purchased TIMESTAMP,
-    date_sold TIMESTAMP,
+    date_purchased TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    date_sold TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     purchase_price NUMERIC NOT NULL,
     sale_price NUMERIC NOT NULL,
     position NUMERIC NOT NULL,

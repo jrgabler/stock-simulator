@@ -1,4 +1,4 @@
-from src.models.assets.Asset import Asset
+from src.models.Assets.Asset import Asset
 
 class AssetMap:
     def __init__(self, asset: Asset):

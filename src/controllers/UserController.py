@@ -7,10 +7,11 @@ class UserController:
     # TODO - turn into env variable
     CONN_STRING = "host='localhost' port=3306 user='root' password=''"
 
-    def findByUsername(self, username: str):
+    @classmethod
+    def findByUsername(cls, username: str):
         connection = None
         try:
-            connection = mysql.connector.connect(CONN_STRING)
+            connection = mysql.connector.connect(cls.CONN_STRING)
             cursor = connection.cursor()
 
             cursor.execute(f"SELECT * FROM UserTable WHERE username={username}")
@@ -27,11 +28,57 @@ class UserController:
                 connection.close()
             return True
 
-    # Adds a new User to the database
-    def registration(self, username: str, password: str):
+    # Add balance to user account
+    def addBalance(self, userId: int, amount: float):
         connection = None
         try:
             connection = mysql.connector.connect(CONN_STRING)
+            cursor = connection.cursor()
+
+            cursor.execute(f"SELECT balance FROM UserTable WHERE id={userId}")
+            row = cursor.fetchone()
+            balance = row[0]
+            cursor.execute(f"UPDATE UserTable SET balance={balance + amount} WHERE id={userId}")
+
+            connection.commit()
+            cursor.close()
+        except mysql.DatabaseError as error:
+            print(error)
+            return {"message": "Something went wrong"}
+        finally:
+            if(connection is not None):
+                connection.close
+            return {"message": "Add balance successful"}
+
+    # Subtract balance from user account
+    def subtractBalance(self, userId: int, amount: float):
+        connection = None
+        try:
+            connection = mysql.connector.connect(CONN_STRING)
+            cursor = connection.cursor()
+            
+            cursor.execute(f"SELECT balance FROM UserTable WHERE id={userId}")
+            row = cursor.fetchone()
+            balance = row[0]
+            # TODO - where/how do we want to handle overdrawing?
+            cursor.execute(f"UPDATE UsertTable SET balance={balance - amount}")
+
+            connection.commit()
+            cursor.close()
+        except mysql.DatabaseError as error:
+            print(error)
+            return {"message": "Something went wrong"}
+        finally:
+            if(connection is not None):
+                connection.close()
+            return {"message": "Subtract balance successful"}
+
+    # Adds a new User to the database
+    @classmethod
+    def registration(cls, username: str, password: str):
+        connection = None
+        try:
+            connection = mysql.connector.connect(cls.CONN_STRING)
             cursor = connection.cursor()
 
             cursor.execute(f"SELECT * FROM UserTable WHERE username={username}") # TODO
@@ -52,13 +99,14 @@ class UserController:
         finally:
             if(connection is not None):
                 connection.close()
-                return {"message": "Registration successful"}   # TODO
+            return {"message": "Registration successful"}   # TODO
 
     # Marks existing user as archived
-    def archive(self, userId: int):
+    @classmethod
+    def archive(cls, userId: int):
         connection = None
         try:
-            connection = mysql.connector.connect(CONN_STRING)
+            connection = mysql.connector.connect(cls.CONN_STRING)
             cursor = connection.cursor()
 
             cursor.execute(f"SELECT * FROM UserTable WHERE id={userId}")
@@ -85,10 +133,11 @@ class UserController:
 
         return (salt + binascii.hexlify(hashedValue)), salt
 
-    def login(self, username: str, password: str):
+    @classmethod
+    def login(cls, username: str, password: str):
         connection = None
         try:
-            connection = mysql.connector.connect(CONN_STRING)
+            connection = mysql.connector.connect(cls.CONN_STRING)
             cursor = connection.cursor()
 
             cursor.execute("SELECT * FROM UserTable WHERE username={username}")
@@ -102,10 +151,11 @@ class UserController:
             print(error)
             return False
 
-    def validateLogin(self, user: User, userId: str, password: str):
+    @classmethod
+    def validateLogin(cls, user: User, userId: str, password: str):
         connection = None
         try:
-            connection = mysql.connector.connect(CONN_STRING)
+            connection = mysql.connector.connect(cls.CONN_STRING)
             cursor = connection.cursor()
 
             # get the salt and password
@@ -124,10 +174,11 @@ class UserController:
             print(error)
             return False
 
-    def logout(self, user: User, tokenId: str):
+    @classmethod
+    def logout(cls, user: User, tokenId: str):
         connection = None
         try:
-            connection = mysql.connector.connect(CONN_STRING)
+            connection = mysql.connector.connect(cls.CONN_STRING)
             cursor = connection.cursor()
 
             cursor.execute(f"SELECT * FROM RevokedTokens WHERE id={tokenId}")
@@ -147,10 +198,11 @@ class UserController:
                 connection.close()
             return True
 
-    def tokenIsBlacklisted(self, jti: str):
+    @classmethod
+    def tokenIsBlacklisted(cls, jti: str):
         connection = None
         try:
-            connection = mysql.connector.connect(CONN_STRING)
+            connection = mysql.connector.connect(cls.CONN_STRING)
             cursor = connection.cursor()
 
             cursor.execute(f"SELECT * FROM RevokedTokens WHERE jti={jti}")

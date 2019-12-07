@@ -18,7 +18,7 @@
   * grey:       #edf0f1
   * dark gray:  #484848
 */
-*{
+* {
   box-sizing: border-box;
 }
 
@@ -36,7 +36,7 @@
 }
 
 body {
-  background-color: #F1F9FF;
+  background-color: #f1f9ff;
 }
 /***********************************/
 /***********************************/
@@ -44,18 +44,18 @@ body {
 /***********************************/
 /***********************************/
 h1 {
-  font-size: 2em;  /* 32pt */
+  font-size: 2em; /* 32pt */
 }
 
 h2 {
   font-size: 1.5em; /* 24pt */
-  color: #7FC4FD;
+  color: #7fc4fd;
   font-weight: 400;
 }
 
 h3 {
-  font-size: 1.2em; 
-  color: #7FC4FD;
+  font-size: 1.2em;
+  color: #7fc4fd;
   font-weight: 300;
 }
 
@@ -72,7 +72,6 @@ h5 {
   opacity: 70%;
 }
 
-
 .headline {
   font-size: 3em; /* 48pt */
   font-weight: bold;
@@ -83,11 +82,12 @@ h5 {
 }
 
 .quote {
-  font-size: 1.375em /* 20pt */
+  font-size: 1.375em; /* 20pt */
   font-style: italic;
 }
 
-.body-emphasis { /** 16pt */
+.body-emphasis {
+  /** 16pt */
   font-weight: bold;
 }
 
@@ -96,7 +96,8 @@ label,
   font-size: 0.875em; /* 14pt */
 }
 
-.eyebrow { /** 12pt **/
+.eyebrow {
+  /** 12pt **/
   text-transform: uppercase;
   font-size: 0.75em;
 }
@@ -108,11 +109,10 @@ label,
 /***********************************/
 
 .content-wrapper {
-  background: #FFF;
+  background: #fff;
   margin: 0;
   padding: 10px;
 }
-
 
 /***********************************/
 /***********************************/
@@ -150,24 +150,24 @@ button {
 
 .btn {
   border: none;
-  background-color: #2699FB;
-  color: #FFF;
+  background-color: #2699fb;
+  color: #fff;
 }
 
 .btn:hover,
 .btn:active {
-  background-color: #007FEB
+  background-color: #007feb;
 }
 
 .btn--outline {
-  border: 1px solid #2699FB;
-  color: #2699FB;
-  background-color: #FFF;
+  border: 1px solid #2699fb;
+  color: #2699fb;
+  background-color: #fff;
 }
 
 .btn-clear {
   background-color: transparent;
-  color: #2699FB;
+  color: #2699fb;
   border: none;
 }
 
@@ -177,59 +177,37 @@ button {
 /* Full-width inputs */
 /***********************************/
 /***********************************/
-input[type=text],
-input[type=password] {
-   width: 100%;
-   padding: 12px 20px;
-   margin: 8px 0;
-   display: inline-block;
-   box-sizing: border-box;
-   border: 0;
-   outline: 0;
-   background: transparent;
-   border-bottom: 1px solid #2699FB;
+input[type="text"],
+input[type="password"] {
+  width: 100%;
+  padding: 12px 20px;
+  margin: 8px 0;
+  display: inline-block;
+  box-sizing: border-box;
+  border: 0;
+  outline: 0;
+  background: transparent;
+  border-bottom: 1px solid #2699fb;
 }
 
-input[type=text]:focus,
-input[type=password]:focus {
+input[type="text"]:focus,
+input[type="password"]:focus {
   box-shadow: 0 0 5px rgba(81, 203, 238, 1);
   border: 1px solid rgba(81, 203, 238, 1);
 }
 
 input[type="checkbox"] {
-
 }
 
 /***********************************/
 /***********************************/
-/* table styles */
+/* div styles */
 /***********************************/
 /***********************************/
 
-table {
-  background-color: #FFF;
-  display: block;
-  margin: 20px;
-  padding: 10px;
-  border-radius: 5px;
-  height: 70%;
-  width: 410px; 
-}
-
-table thead th {
-  font-weight: 300;
-  font-size: 0.8em;
-  color: #969696;
-  border-bottom: solid 1px #000;
-}
-
-table tbody tr:hover {
-  cursor: pointer;
-  background-color: #EDF0F1;
-}
-
-table tr td {
-  font-size: 0.8em;
+.center-div {
+  margin: 0 auto;
+  width: 60%;
 }
 
 /***********************************/
@@ -263,7 +241,6 @@ table tr td {
   vertical-align: top;
 }
 
-
 /***********************************/
 /***********************************/
 /* div styles */
@@ -272,28 +249,27 @@ table tr td {
 
 .center-div {
   margin: 0 auto;
-  width: 60%; 
+  width: 60%;
 }
-
 
 /***********************************/
 /***********************************/
 /** TABLET styles */
 /***********************************/
 /***********************************/
- @media only screen and (max-width: 1024px) {
-   #content {
-     margin: 30px 40px;
-   }
- }
+@media only screen and (max-width: 1024px) {
+  #content {
+    margin: 30px 40px;
+  }
+}
 
- /***********************************/
- /***********************************/
- /** MOBILE styles */
- /***********************************/
- /***********************************/
- @media only screen and (max-width: 480px) {
-   #content {
-     margin: 30px 20px;
-   }
- }
+/***********************************/
+/***********************************/
+/** MOBILE styles */
+/***********************************/
+/***********************************/
+@media only screen and (max-width: 480px) {
+  #content {
+    margin: 30px 20px;
+  }
+}

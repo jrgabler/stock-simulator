@@ -3,12 +3,20 @@ from flask_jwt_extended import (create_access_token, create_refresh_token, jwt_r
 
 from controllers import StockController
 from models.assets import Stock
-from Resources import MarketProvider
+from Resources.MarketProvider import MarketProvider
 
 parser = reqparse.RequestParser()
 parser.add_argument("stock_symbol", help="", required=False)
 parser.add_argument("user_id", help="", required=False)
 parser.add_argument("stock_id", help="", required=False)
+
+# Test function for MarketProvider
+class GetStock(Resource):
+    def post(self):
+        data = parser.parse_args()
+        stock = MarketProvider().getStock(data["stock_symbol"])
+
+        return stock.to_json()
 
 # Arguments: username, stock symbol
 class PurchaseAsset(Resource):
@@ -16,7 +24,7 @@ class PurchaseAsset(Resource):
     def post(self):
         data = parser.parse_args()
 
-        stock = MarketProvider.getStock(data["stock_symbol"])
+        stock = MarketProvider().getStock(data["stock_symbol"])
 
         # This is gonna be a hefty boi
 
@@ -25,12 +33,12 @@ class WatchAsset(Resource):
     @jwt_required
     def post(self):
         data = parser.parse_args()
-        stock = MarketProvider.getStock(data["stock_symbol"])
+        stock = MarketProvider().getStock(data["stock_symbol"])
 
-        return StockController.addWatch(stock, data["user_id"])
+        return StockController().addWatch(stock, data["user_id"])
 
 class RemoveWatchedAsset(Resource):
     @jwt_required
     def post(self):
         data = parser.parse_args()
-        return StockController.removeWatch(data["stock_id"], data["user_id"])
+        return StockController().removeWatch(data["stock_id"], data["user_id"])

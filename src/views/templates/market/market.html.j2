@@ -5,12 +5,30 @@
 {% block head %}
   {{ super() }}
   <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/market.css') }}">
-  <link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+  <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/table.css') }}">
 {% endblock %}
 
 {% block content %}
 
-<div class="center-div">  
+{% macro matchingStockRow(symbol, name, price, change, pct, vol, avg, cap) -%}
+  <tr>
+      <td data-label="Symbol">{{ symbol }}</td>
+      <td data-label="Name">{{ name }}</td>
+      <td data-label="Price">{{ price }}</td>
+      <td data-label="Change">{{ change }}</td>
+      <td data-label="Pct. Changed">{{ pct }}</td>
+      <td data-label="Volume">{{ vol }}</td>
+      <td data-label="Avg. Volume">{{ avg }}</td>
+      <td data-label="Market Cap"> {{ cap }}</td>
+  </tr>
+{%- endmacro %}
+
+{% macro addButtonPanel() -%}
+  <i class="fas fa-plus"></i>
+  <i class="fas fa-eye"></i>
+{%- endmacro %}
+
+<div>
     <div class="banner">
         <i id="search">Search Icon</i>
     </div>
@@ -19,27 +37,27 @@
         <h4>Matching Stocks</h4>
         <h5>Live pricing data. Currency in USD</h5>
 
-        <table id="stock_table" cellspacing=0>
+        {{ addButtonPanel() }}
+
+        <table class="hover" id="stock-table">
             <thead>
-                <th class="col-sm left-align">SYMBOL</th>
-                <th class="col-md left-align">NAME</th>
-                <th class="col-sm left-align">PRICE</th>
-                <th class="col-sm left-align">CHANGE</th>
-                <th class="col-sm left-align">% CHANGE</th>
-                <th class="col-sm left-align">VOLUME</th>
-                <th class="col-sm left-align">AVG. VOLUME</th>
-                <th class="col-md left-align">MARKET CAP</th>
+              <tr>
+                <th scope="col">Symbol</th>
+                <th scope="col">Name</th>
+                <th scope="col">Price</th>
+                <th scope="col">Change</th>
+                <th scope="col">Pct. Changed</th>
+                <th scope="col">Volume</th>
+                <th scope="col">Avg. Volume</th>
+                <th scope="col">Market Cap</th>
+              </tr>
             </thead>
-            <tr>
-                <td class="col-sm">AMD</td>
-                <td class="col-md">Advanced Micro Devices, Inc.</td> 
-                <td class="col-sm">1.3900</td>
-                <td class="col-sm ">+0.100</td>
-                <td class="col-sm">+7.75%</td>
-                <td class="col-sm">67.61M</td>
-                <td class="col-sm">55.88M</td>
-                <td class="col-md">2.716B  </td>
-            </tr>
+            <tbody>
+              {{ matchingStockRow( 'AMD', 'Advanced Micro Devices, Inc.', '1.3900', '+0.100', '+7.75%', '67.61M', '55.88M', '2.716B') }}
+              {{ matchingStockRow( 'AMD', 'Advanced Micro Devices, Inc.', '1.3900', '+0.100', '+7.75%', '67.61M', '55.88M', '2.716B') }}
+              {{ matchingStockRow( 'AMD', 'Advanced Micro Devices, Inc.', '1.3900', '+0.100', '+7.75%', '67.61M', '55.88M', '2.716B') }}
+
+            </tbody>
         </table>
     </div>
 </div>

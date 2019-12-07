@@ -3,11 +3,13 @@
 .stock_info table {
   background-color: transparent;
   width: 100%;
-  margin-left: 0;
-  margin-right: 0;
+  margin: 0 auto;
 }
 
 .stock_info table td {
-  width: 150px;
   padding: 5px;
+}
+
+.stock_info table .caption {
+  margin: 15px auto;
 }
