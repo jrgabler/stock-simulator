@@ -27,3 +27,11 @@ div.pwd {
      width: 100%;
    }
 }
+
+.logout-link {
+  display: none !important;
+}
+
+.login-link {
+  display: block !important;
+}
