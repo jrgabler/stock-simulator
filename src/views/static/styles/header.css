@@ -2,14 +2,19 @@ header {
   background-color: #2699FB;
   color: white;
   min-height: 30px;
-  padding: 20px 15px 10px;
+  padding: 20px 15px 20px;
   overflow: hidden;
 }
 
 .menu-item {
-  float: right;
+  display: flex;
+  justify-content: flex-end;
   margin-top: -18px;
   font-size: 0.875em;
+}
+
+.menu-item a {
+  color: #e6e6e6;
 }
 
 header ul {
@@ -25,14 +30,53 @@ header ul li a {
 }
 
 .logo {
-  margin: 0 auto;
-  width: 70%;
-  text-align: center;
+  display: flex;
+  justify-content: center;
   font-size: 1.2em; /* 24pt */
 }
 
 @media only screen and (max-width: 480px) {
   .menu-item {
-    display: none;
+    float: none;
+    margin-top: 10px;
+    justify-content: center;
   }
+
+}
+
+ .logout-link {
+   display: flex;
+ }
+
+ .logout-link a {
+   margin-right: 10px;
+ }
+
+ .login-link {
+   display: none;
+ }
+
+ /** nav styles **/
+.global-nav {
+  margin: 15px 75px;
+}
+
+ nav ul li a {
+   color: #484848;
+   display: block;
+   text-decoration: none;
+ }
+
+ nav ul {
+   display: flex;
+ }
+
+ nav ul li:not(:last-child) {
+   margin-right: 10px;
+ }
+
+/*  */
+nav ul li:not(:last-child) a::after {
+  content: '|';
+  padding-left: 10px;
 }
