@@ -4,14 +4,13 @@ from models import User
 
 class UserController:
 
-    # TODO - turn into env variable
-    CONN_STRING = "host='localhost' port=3306 user='root' password=''"
+    # CONN_STRING = "host='localhost' port=3306 user='root' password=''"
 
-    @classmethod
-    def findByUsername(cls, username: str) -> User:
+    @staticmethod
+    def findByUsername(username: str) -> User:
         connection = None
         try:
-            connection = mysql.connector.connect(cls.CONN_STRING)
+            connection = mysql.connector.connect(host="localhost", user="root", password="", database="stocksimulator")
             cursor = connection.cursor()
 
             cursor.execute(f"SELECT * FROM UserTable WHERE username={username}")
@@ -21,7 +20,7 @@ class UserController:
 
             user = User(row[0], row[1])
             cursor.close()
-        except mysql.DatabaseError as error:
+        except mysql.connector.Error as error:
             print(error)
             return None
         finally:
@@ -30,11 +29,11 @@ class UserController:
             return user
 
     # Add balance to user account
-    @classmethod
-    def addBalance(cls, userId: int, amount: float):
+    @staticmethod
+    def addBalance(userId: int, amount: float):
         connection = None
         try:
-            connection = mysql.connector.connect(cls.CONN_STRING)
+            connection = mysql.connector.connect(host="localhost", user="root", password="", database="stocksimulator")
             cursor = connection.cursor()
 
             cursor.execute(f"SELECT balance FROM UserTable WHERE id={userId}")
@@ -46,7 +45,7 @@ class UserController:
 
             connection.commit()
             cursor.close()
-        except mysql.DatabaseError as error:
+        except mysql.connector.Error as error:
             print(error)
             return {"message": "Something went wrong"}
         finally:
@@ -55,11 +54,11 @@ class UserController:
             return {"message": "Add balance successful"}
 
     # Subtract balance from user account
-    @classmethod
-    def subtractBalance(cls, userId: int, amount: float):
+    @staticmethod
+    def subtractBalance(userId: int, amount: float):
         connection = None
         try:
-            connection = mysql.connector.connect(cls.CONN_STRING)
+            connection = mysql.connector.connect(host="localhost", user="root", password="", database="stocksimulator")
             cursor = connection.cursor()
             
             cursor.execute(f"SELECT balance FROM UserTable WHERE id={userId}")
@@ -72,7 +71,7 @@ class UserController:
 
             connection.commit()
             cursor.close()
-        except mysql.DatabaseError as error:
+        except mysql.connector.Error as error:
             print(error)
             return {"message": "Something went wrong"}
         finally:
@@ -80,18 +79,18 @@ class UserController:
                 connection.close()
             return {"message": "Subtract balance successful"}
 
-    @classmethod
-    def getUserBalanceHistory(cls, userId):
+    @staticmethod
+    def getUserBalanceHistory(userId):
         connection = None
         try:
-            connection = mysql.connector.connect(cls.CONN_STRING)
+            connection = mysql.connector.connect(host="localhost", user="root", password="", database="stocksimulator")
             cursor = connection.cursor()
 
             cursor.execute(f"SELECT balance FROM UserBalanceHistory WHERE user_id={userId}")
             history = cursor.fetchall()
 
             cursor.close()
-        except mysql.DatabaseError as error:
+        except mysql.connector.Error as error:
             print(error)
             return {"message": "Something went wrong"}
         finally:
@@ -100,11 +99,11 @@ class UserController:
             return history
 
     # Adds a new User to the database
-    @classmethod
-    def registration(cls, username: str, password: str):
+    @staticmethod
+    def registration(username: str, password: str):
         connection = None
         try:
-            connection = mysql.connector.connect(cls.CONN_STRING)
+            connection = mysql.connector.connect(host="localhost", user="root", password="", database="stocksimulator")
             cursor = connection.cursor()
 
             cursor.execute(f"SELECT * FROM UserTable WHERE username={username}") # TODO
@@ -119,7 +118,7 @@ class UserController:
 
             connection.commit()
             cursor.close()
-        except mysql.DatabaseError as error:
+        except mysql.connector.Error as error:
             print(error)
             return {"Error": "Unable to create new user"}   # TODO
         finally:
@@ -128,11 +127,11 @@ class UserController:
             return {"message": "Registration successful"}   # TODO
 
     # Marks existing user as archived
-    @classmethod
-    def archive(cls, userId: int):
+    @staticmethod
+    def archive(userId: int):
         connection = None
         try:
-            connection = mysql.connector.connect(cls.CONN_STRING)
+            connection = mysql.connector.connect(host="localhost", user="root", password="", database="stocksimulator")
             cursor = connection.cursor()
 
             cursor.execute(f"SELECT * FROM UserTable WHERE id={userId}")
@@ -144,7 +143,7 @@ class UserController:
 
             connection.commit()
             cursor.close()
-        except mysql.DatabaseError as error:
+        except mysql.connector.Error as error:
             print(error)
             return {"Error": "Unable to archive user"}  #TODO
         finally:
@@ -159,11 +158,11 @@ class UserController:
 
         return (salt + binascii.hexlify(hashedValue)), salt
 
-    @classmethod
-    def login(cls, username: str, password: str):
+    @staticmethod
+    def login(username: str, password: str):
         connection = None
         try:
-            connection = mysql.connector.connect(cls.CONN_STRING)
+            connection = mysql.connector.connect(host="localhost", user="root", password="", database="stocksimulator")
             cursor = connection.cursor()
 
             cursor.execute("SELECT * FROM UserTable WHERE username={username}")
@@ -173,19 +172,19 @@ class UserController:
 
             if(validateLogin(User(username), row[0], password)):
                 return True
-        except mysql.DatabaseError as error:
+        except mysql.connector.Error as error:
             print(error)
             return False
 
-    @classmethod
-    def validateLogin(cls, user: User, userId: str, password: str):
+    @staticmethod
+    def validateLogin(user: User, userId: str, password: str):
         connection = None
         try:
-            connection = mysql.connector.connect(cls.CONN_STRING)
+            connection = mysql.connector.connect(host="localhost", user="root", password="", database="stocksimulator")
             cursor = connection.cursor()
 
             # get the salt and password
-            cursor.execute("SELECT password, salt FROM LoginData WHERE user_id = {userId}")
+            cursor.execute(f"SELECT password, salt FROM LoginData WHERE user_id = {userId}")
             row = cursor.fetchone()
 
             dbPassword = row[0]
@@ -196,15 +195,15 @@ class UserController:
                 return True
 
             return False
-        except mysql.DatabaseError as error:
+        except mysql.connector.Error as error:
             print(error)
             return False
 
-    @classmethod
-    def logout(cls, user: User, tokenId: str):
+    @staticmethod
+    def logout(user: User, tokenId: str):
         connection = None
         try:
-            connection = mysql.connector.connect(cls.CONN_STRING)
+            connection = mysql.connector.connect(host="localhost", user="root", password="", database="stocksimulator")
             cursor = connection.cursor()
 
             cursor.execute(f"SELECT * FROM RevokedTokens WHERE id={tokenId}")
@@ -216,7 +215,7 @@ class UserController:
 
             connection.commit()
             cursor.close()
-        except mysql.DatabaseError as error:
+        except mysql.connector.Error as error:
             print(error)
             return False
         finally:
@@ -224,11 +223,11 @@ class UserController:
                 connection.close()
             return True
 
-    @classmethod
-    def tokenIsBlacklisted(cls, jti: str):
+    @staticmethod
+    def tokenIsBlacklisted(jti: str):
         connection = None
         try:
-            connection = mysql.connector.connect(cls.CONN_STRING)
+            connection = mysql.connector.connect(host="localhost", user="root", password="", database="stocksimulator")
             cursor = connection.cursor()
 
             cursor.execute(f"SELECT * FROM RevokedTokens WHERE jti={jti}")
@@ -238,7 +237,7 @@ class UserController:
                 return True
 
             cursor.close()
-        except mysql.DatabaseError as error:
+        except mysql.connector.Error as error:
             print(error)
             return True
         finally:
