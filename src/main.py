@@ -82,4 +82,5 @@ def stock_sell():
 
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(host='0.0.0.0')    # Dockerized
+    # app.run(debug=True)    # Debug
