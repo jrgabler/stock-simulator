@@ -6,5 +6,7 @@ services:
         container_name: stocksimulator-app
         build: ./src
         ports:
-            - '5000:5000'
+            - '5000'
+        expose:
+            - '8080'
 

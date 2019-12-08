@@ -26,8 +26,10 @@ CREATE TABLE UserBalanceHistory(
     id INT NOT NULL AUTO_INCREMENT,
     user_id INT NOT NULL,
     balance NUMERIC NOT NULL DEFAULT 10000.0,
-    time_change TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-)
+    time_change TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY(id),
+    FOREIGN KEY (user_id) REFERENCES UserTable(id)
+);
 
 DROP TABLE IF EXISTS RevokedTokens;
 CREATE TABLE RevokedTokens(
