@@ -80,6 +80,5 @@ def stock_purchase():
 def stock_sell():
     return render_template("stocks/sell.html.j2")
 
-
 if __name__ == "__main__":
     app.run(debug=True)
