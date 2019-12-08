@@ -9,6 +9,7 @@ class UserController:
     @staticmethod
     def findByUsername(username: str) -> User:
         connection = None
+        user = None
         try:
             connection = mysql.connector.connect(host="localhost", user="root", password="", database="stocksimulator")
             cursor = connection.cursor()
