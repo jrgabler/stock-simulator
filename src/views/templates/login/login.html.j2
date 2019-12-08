@@ -5,11 +5,12 @@
 {% block head %}
   {{ super() }}
   <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/login.css') }}">
+  <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/input.css') }}">
 {% endblock %}
 
 {% block content %}
 
-  <form method="post">
+  <form action="/login" method="POST">
     <div class="error">
     </div>
     <div class="form-container">
@@ -19,7 +20,7 @@
        <input type="text" placeholder="Enter Username" name="username" required>
 
        <label for="pwd"><b>Password</b></label>
-       <input type="password" placeholder="Enter Password" name="pwd" required>
+       <input type="password" placeholder="Enter Password" name="password" required>
 
        <button type="submit" class="btn btn--full-width">Login</button>
        <label>
