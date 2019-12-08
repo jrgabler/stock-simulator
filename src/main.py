@@ -4,9 +4,10 @@ from flask import Flask, render_template, redirect, url_for
 from flask import request
 from flask_restful import Api
 from flask_jwt_extended import JWTManager
+from guppy import hpy
 
-from Api import UserService, StockService
-from Controllers import UserController
+from api import UserService, StockService
+from controllers import UserController
 
 # refactor into config.py file
 VIEW_DIRECTORY = "./views"
@@ -24,6 +25,10 @@ blacklist = set()
 jwt = JWTManager(app)
 
 api = Api(app)
+
+# guppy
+h = hpy()
+print(h.heap())
 
 # called every time client tries to access a secure endpoint
 @jwt.token_in_blacklist_loader
