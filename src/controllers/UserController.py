@@ -8,7 +8,7 @@ class UserController:
     CONN_STRING = "host='localhost' port=3306 user='root' password=''"
 
     @classmethod
-    def findByUsername(cls, username: str):
+    def findByUsername(cls, username: str) -> User:
         connection = None
         try:
             connection = mysql.connector.connect(cls.CONN_STRING)
@@ -17,16 +17,17 @@ class UserController:
             cursor.execute(f"SELECT * FROM UserTable WHERE username={username}")
             row = cursor.fetchone()
             if(row is None):
-                return False
+                return None
 
+            user = User(row[0], row[1])
             cursor.close()
         except mysql.DatabaseError as error:
             print(error)
-            return False
+            return None
         finally:
             if(connection is not None):
                 connection.close()
-            return True
+            return user
 
     # Add balance to user account
     @classmethod
@@ -65,7 +66,7 @@ class UserController:
             row = cursor.fetchone()
             newBalance = row[0] - amount
             # TODO - where/how do we want to handle overdrawing?
-            cursor.execute(f"UPDATE UsertTable SET balance={newBalance}")
+            cursor.execute(f"UPDATE UserTable SET balance={newBalance}")
             # TODO
             cursor.execute(f"INSERT INTO UserBalanceHistory (user_id, balance) VALUES({userId}, {newBalance})")
 
@@ -78,6 +79,25 @@ class UserController:
             if(connection is not None):
                 connection.close()
             return {"message": "Subtract balance successful"}
+
+    @classmethod
+    def getUserBalanceHistory(cls, userId):
+        connection = None
+        try:
+            connection = mysql.connector.connect(cls.CONN_STRING)
+            cursor = connection.cursor()
+
+            cursor.execute(f"SELECT balance FROM UserBalanceHistory WHERE user_id={userId}")
+            history = cursor.fetchall()
+
+            cursor.close()
+        except mysql.DatabaseError as error:
+            print(error)
+            return {"message": "Something went wrong"}
+        finally:
+            if(connection is not None):
+                connection.close()
+            return history
 
     # Adds a new User to the database
     @classmethod
