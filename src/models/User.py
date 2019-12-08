@@ -1,11 +1,15 @@
 class User:
 
-    def __init__(self, username: str, password: str):
+    def __init__(self, userId: int, username: str):
+        self.userId = userId
         self.username = username
         self.isAuthenticated = False
 
     def getUsername(self):
         return self.username
+
+    def getUserId(self):
+        return self.userId
 
     def isAuthenticated(self):
         return self.isAuthenticated

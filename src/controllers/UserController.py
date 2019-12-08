@@ -1,6 +1,6 @@
 import mysql.connector, binascii, hashlib
 
-from Models import User
+from models import User
 
 class UserController:
 
@@ -8,7 +8,7 @@ class UserController:
     CONN_STRING = "host='localhost' port=3306 user='root' password=''"
 
     @classmethod
-    def findByUsername(cls, username: str):
+    def findByUsername(cls, username: str) -> User:
         connection = None
         try:
             connection = mysql.connector.connect(cls.CONN_STRING)
@@ -17,28 +17,32 @@ class UserController:
             cursor.execute(f"SELECT * FROM UserTable WHERE username={username}")
             row = cursor.fetchone()
             if(row is None):
-                return False
+                return None
 
+            user = User(row[0], row[1])
             cursor.close()
         except mysql.DatabaseError as error:
             print(error)
-            return False
+            return None
         finally:
             if(connection is not None):
                 connection.close()
-            return True
+            return user
 
     # Add balance to user account
-    def addBalance(self, userId: int, amount: float):
+    @classmethod
+    def addBalance(cls, userId: int, amount: float):
         connection = None
         try:
-            connection = mysql.connector.connect(CONN_STRING)
+            connection = mysql.connector.connect(cls.CONN_STRING)
             cursor = connection.cursor()
 
             cursor.execute(f"SELECT balance FROM UserTable WHERE id={userId}")
             row = cursor.fetchone()
-            balance = row[0]
-            cursor.execute(f"UPDATE UserTable SET balance={balance + amount} WHERE id={userId}")
+            newBalance = row[0] + amount
+            cursor.execute(f"UPDATE UserTable SET balance={newBalance} WHERE id={userId}")
+            # TODO - this could be turned into a MySQL procedure
+            cursor.execute(f"INSERT INTO UserBalanceHistory (user_id, balance) VALUES({userId}, {newBalance})")
 
             connection.commit()
             cursor.close()
@@ -51,17 +55,20 @@ class UserController:
             return {"message": "Add balance successful"}
 
     # Subtract balance from user account
-    def subtractBalance(self, userId: int, amount: float):
+    @classmethod
+    def subtractBalance(cls, userId: int, amount: float):
         connection = None
         try:
-            connection = mysql.connector.connect(CONN_STRING)
+            connection = mysql.connector.connect(cls.CONN_STRING)
             cursor = connection.cursor()
             
             cursor.execute(f"SELECT balance FROM UserTable WHERE id={userId}")
             row = cursor.fetchone()
-            balance = row[0]
+            newBalance = row[0] - amount
             # TODO - where/how do we want to handle overdrawing?
-            cursor.execute(f"UPDATE UsertTable SET balance={balance - amount}")
+            cursor.execute(f"UPDATE UserTable SET balance={newBalance}")
+            # TODO
+            cursor.execute(f"INSERT INTO UserBalanceHistory (user_id, balance) VALUES({userId}, {newBalance})")
 
             connection.commit()
             cursor.close()
@@ -72,6 +79,25 @@ class UserController:
             if(connection is not None):
                 connection.close()
             return {"message": "Subtract balance successful"}
+
+    @classmethod
+    def getUserBalanceHistory(cls, userId):
+        connection = None
+        try:
+            connection = mysql.connector.connect(cls.CONN_STRING)
+            cursor = connection.cursor()
+
+            cursor.execute(f"SELECT balance FROM UserBalanceHistory WHERE user_id={userId}")
+            history = cursor.fetchall()
+
+            cursor.close()
+        except mysql.DatabaseError as error:
+            print(error)
+            return {"message": "Something went wrong"}
+        finally:
+            if(connection is not None):
+                connection.close()
+            return history
 
     # Adds a new User to the database
     @classmethod

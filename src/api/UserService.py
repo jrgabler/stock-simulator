@@ -1,8 +1,8 @@
 from flask_restful import Resource, reqparse
 from flask_jwt_extended import (create_access_token, create_refresh_token, jwt_required, jwt_refresh_token_required, get_jwt_identity, get_raw_jwt)
 
-from Controllers import UserController
-from Models import User
+from controllers import UserController
+from models import User
 
 parser = reqparse.RequestParser()
 parser.add_argument("username", help="This field cannot be blank", required=False)
@@ -12,7 +12,7 @@ class UserRegistration(Resource):
     def post(self):
         data = parser.parse_args()
 
-        if(UserController().findByUsername(data["username"])):
+        if(UserController().findByUsername(data["username"]) != None):
             return {"Error": f"User {data['username']} already exists"}
 
         try:
@@ -33,10 +33,10 @@ class UserLogin(Resource):
     def post(self):
         data = parser.parse_args()
 
-        if(not UserController().findByUsername(data["username"])):
+        if(UserController().findByUsername(data["username"]) == None):
             return {"message": f"User {data.username} doesn't exist"}
 
-        if(UserController().login(data["username"], data["passwors"])):
+        if(UserController().login(data["username"], data["password"])):
             access_token = create_access_token(identity = data["username"])
             refresh_token = create_refresh_token(identity = data["username"])
 
@@ -65,3 +65,13 @@ class TokenRefresh(Resource):
         user = get_jwt_identity()
         access_token = create_access_token(identity = user)
         return {"access_token": access_token}
+
+class GetBalanceHistory(Resource):
+    @jwt_required
+    def post(self):
+        data = parser.parse_args()
+
+        user = UserController().findByUsername(data["username"])
+        history = UserController().getUserBalanceHistory(user.getUserId)
+
+        return history
