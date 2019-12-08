@@ -1,4 +1,5 @@
 # import Asset
+import json
 
 # This object has to match the API being used in order to make json.dumps()
 # work
@@ -16,3 +17,12 @@ class Stock():
         self.last = last
         self.symbol = symbol
         self.prevclose = prev_close
+
+
+    def to_json(self):
+        return json.dumps(self.__dict__)
+
+    @classmethod
+    def from_json(cls, json_str):
+        stockJson = json_str["quotes"]["quote"]
+        return Stock(stockJson["open"], stockJson["close"], stockJson["high"], stockJson["low"], 0.0, 0.0, 0.0, 0.0, stockJson["type"], stockJson["last"], stockJson["symbol"], stockJson["prevclose"])
