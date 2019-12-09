@@ -1,54 +1,56 @@
 {% import 'macros/container-macro.html.j2' as macro %}
+{% macro watchlist(stock) -%}
+  {% if stock %}
+    <div class="stock_info">
+      <h2 class="caption">{{ data.symbol }}</h2>
+      <h3 class="caption">High</h3>
+        <table class="card-style">
+          <thead>
+            <tr>
+              <th scope="col">Previous Close</th>
+              <th scope="col">Open</th>
+              <th scope="col">Bid</th>
+              <th scope="col">Ask</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+                <td data-label="Previous Close">{{stock.prevclose}}</td>
+                <td data-label="Open">{{stock.open}}</td>
+                <td data-label="Bid">{{stock.high}}</td>
+                <td data-label="Ask">{{stock.low}}</td>
+            </tr>
+          </tbody>
+        </table>
+    </div>
+    <div class="stock_info">
+        <h3 class="caption">Low</h3>
 
-
-{% macro watchlist(stock_symbol) -%}
-  <div class="stock_info">
-    <h2 class="caption">{{ stock_symbol }}</h2>
-    <h3 class="caption">High</h3>
-      <table class="card-style">
-        <thead>
-          <tr>
-            <th scope="col">Previous Close</th>
-            <th scope="col">Open</th>
-            <th scope="col">Bid</th>
-            <th scope="col">Ask</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-              <td data-label="Previous Close">227.01</td>
-              <td data-label="Open">226.27</td>
-              <td data-label="Bid">227.12 x 1100</td>
-              <td data-label="Ask">227.44 x 900</td>
-          </tr>
-        </tbody>
-      </table>
-  </div>
-  <div class="stock_info">
-      <h3 class="caption">Low</h3>
-
-      <table class="card-style">
-        <thead>
-          <tr>
-            <th scope="col">Earnings Date</th>
-            <th scope="col">Volume</th>
-            <th scope="col">Avg. Volume</th>
-            <th scope="col">Market Cap</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-              <td data-label="Earnings Date">227.01</td>
-              <td data-label="Volume">226.27</td>
-              <td data-label="Avg. Volume">227.12 x 1100</td>
-              <td data-label="Market">227.44 x 900</td>
-          </tr>
-        </tbody>
-      </table>
-  </div>
+        <table class="card-style">
+          <thead>
+            <tr>
+              <th scope="col">Last</th>
+              <th scope="col">Per Ratio</th>
+              <th scope="col">Avg. Volume</th>
+              <th scope="col">Market Cap</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+                <td data-label="Last">{{stock.last}}</td>
+                <td data-label="Per Ratio">{{stock.peratio}}</td>
+                <td data-label="Avg. Volume">{{stock.average_volume}}</td>
+                <td data-label="Market">{{stock.market_cap}}</td>
+            </tr>
+          </tbody>
+        </table>
+    </div>
+  {% else %}
+    <p>Please add stock to your watchlist <a class="" href="{{url_for('manage_watchlist')}}">here</a><p>
+  {% endif %}
 {%- endmacro %}
 
 {{ macro.container(
-    watchlist('GOOGL'),
+    watchlist(data),
     'WatchList', '', 'container-item--half')
 }}

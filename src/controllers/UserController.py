@@ -169,7 +169,7 @@ class UserController:
             connection = mysql.connector.connect(host="localhost", user="root", password="", database="stocksimulator")
             cursor = connection.cursor()
 
-            cursor.execute("SELECT * FROM UserTable WHERE username='{username}';")  ### Missing an f before query??
+            cursor.execute(f"SELECT * FROM UserTable WHERE username='{username}';")  ### Missing an f before query??
             row = cursor.fetchone()
             if(row is None):
                 return False
