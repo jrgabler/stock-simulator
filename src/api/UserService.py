@@ -11,7 +11,7 @@ parser.add_argument("password", help="This field cannot be blank", required=Fals
 class UserRegistration(Resource):
     def post(self):
         data = parser.parse_args()
-        userController = UserController()
+        userController = UserController.UserController()
 
         if(userController.findByUsername(data["username"]) != None):
             return {"Message": f"User {data['username']} already exists"}
@@ -28,7 +28,7 @@ class UserRegistration(Resource):
             }
 
         except:
-            return {"message": "Something went wrong"}, 500
+            return {"message": "Something went wrong"}
 
 class UserLogin(Resource):
     def post(self):
@@ -48,7 +48,7 @@ class UserLogin(Resource):
                 "refresh_token": refresh_token
             }
         else:
-            return {"message": "Invalid credentials"}
+            return {"message": "Username or password is incorrect."}
 
 class UserLogoutAccess(Resource):
     @jwt_required

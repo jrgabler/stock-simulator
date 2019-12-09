@@ -9,13 +9,13 @@
 
 {% block content %}
 
-  <form>
+  <form method="post" action="{{ url_for('register') }}">
    <div class="form-container">
      <h2>Register</h2>
      <p>Please fill in this form to create an account.</p>
 
-     <label for="username"><b>First Name</b></label>
-     <input type="text" placeholder="Choose a username" name="lname" minlength="3" maxlength="15" required>
+     <label for="username"><b>Username</b></label>
+     <input type="text" placeholder="Choose a username" name="username" minlength="3" maxlength="15" required>
 
 
      <label for="email"><b>Email</b></label>

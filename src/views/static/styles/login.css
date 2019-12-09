@@ -9,6 +9,12 @@
   color: dodgerblue;
 }
 
+.error {
+  color: red;
+  margin: 10px 0 20px;
+  line-height: 1.2;
+}
+
 /* The "Forgot password" text */
 div.pwd {
  float: right;

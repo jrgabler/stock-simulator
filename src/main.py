@@ -12,9 +12,11 @@ from Controllers import UserController
 VIEW_DIRECTORY = "./views"
 TEMPLATE_FOLDER = os.path.abspath(VIEW_DIRECTORY + "/templates/")
 STATIC_FOLDER = os.path.abspath(VIEW_DIRECTORY + "/static/")
-LOCAL_URL = 'https://localhost:5000'
-HEADERS = {"Authorization": '', "Accept": "application/json"}
-
+LOCAL_URL = 'http://localhost:5000'
+API_LOGIN = '/login/submit'
+API_REGISTER = '/registration'
+ACCESS_TOKEN = ""
+REFRESH_TOKEN = ""
 
 app = Flask(__name__, template_folder=TEMPLATE_FOLDER, static_folder=STATIC_FOLDER)
 
@@ -34,8 +36,8 @@ def check_if_token_in_blacklist(decrypted_token):
 
 
 # User Service
-api.add_resource(UserService.UserRegistration, "/registration")
-api.add_resource(UserService.UserLogin, "/login/submit")
+api.add_resource(UserService.UserRegistration, API_REGISTER)
+api.add_resource(UserService.UserLogin, API_LOGIN)
 api.add_resource(UserService.UserLogoutAccess, "/logout/access")
 api.add_resource(UserService.UserLogoutRefresh, "/logout/refresh")
 api.add_resource(UserService.TokenRefresh, "/token/refresh")
@@ -45,64 +47,65 @@ api.add_resource(StockService.WatchAsset, "/watch/add")
 api.add_resource(StockService.RemoveWatchedAsset, "/watch/remove")
 
 
-#  isLogged in to be removed and replaced for Token Access check
-def isLoggedIn(template, isLoggedIn):
-    if isLoggedIn:
+def isLoggedIn(template):
+    if ACCESS_TOKEN or REFRESH_TOKEN:
         return render_template(template)
 
     return redirect(url_for('login'))
 
+def set_tokens_redirect(json_response, page):
+    ACCESS_TOKEN = json_response.get("access_token")
+    REFRESH_TOKEN = json_response.get("refresh_token")
+    return redirect(url_for(page))
+
 @app.route("/")
 @app.route("/home")
 def index():
-    return isLoggedIn("index.html.j2", True)
+    return isLoggedIn("index.html.j2")
 
 @app.route("/market")
 def market():
-    return isLoggedIn("market/market.html.j2", True)
+    return isLoggedIn("market/market.html.j2")
 
-@app.route("/login")
+@app.route("/login", methods=['GET', 'POST'])
 def login():
-    return render_template("login/login.html.j2") #, data=r.json())
+    if request.method == 'POST':
+        response = requests.post(LOCAL_URL + API_LOGIN, data=request.form)
+        json_response = response.json()
 
-@app.route('/login', methods=['POST'])
-def login_submission():
-    r = requests.post(LOCAL_URL + '/login/access',
-        params={
-            'username': request.form['username'],
-            'password': request.form['password']
-    })
+        if json_response.get("access_token", "empty"):
+            return render_template("login/login.html.j2", error=json_response.get("message"))
 
-    return '<html><p>yo:' + r.json + '</p><html>';
+        return set_tokens_redirect(json_response, "index")
+    return render_template("login/login.html.j2")
 
-
-    # if request.method == 'POST':
-    #     r = requests.post('/login/access', auth=('user', 'pass')
-
-    # r = requests.post('/login/access', auth=('user', 'pass')
-    # r.json();
-
-
-@app.route("/register")
+@app.route("/register", methods=["GET", "POST"])
 def register():
-    # if
-    return isLoggedIn("login/register.html.j2", True)
+    if request.method == 'POST':
+        response = requests.post(LOCAL_URL + API_REGISTER, data=request.form)
+        json_response = response.json()
+
+        if json_response.get("access_token", "empty"):
+            return render_template("login/login.html.j2", error=json_response)
+
+        return set_tokens_redirect(json_response, "index")
+    return render_template("login/register.html.j2")
 
 @app.route("/reset-password")
 def reset_password():
-    return isLoggedIn("login/password-reset.html.j2", True)
+    return isLoggedIn("login/password-reset.html.j2")
 
 @app.route("/account")
 def account():
-    return isLoggedIn("account.html.j2", True)
+    return isLoggedIn("account.html.j2")
 
 @app.route("/stock/purchase")
 def stock_purchase():
-    return isLoggedIn("stocks/purchase.html.j2", True)
+    return isLoggedIn("stocks/purchase.html.j2")
 
 @app.route("/stock/sell")
 def stock_sell():
-    return isLoggedIn("stocks/sell.html.j2", True)
+    return isLoggedIn("stocks/sell.html.j2")
 
 @app.route("/watchlist/manage")
 def manage_watchlist():
