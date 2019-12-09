@@ -23,6 +23,7 @@ API_WATCHLIST_REMOVE = "/watch/remove"
 API_REFRESH = "/token/refresh"
 API_LOGOUT = "/logout/access"
 API_LOGOUT_REFRESH = "/logout/refresh"
+API_STOCK_PURCHASE_SELL = "/stock/purchase"
 ACCESS_COOKIE = 'user_access'
 REFRESH_COOKIE = 'user_refresh'
 
@@ -55,12 +56,13 @@ api.add_resource(UserService.UserLogoutRefresh, API_LOGOUT_REFRESH)
 api.add_resource(UserService.TokenRefresh, API_REFRESH)
 # Stock Service
 api.add_resource(StockService.GetStock, "/stock")
+api.add_resource(StockService.PurchaseAsset, API_STOCK_PURCHASE_SELL)
 api.add_resource(StockService.WatchAsset, API_WATCHLIST_ADD)
 api.add_resource(StockService.RemoveWatchedAsset, API_WATCHLIST_REMOVE)
 
 def refresh_token(request):
     token = { "refresh_token": request.cookies.get(REFRESH_COOKIE) }
-    response = request.post(LOCAL_URL + API_REFRESH, data=token)
+    response = requests.post(LOCAL_URL + API_REFRESH, data=token)
     return response.json()
 
 def isLoggedIn(template, request):
@@ -118,7 +120,10 @@ def login():
 @app.route("/register", methods=["GET", "POST"])
 def register():
     if request.method == 'POST':
-        response = requests.post(LOCAL_URL + API_REGISTER, data=request.form)
+        data = dict(request.form)
+        # don't need field
+        del data['password-repeat']
+        response = requests.post(LOCAL_URL + API_REGISTER, data=data)
         json_response = response.json()
 
         if json_response.get("access_token"):
@@ -146,12 +151,18 @@ def reset_password():
 def account():
     return isLoggedIn("account.html.j2", request)
 
-@app.route("/stock/purchase")
-def stock_purchase():
-    return isLoggedIn("stocks/purchase.html.j2", request)
+@app.route("/stock/manage", methods=["GET", "POST"])
+def manage_stock():
+    if request.method == "POST":
+        data = dict(request.form)
+        del data['transaction']
+        # formType = request.form.get("transaction")
+        # data.remove("transaction")
+        response = requests.post(LOCAL_URL + API_STOCK_PURCHASE_SELL, data=data)
+        json_response = response.json()
+        return render_template("stocks/sell.html.j2", error=jscon_response.get("message"))
 
-@app.route("/stock/sell")
-def stock_sell():
+
     return isLoggedIn("stocks/sell.html.j2", request)
 
 @app.route("/watchlist/manage")
