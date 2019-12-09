@@ -1,13 +1,18 @@
 #!/usr/bin/env python
 import os, requests, json, ast
-from flask import Flask, render_template, redirect, url_for
-from flask import request, make_response
+from flask import Flask, render_template, redirect, url_for, request, make_response
 from flask_restful import Api
 from flask_jwt_extended import JWTManager
 from guppy import hpy
+from dotenv import load_dotenv
+from pathlib import Path
 
+# Local
 from api import UserService, StockService
 from controllers.UserController import UserController
+
+env_path = Path('./config/') / '.env'
+load_dotenv(dotenv_path=env_path)
 
 # refactor into config.py file
 VIEW_DIRECTORY = "./views"
@@ -30,7 +35,7 @@ REFRESH_COOKIE = 'user_refresh'
 
 app = Flask(__name__, template_folder=TEMPLATE_FOLDER, static_folder=STATIC_FOLDER)
 
-app.config["JWT_SECRET_KEY"] = "jwt_secret_string"
+app.config["JWT_SECRET_KEY"] = os.getenv("JWT_SECRET_KEY")
 app.config["JWT_BLACKLIST_ENABLED"] = True
 app.config["JWT_BLACKLIST_TOKEN_CHECKS"] = ["access", "refresh"]
 
