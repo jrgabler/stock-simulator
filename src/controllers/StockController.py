@@ -6,16 +6,15 @@ from models import User
 
 class StockController:
 
-    # TODO - turn into env variable
-    CONN_STRING = "host='localhost' port=3306 user='root' password=''"
+    # CONN_STRING = "host='localhost' port=3306 user='root' password=''"
 
     # Inserts a Stock object into the Stock table and returns the generated ID
     # on success, -1 on failure
-    @classmethod
-    def insertStock(cls, stock: Stock):
+    @staticmethod
+    def insertStock(stock: Stock):
         connection = None
         try:
-            connection = mysql.connector.connect(cls.CONN_STRING)
+            connection = mysql.connector.connect(host="localhost", user="root", password="", database="stocksimulator")
             cursor = connection.cursor()
 
             # if symbol exists in Stock table, update pricing from API
@@ -39,7 +38,7 @@ class StockController:
 
             connection.commit()
             cursor.close()
-        except mysql.DatabseError as error:
+        except mysql.connector.Error as error:
             print(error)    # TODO
             return -1
         finally:
@@ -48,19 +47,19 @@ class StockController:
             return stockId
 
     # Add a reference to Stock table to Watchlist associated with userId
-    @classmethod    
-    def addWatch(cls, stock: Stock, userId: int):
+    @staticmethod    
+    def addWatch(stock: Stock, userId: int):
         stockId = insertStock(stock)
         connection = None
         try:
-            connection = mysql.connector.connect(cls.CONN_STRING)
+            connection = mysql.connector.connect(host="localhost", user="root", password="", database="stocksimulator")
             cursor = connection.cursor()
 
             cursor.execute(f"INSERT INTO WatchList(stock_id, user_id) VALUES({stockId}, {userId})")
 
             connection.commit()
             cursor.close()
-        except mysql.DatabaseError as error:
+        except mysql.connector.Error as error:
             print(error) # TODO - log error
             return {"message": "Something went wrong"}
         finally:
@@ -69,33 +68,33 @@ class StockController:
             return {"message": f"Added {stock.symbol} to watchlist"}
 
     # Removes reference to Stock table associated with userId from Watchlist
-    @classmethod
-    def removeWatch(cls, stockId: int, userId: int):
+    @staticmethod
+    def removeWatch(stockId: int, userId: int):
         connection = None
         try:
-            connection = mysql.connector.connect(cls.CONN_STRING)
+            connection = mysql.connector.connect(host="localhost", user="root", password="", database="stocksimulator")
             cursor = connection.cursor()
 
             cursor.execute(f"DELETE FROM WatchList WHERE stock_id={stockId}")
 
             connection.commit()
             cursor.close()
-        except mysql.DatabaseError as error:
+        except mysql.connector.Error as error:
             print(error) # TODO - log error
         finally:
             if(connection is not None):
                 connection.close()
 
-    @classmethod
-    def purchaseAsset(cls, stock: Stock, user: User):
+    @staticmethod
+    def purchaseAsset(stock: Stock, user: User):
         connection = None
         try:
-            connection = mysql.connector.connect(cls.CONN_STRING)
+            connection = mysql.connector.connect(host="localhost", user="root", password="", database="stocksimulator")
             cursor = connection.cursor()
             # there's a lot to do here
             # we need to get the purchase price
             cursor.execute(f"INSERT INTO Stock VALUES({stock.open}, {stock.close}, {stock.high}, {stock.low}, {stock.average_volume}, {stock.dividend_yield}, {stock.type}, {stock.last}, {stock.symbol}, {stock.prevclose})")
-        except mysql.DatabaseError as error:
+        except mysql.connector.Error as error:
             print(error) # TODO - log error
         finally:
             if(connection is not None):
