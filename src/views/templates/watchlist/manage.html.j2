@@ -17,7 +17,7 @@
   <form method="post" class="{{ formname }}" action="{{ url_for(action) }}">
     <div class="form-container watchlist-form">
        <label for="stock_symbol"><b>Stock Symbol ID</b></label>
-       <input type="text" placeholder="Stock Symbol ID" name="stock_symbol" maxlength="10" required>
+       <input type="text" placeholder="Stock Symbol ID" name="stock_symbol" maxlength="5" required>
        <button type="submit" class="btn btn-right">{{ submitBtn }}</button>
     </div>
   </form>

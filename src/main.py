@@ -7,7 +7,7 @@ from flask_jwt_extended import JWTManager
 from guppy import hpy
 
 from api import UserService, StockService
-from controllers import UserController
+from controllers.UserController import UserController
 
 # refactor into config.py file
 VIEW_DIRECTORY = "./views"
@@ -24,6 +24,7 @@ API_REFRESH = "/token/refresh"
 API_LOGOUT = "/logout/access"
 API_LOGOUT_REFRESH = "/logout/refresh"
 API_STOCK_PURCHASE_SELL = "/stock/purchase"
+API_STOCK = "/stock"
 ACCESS_COOKIE = 'user_access'
 REFRESH_COOKIE = 'user_refresh'
 
@@ -55,23 +56,29 @@ api.add_resource(UserService.UserLogoutAccess, API_LOGOUT)
 api.add_resource(UserService.UserLogoutRefresh, API_LOGOUT_REFRESH)
 api.add_resource(UserService.TokenRefresh, API_REFRESH)
 # Stock Service
-api.add_resource(StockService.GetStock, "/stock")
+api.add_resource(StockService.GetStock, API_STOCK)
 api.add_resource(StockService.PurchaseAsset, API_STOCK_PURCHASE_SELL)
 api.add_resource(StockService.WatchAsset, API_WATCHLIST_ADD)
 api.add_resource(StockService.RemoveWatchedAsset, API_WATCHLIST_REMOVE)
 
 def refresh_token(request):
-    token = { "refresh_token": request.cookies.get(REFRESH_COOKIE) }
-    response = requests.post(LOCAL_URL + API_REFRESH, data=token)
+    token = {'Authorization': 'Bearer ' + request.cookies.get(REFRESH_COOKIE) }
+    response = requests.post(LOCAL_URL + API_REFRESH, headers=token)
     return response.json()
 
-def isLoggedIn(template, request):
+def isLoggedIn(template, request, data=None):
     cookie = request.cookies.get(ACCESS_COOKIE)
     if cookie:
         return render_template(template)
     elif request.cookies.get(REFRESH_COOKIE):
-        response = refresh_token(request)
-        return set_tokens_redirect(request, response, template, True)
+        token = refresh_token(request)
+        # return set_tokens_redirect(request, response, template, True)
+        if data is None:
+            response = make_response(render_template(template))
+        else:
+            response = make_response(render_template(template, data=data))
+
+        response.set_cookie(ACCESS_COOKIE, token.get("access_token"), max_age=900)
 
     return redirect(url_for('login'))
 
@@ -82,15 +89,10 @@ def get_header(request):
         refreshed = refresh_token(request)
         access_token = refreshed.get('access_token')
 
-    return {'Authorization': 'Bearer ' + access_token}
+    return {'Authorization': 'Bearer ' + access_token }
 
-def set_tokens_redirect(request, json_response, page, isTemplate):
-    if isTemplate:
-        action = render_template(page)
-    else:
-        action = redirect(url_for(page))
-
-    response = make_response(action)
+def set_tokens_redirect(request, json_response, page):
+    response = make_response(redirect(url_for(page)))
     response.set_cookie(ACCESS_COOKIE, json_response.get("access_token"), max_age=900)
     response.set_cookie(REFRESH_COOKIE, json_response.get("refresh_token"))
     return response
@@ -98,7 +100,8 @@ def set_tokens_redirect(request, json_response, page, isTemplate):
 @app.route("/")
 @app.route("/home")
 def index():
-    return isLoggedIn("index.html.j2", request)
+    response = requests.post(LOCAL_URL + API_STOCK, data={"stock_symbol": "AAPL"}, headers=get_header(request))
+    return isLoggedIn("index.html.j2", request, data=response.json())
 
 @app.route("/market")
 def market():
@@ -111,7 +114,7 @@ def login():
         json_response = response.json()
 
         if json_response.get("access_token"):
-            return set_tokens_redirect(request, json_response, "index", False)
+            return set_tokens_redirect(request, json_response, "index")
 
             return render_template("login/login.html.j2", error=json_response.get("message"))
 
@@ -127,7 +130,7 @@ def register():
         json_response = response.json()
 
         if json_response.get("access_token"):
-            return set_tokens_redirect(request, json_response, "index", False)
+            return set_tokens_redirect(request, json_response, "index")
 
         return render_template("login/login.html.j2", error=json_response)
 
@@ -154,34 +157,31 @@ def account():
 @app.route("/stock/manage", methods=["GET", "POST"])
 def manage_stock():
     if request.method == "POST":
-        data = dict(request.form)
-        del data['transaction']
-        # formType = request.form.get("transaction")
-        # data.remove("transaction")
-        response = requests.post(LOCAL_URL + API_STOCK_PURCHASE_SELL, data=data)
+        response = requests.post(LOCAL_URL + API_STOCK_PURCHASE_SELL, data=request.form, headers=get_header(request))
         json_response = response.json()
-        return render_template("stocks/sell.html.j2", error=jscon_response.get("message"))
-
+        return render_template("stocks/sell.html.j2", error=json_response.get("message"))
 
     return isLoggedIn("stocks/sell.html.j2", request)
 
+# manage watch list + add / remove stock from watchlist
 @app.route("/watchlist/manage")
 def manage_watchlist():
     return isLoggedIn("watchlist/manage.html.j2", request)
 
 @app.route("/watchlist/manage", methods=["POST"])
-def add_stock_watchlist():
-    response = requests.post(LOCAL_URL + API_WATCHLIST_ADD, data=request.form, headers=get_header(request))
-    json_response = response.json()
-
-    return render_template("watchlist/manage.html.j2", error=json_response.get("message"))
+def remove_stock_watchlist():
+    if request.method == "POST":
+        response = requests.post(LOCAL_URL + API_WATCHLIST_REMOVE, data=request.form, headers=get_header(request))
+        json_response = response.json()
+        return render_template("stocks/sell.html.j2", error=json_response.get("message"))
 
 @app.route("/watchlist/manage", methods=["POST"])
-def remove_stock_watchlist():
-    response = requests.post(LOCAL_URL + API_WATCHLIST_REMOVE, data=request.form, headers=get_header(request))
-    json_response = response.json()
+def add_stock_watchlist():
+    if request.method == "POST":
+        response = requests.post(LOCAL_URL + API_WATCHLIST_ADD, data=request.form, headers=get_header(request))
+        json_response = response.json()
+        return render_template("stocks/sell.html.j2", error=json_response.get("message"))
 
-    return render_template("watchlist/manage.html.j2", error=json_response.get("message"))
 
 if __name__ == "__main__":
     app.run(host='0.0.0.0')    # Dockerized
