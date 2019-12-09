@@ -208,19 +208,8 @@ class UserController:
     def login(username: str, password: str):
         connection = None
         try:
-            connection = mysql.connector.connect(host="localhost", user=MYSQL_USER, password=MYSQL_PASSWORD, database="stocksimulator")
-            cursor = connection.cursor()
-
-            cursor.execute("SELECT * FROM UserTable WHERE username='{username}';")  ### Missing an f before query??
-            row = cursor.fetchone()
-            if(row is None):
-                return False
-
-            if(validateLogin(User(username), row[0], password)):
-                return True
-        except mysql.connector.Error as error:
-            print(error)
-            return False
+            # connection = mysql.connector.connect(host="localhost", user=MYSQL_USER, password=MYSQL_PASSWORD, database="stocksimulator")
+            connection = mysql.connector.connect(host="localhost", user="root", password="", database="stocksimulator")
 
             if connection.is_connected():
                 cursor = connection.cursor()
@@ -236,13 +225,13 @@ class UserController:
                 row = cursor.fetchone()
                 dbPassword = row[0]
                 salt = row[1]
-
+                
                 if(password == salt + dbPassword):
                     user = User.User(row[0], username)
                     user.authenticate()
                     return True
 
-                return False
+            return False
         except mysql.connector.Error as error:
             print(error)
             return False

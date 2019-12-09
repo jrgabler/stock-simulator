@@ -76,7 +76,10 @@ def isLoggedIn(template, request):
         return render_template(template)
     elif request.cookies.get(REFRESH_COOKIE):
         response = refresh_token(request)
-        return set_tokens_redirect(request, response, template, True)
+        response.set_cookie(ACCESS_COOKIE, json_response.get("access_token"), max_age=900)
+        response.set_cookie(REFRESH_COOKIE, json_response.get("refresh_token"))
+        return render_template(template)
+        # return set_tokens_redirect(request, response, template)
 
     return redirect(url_for('login'))
 
@@ -89,13 +92,8 @@ def get_header(request):
 
     return {'Authorization': 'Bearer ' + access_token}
 
-def set_tokens_redirect(request, json_response, page, isTemplate):
-    if isTemplate:
-        action = render_template(page)
-    else:
-        action = redirect(url_for(page))
-
-    response = make_response(action)
+def set_tokens_redirect(request, json_response, page):
+    response = make_response(redirect(url_for(page)))
     response.set_cookie(ACCESS_COOKIE, json_response.get("access_token"), max_age=900)
     response.set_cookie(REFRESH_COOKIE, json_response.get("refresh_token"))
     return response
@@ -116,9 +114,9 @@ def login():
         json_response = response.json()
 
         if json_response.get("access_token"):
-            return set_tokens_redirect(request, json_response, "index", False)
+            return set_tokens_redirect(request, json_response, "index")
 
-            return render_template("login/login.html.j2", error=json_response.get("message"))
+        return render_template("login/login.html.j2", error=json_response.get("message"))
 
     return render_template("login/login.html.j2")
 
@@ -132,9 +130,9 @@ def register():
         json_response = response.json()
 
         if json_response.get("access_token"):
-            return set_tokens_redirect(request, json_response, "index", False)
+            return set_tokens_redirect(request, json_response, "index")
 
-        return render_template("login/login.html.j2", error=json_response)
+        return render_template("login/register.html.j2", error=json_response.get("message"))
 
     return render_template("login/register.html.j2")
 
