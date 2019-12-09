@@ -1,7 +1,7 @@
 #!/usr/bin/env python
-import os, requests
+import os, requests, json, ast
 from flask import Flask, render_template, redirect, url_for
-from flask import request
+from flask import request, make_response
 from flask_restful import Api
 from flask_jwt_extended import JWTManager
 from guppy import hpy
@@ -20,11 +20,11 @@ API_LOGIN = '/login/submit'
 API_REGISTER = '/registration'
 API_WATCHLIST_ADD = "/watch/add"
 API_WATCHLIST_REMOVE = "/watch/remove"
-
-global ACCESS_TOKEN
-global REFRESH_TOKEN
-ACCESS_TOKEN = ""
-REFRESH_TOKEN = ""
+API_REFRESH = "/token/refresh"
+API_LOGOUT = "/logout/access"
+API_LOGOUT_REFRESH = "/logout/refresh"
+ACCESS_COOKIE = 'user_access'
+REFRESH_COOKIE = 'user_refresh'
 
 app = Flask(__name__, template_folder=TEMPLATE_FOLDER, static_folder=STATIC_FOLDER)
 
@@ -50,38 +50,57 @@ def check_if_token_in_blacklist(decrypted_token):
 # User Service
 api.add_resource(UserService.UserRegistration, API_REGISTER)
 api.add_resource(UserService.UserLogin, API_LOGIN)
-api.add_resource(UserService.UserLogoutAccess, "/logout/access")
-api.add_resource(UserService.UserLogoutRefresh, "/logout/refresh")
-api.add_resource(UserService.TokenRefresh, "/token/refresh")
+api.add_resource(UserService.UserLogoutAccess, API_LOGOUT)
+api.add_resource(UserService.UserLogoutRefresh, API_LOGOUT_REFRESH)
+api.add_resource(UserService.TokenRefresh, API_REFRESH)
 # Stock Service
 api.add_resource(StockService.GetStock, "/stock")
 api.add_resource(StockService.WatchAsset, API_WATCHLIST_ADD)
 api.add_resource(StockService.RemoveWatchedAsset, API_WATCHLIST_REMOVE)
 
+def refresh_token(request):
+    token = { "refresh_token": request.cookies.get(REFRESH_COOKIE) }
+    response = request.post(LOCAL_URL + API_REFRESH, data=token)
+    return response.json()
 
-def isLoggedIn(template):
-    # if ACCESS_TOKEN or REFRESH_TOKEN:
-    return render_template(template)
+def isLoggedIn(template, request):
+    cookie = request.cookies.get(ACCESS_COOKIE)
+    if cookie:
+        return render_template(template)
+    elif request.cookies.get(REFRESH_COOKIE):
+        response = refresh_token(request)
+        return set_tokens_redirect(request, response, template, True)
 
-    # return redirect(url_for('login'))
+    return redirect(url_for('login'))
 
-def get_header(auth_token):
-    return {'Authorization': 'Bearer ' + auth_token}
+def get_header(request):
+    access_token = request.cookies.get(ACCESS_COOKIE)
 
-def set_tokens_redirect(json_response, page):
-    ACCESS_TOKEN = json_response.get("access_token")
-    REFRESH_TOKEN = json_response.get("refresh_token")
+    if not access_token:
+        refreshed = refresh_token(request)
+        access_token = refreshed.get('access_token')
 
-    return redirect(url_for(page))
+    return {'Authorization': 'Bearer ' + access_token}
+
+def set_tokens_redirect(request, json_response, page, isTemplate):
+    if isTemplate:
+        action = render_template(page)
+    else:
+        action = redirect(url_for(page))
+
+    response = make_response(action)
+    response.set_cookie(ACCESS_COOKIE, json_response.get("access_token"), max_age=900)
+    response.set_cookie(REFRESH_COOKIE, json_response.get("refresh_token"))
+    return response
 
 @app.route("/")
 @app.route("/home")
 def index():
-    return isLoggedIn("index.html.j2")
+    return isLoggedIn("index.html.j2", request)
 
 @app.route("/market")
 def market():
-    return isLoggedIn("market/market.html.j2")
+    return isLoggedIn("market/market.html.j2", request)
 
 @app.route("/login", methods=['GET', 'POST'])
 def login():
@@ -90,7 +109,7 @@ def login():
         json_response = response.json()
 
         if json_response.get("access_token"):
-            return set_tokens_redirect(json_response, "index")
+            return set_tokens_redirect(request, json_response, "index", False)
 
             return render_template("login/login.html.j2", error=json_response.get("message"))
 
@@ -99,49 +118,56 @@ def login():
 @app.route("/register", methods=["GET", "POST"])
 def register():
     if request.method == 'POST':
-        response = requests.post(LOCAL_URL + API_REGISTER, data=request.form, auth={})
+        response = requests.post(LOCAL_URL + API_REGISTER, data=request.form)
         json_response = response.json()
 
         if json_response.get("access_token"):
-            return set_tokens_redirect(json_response, "login")
+            return set_tokens_redirect(request, json_response, "index", False)
 
         return render_template("login/login.html.j2", error=json_response)
 
     return render_template("login/register.html.j2")
 
+@app.route("/logout")
+def logout():
+    requests.post(LOCAL_URL + API_LOGOUT)
+    requests.post(LOCAL_URL + API_LOGOUT_REFRESH)
+
+    response = make_response(url_for('login'))
+    response.delete_cookie(ACCESS_COOKIE)
+    response.delete_cookie(REFRESH_COOKIE)
+    return response
+
 @app.route("/reset-password")
 def reset_password():
-    return isLoggedIn("login/password-reset.html.j2")
+    return isLoggedIn("login/password-reset.html.j2", request)
 
 @app.route("/account")
 def account():
-    return isLoggedIn("account.html.j2")
+    return isLoggedIn("account.html.j2", request)
 
 @app.route("/stock/purchase")
 def stock_purchase():
-    return isLoggedIn("stocks/purchase.html.j2")
+    return isLoggedIn("stocks/purchase.html.j2", request)
 
 @app.route("/stock/sell")
 def stock_sell():
-    return isLoggedIn("stocks/sell.html.j2")
+    return isLoggedIn("stocks/sell.html.j2", request)
 
 @app.route("/watchlist/manage")
 def manage_watchlist():
-    return isLoggedIn("watchlist/manage.html.j2")
+    return isLoggedIn("watchlist/manage.html.j2", request)
 
 @app.route("/watchlist/manage", methods=["POST"])
 def add_stock_watchlist():
-    response = requests.post(LOCAL_URL + API_WATCHLIST_ADD, data=request.form, headers=get_header(ACCESS_TOKEN))
+    response = requests.post(LOCAL_URL + API_WATCHLIST_ADD, data=request.form, headers=get_header(request))
     json_response = response.json()
-
-    # if json_response.get("access_token"):
-    #     return set_tokens_redirect(json_response, "manage_watchlist")
 
     return render_template("watchlist/manage.html.j2", error=json_response.get("message"))
 
 @app.route("/watchlist/manage", methods=["POST"])
 def remove_stock_watchlist():
-    response = requests.post(LOCAL_URL + API_WATCHLIST_REMOVE, data=request.form, headers=get_header(ACCESS_TOKEN))
+    response = requests.post(LOCAL_URL + API_WATCHLIST_REMOVE, data=request.form, headers=get_header(request))
     json_response = response.json()
 
     return render_template("watchlist/manage.html.j2", error=json_response.get("message"))
