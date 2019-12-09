@@ -11,28 +11,21 @@
 {% endblock %}
 
 {% macro transactionForm() -%}
-  <form ethod="post" action="{{ url_for('manage_stock')}}">
-    <table>
-      <tr>
-        <th>Stock Symbol:</th>
-        <td><input type="text" name="symbol"></td>
-        <td><span>Check Symbol</span></td>
-      </tr>
-      <tr>
-        <th>Transaction:</th>
-        <td>
-          <select name="transaction">
-            <option value="buy">Buy</option>
-            <option value="sell">Sell</option>
-          </select>
-        </td>
-      </tr>
-      <tr>
-        <th>Quantity:</th>
-        <td><input type="number" name="quantity"></td>
-      </tr>
-    </table>
-    <button type="submit" class="btn btn--full-width">Submit</button>
+  <form method="post" action="{{ url_for('manage_stock')}}">
+    <div class="form-container">
+      <h2>Login</h2>
+
+      {% if error %}
+        <div class="error">{{ error }}</div>
+      {% endif %}
+
+       <label for="stock_symbol"><b>Username</b></label>
+       <input type="text" placeholder="Stock Symbol ID" name="stock_symbol" maxlength="5" required>
+
+       <label for="quantity"><b>Quantity</b></label>
+       <input type="number" name="quantity" required>
+       <button type="submit" class="btn btn--full-width">Submit</button>
+    </div>
   </form>
 {%- endmacro %}
 

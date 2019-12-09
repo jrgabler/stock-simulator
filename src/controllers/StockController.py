@@ -34,6 +34,7 @@ class StockController:
             if(stockId is not None):
                 # TODO - potential optimization point
                 updatedStock = MarketProvider().getStock(stock.symbol)
+                print (updatedStock)
 
                 cursor.execute(f"UPDATE Stock SET open_price={stock.open} close_price={stock.close} high={stock.high} low={stock.low} average_volume={stock.average_volume} peratio={stock.peratio} didend_yield={stock.dividend_yield} asset_type='{stock.asset_type}' last={stock.last} symbol='{stock.symbol}' prev_close={stock.prev_close};")
                 cursor.execute(f"SELECT id FROM Stock WHERE symbol='{stock.symbol}'")
