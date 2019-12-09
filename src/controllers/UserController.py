@@ -62,7 +62,6 @@ class UserController:
         try:
             connection = mysql.connector.connect(host="localhost", user="root", password="", database="stocksimulator")
             cursor = connection.cursor()
-            
             cursor.execute(f"SELECT balance FROM UserTable WHERE id={userId};")
             row = cursor.fetchone()
             newBalance = row[0] - amount
@@ -112,7 +111,7 @@ class UserController:
             row = cursor.fetchone()
             if(row is not None):
                 return {"Error": "Unable to create new user: Duplicate username"}   # TODO
-            
+
             # hashedPassword, salt = hash(password)
 
             hashedPassword = "test123"

@@ -1,0 +1,54 @@
+{% import 'macros/container-macro.html.j2' as macro %}
+
+
+{% macro watchlist(stock_symbol) -%}
+  <div class="stock_info">
+    <h2 class="caption">{{ stock_symbol }}</h2>
+    <h3 class="caption">High</h3>
+      <table class="card-style">
+        <thead>
+          <tr>
+            <th scope="col">Previous Close</th>
+            <th scope="col">Open</th>
+            <th scope="col">Bid</th>
+            <th scope="col">Ask</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+              <td data-label="Previous Close">227.01</td>
+              <td data-label="Open">226.27</td>
+              <td data-label="Bid">227.12 x 1100</td>
+              <td data-label="Ask">227.44 x 900</td>
+          </tr>
+        </tbody>
+      </table>
+  </div>
+  <div class="stock_info">
+      <h3 class="caption">Low</h3>
+
+      <table class="card-style">
+        <thead>
+          <tr>
+            <th scope="col">Earnings Date</th>
+            <th scope="col">Volume</th>
+            <th scope="col">Avg. Volume</th>
+            <th scope="col">Market Cap</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+              <td data-label="Earnings Date">227.01</td>
+              <td data-label="Volume">226.27</td>
+              <td data-label="Avg. Volume">227.12 x 1100</td>
+              <td data-label="Market">227.44 x 900</td>
+          </tr>
+        </tbody>
+      </table>
+  </div>
+{%- endmacro %}
+
+{{ macro.container(
+    watchlist('GOOGL'),
+    'WatchList', '', 'container-item--half')
+}}

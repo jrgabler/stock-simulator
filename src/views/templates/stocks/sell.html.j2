@@ -11,34 +11,34 @@
 {% endblock %}
 
 {% macro transactionForm() -%}
-  <form action="/stock/sell" method="POST">
-    <table> 
-      <tr> 
+  <form ethod="post" action="{{ url_for('manage_stock')}}">
+    <table>
+      <tr>
         <th>Stock Symbol:</th>
         <td><input type="text" name="symbol"></td>
         <td><span>Check Symbol</span></td>
       </tr>
-      <tr> 
+      <tr>
         <th>Transaction:</th>
-        <td> 
-          <select>
+        <td>
+          <select name="transaction">
             <option value="buy">Buy</option>
             <option value="sell">Sell</option>
           </select>
         </td>
       </tr>
-      <tr> 
+      <tr>
         <th>Quantity:</th>
         <td><input type="number" name="quantity"></td>
       </tr>
     </table>
-    <input class="btn btn--full-width" type="submit">
+    <button type="submit" class="btn btn--full-width">Submit</button>
   </form>
 {%- endmacro %}
 
-{% macro stockInfo() -%} 
-  <div class="owned container-item--outline"> 
-    <h3>Advanced Micro Devices, Inc.</h3> 
+{% macro stockInfo() -%}
+  <div class="owned container-item--outline">
+    <h3>Advanced Micro Devices, Inc.</h3>
     <table>
       <tr>
         <th>Quantity Owned</th>

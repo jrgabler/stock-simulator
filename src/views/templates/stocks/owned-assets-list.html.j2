@@ -1,0 +1,34 @@
+{% import 'macros/container-macro.html.j2' as macro %}
+
+{% macro ownedAssetRow(date, symbol, amount, price) -%}
+  <tr>
+      <td data-label="Purchased">{{ date }}</td>
+      <td data-label="Symbol">{{ symbol }}</td>
+      <td data-label="Quantity">{{ amount }}</td>
+      <td data-label="Price">${{ price }}</td>
+  </tr>
+{%- endmacro %}
+
+<!--  -->
+{% macro ownedAssets() -%}
+  <table id="my_asset_table" cellspacing="0">
+      <thead>
+        <tr>
+          <th scope="col">Purchased</th>
+          <th scope="col">Symbol</th>
+          <th scope="col">Quantity</th>
+          <th scope="col">Price</th>
+        </tr>
+      </thead>
+      <tbody>
+        {{ ownedAssetRow('2019-01-19 17:56:23', 'KN', '1446', '151.44') }}
+        {{ ownedAssetRow('2019-01-19 17:56:23', 'KN', '1446', '151.44') }}
+        {{ ownedAssetRow('2019-01-19 17:56:23', 'KN', '1446', '151.44') }}
+      </tbody>
+  </table>
+{%- endmacro %}
+
+{{ macro.container(
+    ownedAssets(),
+    'Owned Assets', '', 'container-item--half')
+}}

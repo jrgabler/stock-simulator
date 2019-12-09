@@ -17,4 +17,3 @@ COPY ./view ./view
 COPY ./views ./views
 
 CMD ["python", "./main.py"]
-

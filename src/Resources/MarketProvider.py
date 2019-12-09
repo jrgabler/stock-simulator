@@ -14,6 +14,6 @@ class MarketProvider:
         response = requests.get(cls.API_URL + "/markets/quotes?symbols=" + symbol,
         params={"greeks": "false"},
         headers=cls.HEADERS)
-        
+
         stockJson = response.json()
         return Stock.from_json(stockJson)

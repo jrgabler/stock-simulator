@@ -29,7 +29,6 @@ class PurchaseAsset(Resource):
         marketProvider = MarketProvider()
 
         stock = marketProvider().getStock(data["stock_symbol"])
-
         # This is gonna be a hefty boi
 
 
@@ -39,7 +38,7 @@ class WatchAsset(Resource):
         data = parser.parse_args()
         marketProvider = MarketProvider()
         stockController = StockController()
-        
+
         stock = marketProvider.getStock(data["stock_symbol"])
 
         return stockController.addWatch(stock, data["user_id"])

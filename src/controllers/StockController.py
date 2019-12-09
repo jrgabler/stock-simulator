@@ -47,7 +47,7 @@ class StockController:
             return stockId
 
     # Add a reference to Stock table to Watchlist associated with userId
-    @staticmethod    
+    @staticmethod
     def addWatch(stock: Stock, userId: int):
         stockId = insertStock(stock)
         connection = None

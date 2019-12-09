@@ -41,6 +41,12 @@
   padding-bottom: 10px;
 }
 
+.subtitle {
+  line-height: 1.2;
+  color: #484848;
+  margin-bottom: 20px;
+}
+
 .field {
   margin: 10px 0;
 }

@@ -17,6 +17,10 @@ header {
   color: #e6e6e6;
 }
 
+header ul li:last-child {
+  padding-left: 15px;
+}
+
 header ul {
   list-style-type: none;
   margin: 0;
@@ -69,6 +73,11 @@ header ul li a {
 
  nav ul {
    display: flex;
+   flex-wrap: wrap;
+ }
+
+ nav ul li {
+    margin-bottom: 10px;
  }
 
  nav ul li:not(:last-child) {
