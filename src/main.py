@@ -12,9 +12,16 @@ from Controllers import UserController
 VIEW_DIRECTORY = "./views"
 TEMPLATE_FOLDER = os.path.abspath(VIEW_DIRECTORY + "/templates/")
 STATIC_FOLDER = os.path.abspath(VIEW_DIRECTORY + "/static/")
+
+# api urls
 LOCAL_URL = 'http://localhost:5000'
 API_LOGIN = '/login/submit'
 API_REGISTER = '/registration'
+API_WATCHLIST_ADD = "/watch/add"
+API_WATCHLIST_REMOVE = "/watch/remove"
+
+global ACCESS_TOKEN
+global REFRESH_TOKEN
 ACCESS_TOKEN = ""
 REFRESH_TOKEN = ""
 
@@ -43,23 +50,23 @@ api.add_resource(UserService.UserLogoutRefresh, "/logout/refresh")
 api.add_resource(UserService.TokenRefresh, "/token/refresh")
 # Stock Service
 api.add_resource(StockService.GetStock, "/stock")
-api.add_resource(StockService.WatchAsset, "/watch/add")
-api.add_resource(StockService.RemoveWatchedAsset, "/watch/remove")
+api.add_resource(StockService.WatchAsset, API_WATCHLIST_ADD)
+api.add_resource(StockService.RemoveWatchedAsset, API_WATCHLIST_REMOVE)
 
 
 def isLoggedIn(template):
-    if not ACCESS_TOKEN and not REFRESH_TOKEN:
-        return redirect(url_for('login'))
-
+    # if ACCESS_TOKEN or REFRESH_TOKEN:
     return render_template(template)
 
+    # return redirect(url_for('login'))
+
+def get_header(auth_token):
+    return {'Authorization': 'Bearer ' + auth_token}
 
 def set_tokens_redirect(json_response, page):
-    if json_response:
-        ACCESS_TOKEN = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE1NzU4Njg4ODYsIm5iZiI6MTU3NTg2ODg4NiwianRpIjoiYjNjNzc2NzAtOGY5Ni00ZGRiLWI3NTItYTVjMzBmNzk5MTRmIiwiZXhwIjoxNTc1ODY5Nzg2LCJpZGVudGl0eSI6InRlc3QiLCJmcmVzaCI6ZmFsc2UsInR5cGUiOiJhY2Nlc3MifQ.eP6hVOoJbBvGYTAlMi-EFuQz6B9R0LYvd3wXyqEoYTE'
-        REFRESH_TOKEN = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE1NzU4Njg4ODYsIm5iZiI6MTU3NTg2ODg4NiwianRpIjoiNDI1Nzc5MzktZTk3ZS00ODQzLTlhNzItNTZmMjlhNjU3Y2QxIiwiZXhwIjoxNTc4NDYwODg2LCJpZGVudGl0eSI6InRlc3QiLCJ0eXBlIjoicmVmcmVzaCJ9.npXXqc8absf2dMyd5k5nvrVKBXs4A6Kh--eWxPKOMyk'
-    # ACCESS_TOKEN = json_response.get("access_token")
-    # REFRESH_TOKEN = json_response.get("refresh_token")
+    ACCESS_TOKEN = json_response.get("access_token")
+    REFRESH_TOKEN = json_response.get("refresh_token")
+
     return redirect(url_for(page))
 
 @app.route("/")
@@ -87,7 +94,7 @@ def login():
 @app.route("/register", methods=["GET", "POST"])
 def register():
     if request.method == 'POST':
-        response = requests.post(LOCAL_URL + API_REGISTER, data=request.form)
+        response = requests.post(LOCAL_URL + API_REGISTER, data=request.form, auth={})
         json_response = response.json()
 
         if json_response.get("access_token"):
@@ -115,19 +122,25 @@ def stock_sell():
 
 @app.route("/watchlist/manage")
 def manage_watchlist():
-    # if request.method == "POST":
-    #     # flash('Login requested for user {}, remember_me={}'.format(
-    #     #     form.username.data, form.remember_me.data))
-    #     return redirect('/index')
-    return isLoggedIn("watchlist/manage.html.j2", True)
+    return isLoggedIn("watchlist/manage.html.j2")
 
-@app.route("/watchlist/manage/add")
+@app.route("/watchlist/manage", methods=["POST"])
 def add_stock_watchlist():
-    return isLoggedIn("stocks/purchase.html.j2", True)
+    response = requests.post(LOCAL_URL + API_WATCHLIST_ADD, data=request.form, headers=get_header(ACCESS_TOKEN))
+    json_response = response.json()
 
-@app.route("/watchlist/manage/remove")
+    # if json_response.get("access_token"):
+    #     return set_tokens_redirect(json_response, "manage_watchlist")
+
+    return render_template("watchlist/manage.html.j2", error=json_response.get("message"))
+
+@app.route("/watchlist/manage", methods=["POST"])
 def remove_stock_watchlist():
-    return isLoggedIn("stocks/purchase.html.j2", True)
+    response = requests.post(LOCAL_URL + API_WATCHLIST_REMOVE, data=request.form, headers=get_header(ACCESS_TOKEN))
+    json_response = response.json()
+
+    return render_template("watchlist/manage.html.j2", error=json_response.get("message"))
+
 
 if __name__ == "__main__":
     app.run(host='0.0.0.0')    # Dockerized

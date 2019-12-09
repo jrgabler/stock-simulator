@@ -15,8 +15,6 @@
 <!--  -->
 {% macro watchListForm(action, formname, submitBtn) -%}
   <form method="post" class="{{ formname }}" action="{{ url_for(action) }}">
-    <div class="error">
-    </div>
     <div class="form-container watchlist-form">
        <label for="stock_symbol"><b>Stock Symbol ID</b></label>
        <input type="text" placeholder="Stock Symbol ID" name="stock_symbol" maxlength="10" required>
@@ -34,15 +32,23 @@
         'container-item--outline container-item--full')
     }}
   </div>
+  {% if error %}
   <div class="outer-container">
+    <div class="error">
+      {{error}}
+    </div>
+  </div>
+  {% endif %}
+  <div class="outer-container">
+
     {{ macro.container(
-        watchListForm('add_stock_watchlist', 'add-form', 'Add'),
+        watchListForm('add_stock_watchlist', 'add_stock_watchlist', 'Add'),
         'Add Stock to WatchList',
         '',
         'container-item--outline container-item--half')
     }}
     {{ macro.container(
-        watchListForm('remove_stock_watchlist', 'remove-form', 'Remove'),
+        watchListForm('remove_stock_watchlist', 'remove_stock_watchlist', 'Remove'),
         'Remove Stock from WatchList',
         '',
         'container-item--outline container-item--half')
