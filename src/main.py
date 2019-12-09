@@ -80,7 +80,6 @@ def stock_purchase():
 def stock_sell():
     return render_template("stocks/sell.html.j2")
 
-
 if __name__ == "__main__":
     app.run(host='0.0.0.0')    # Dockerized
     # app.run(debug=True)    # Debug

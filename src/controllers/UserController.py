@@ -14,8 +14,9 @@ class UserController:
             connection = mysql.connector.connect(host="localhost", user="root", password="", database="stocksimulator")
             cursor = connection.cursor()
 
-            cursor.execute(f"SELECT * FROM UserTable WHERE username={username}")
+            cursor.execute(f"SELECT * FROM UserTable WHERE username='{username}';")
             row = cursor.fetchone()
+
             if(row is None):
                 return None
 
@@ -37,12 +38,12 @@ class UserController:
             connection = mysql.connector.connect(host="localhost", user="root", password="", database="stocksimulator")
             cursor = connection.cursor()
 
-            cursor.execute(f"SELECT balance FROM UserTable WHERE id={userId}")
+            cursor.execute(f"SELECT balance FROM UserTable WHERE id={userId};")
             row = cursor.fetchone()
             newBalance = row[0] + amount
-            cursor.execute(f"UPDATE UserTable SET balance={newBalance} WHERE id={userId}")
+            cursor.execute(f"UPDATE UserTable SET balance={newBalance} WHERE id={userId};")
             # TODO - this could be turned into a MySQL procedure
-            cursor.execute(f"INSERT INTO UserBalanceHistory (user_id, balance) VALUES({userId}, {newBalance})")
+            cursor.execute(f"INSERT INTO UserBalanceHistory (user_id, balance) VALUES({userId}, {newBalance});")
 
             connection.commit()
             cursor.close()
@@ -62,13 +63,13 @@ class UserController:
             connection = mysql.connector.connect(host="localhost", user="root", password="", database="stocksimulator")
             cursor = connection.cursor()
             
-            cursor.execute(f"SELECT balance FROM UserTable WHERE id={userId}")
+            cursor.execute(f"SELECT balance FROM UserTable WHERE id={userId};")
             row = cursor.fetchone()
             newBalance = row[0] - amount
             # TODO - where/how do we want to handle overdrawing?
-            cursor.execute(f"UPDATE UserTable SET balance={newBalance}")
+            cursor.execute(f"UPDATE UserTable SET balance={newBalance};")
             # TODO
-            cursor.execute(f"INSERT INTO UserBalanceHistory (user_id, balance) VALUES({userId}, {newBalance})")
+            cursor.execute(f"INSERT INTO UserBalanceHistory (user_id, balance) VALUES({userId}, {newBalance});")
 
             connection.commit()
             cursor.close()
@@ -87,7 +88,7 @@ class UserController:
             connection = mysql.connector.connect(host="localhost", user="root", password="", database="stocksimulator")
             cursor = connection.cursor()
 
-            cursor.execute(f"SELECT balance FROM UserBalanceHistory WHERE user_id={userId}")
+            cursor.execute(f"SELECT balance FROM UserBalanceHistory WHERE user_id={userId};")
             history = cursor.fetchall()
 
             cursor.close()
@@ -107,15 +108,18 @@ class UserController:
             connection = mysql.connector.connect(host="localhost", user="root", password="", database="stocksimulator")
             cursor = connection.cursor()
 
-            cursor.execute(f"SELECT * FROM UserTable WHERE username={username}") # TODO
+            cursor.execute(f"SELECT * FROM UserTable WHERE username='{username}';") # TODO
             row = cursor.fetchone()
             if(row is not None):
                 return {"Error": "Unable to create new user: Duplicate username"}   # TODO
+            
+            # hashedPassword, salt = hash(password)
 
-            hashedPassword, salt = hash(password)
+            hashedPassword = "test123"
+            salt = "1"
 
-            cursor.execute(f"INSERT INTO UserTable(username) VALUES({username})")
-            cursor.execute(f"INSERT INTO LoginData(user_id, password, salt) VALUES((SELECT id WHERE username={username}), {hashedPassword}, {salt})")
+            cursor.execute(f"INSERT INTO UserTable(username) VALUES('{username}');")
+            cursor.execute(f"INSERT INTO LoginData(user_id, password, salt) VALUES((SELECT id FROM UserTable WHERE username='{username}'), '{hashedPassword}', '{salt}');")
 
             connection.commit()
             cursor.close()
@@ -135,12 +139,12 @@ class UserController:
             connection = mysql.connector.connect(host="localhost", user="root", password="", database="stocksimulator")
             cursor = connection.cursor()
 
-            cursor.execute(f"SELECT * FROM UserTable WHERE id={userId}")
+            cursor.execute(f"SELECT * FROM UserTable WHERE id={userId};")
             row = cursor.fetchone()
             if(row is not None):
                 return {"Error": "Unable to archive user: does note exist"} #TODO
 
-            cursor.execute(f"UPDATE UserData SET archived=TRUE WHERE id={userID}")
+            cursor.execute(f"UPDATE UserData SET archived=TRUE WHERE id={userID};")
 
             connection.commit()
             cursor.close()
@@ -166,7 +170,7 @@ class UserController:
             connection = mysql.connector.connect(host="localhost", user="root", password="", database="stocksimulator")
             cursor = connection.cursor()
 
-            cursor.execute("SELECT * FROM UserTable WHERE username={username}")
+            cursor.execute("SELECT * FROM UserTable WHERE username='{username}';")  ### Missing an f before query??
             row = cursor.fetchone()
             if(row is None):
                 return False
@@ -185,7 +189,7 @@ class UserController:
             cursor = connection.cursor()
 
             # get the salt and password
-            cursor.execute(f"SELECT password, salt FROM LoginData WHERE user_id = {userId}")
+            cursor.execute(f"SELECT password, salt FROM LoginData WHERE user_id = {userId};")
             row = cursor.fetchone()
 
             dbPassword = row[0]
@@ -207,12 +211,12 @@ class UserController:
             connection = mysql.connector.connect(host="localhost", user="root", password="", database="stocksimulator")
             cursor = connection.cursor()
 
-            cursor.execute(f"SELECT * FROM RevokedTokens WHERE id={tokenId}")
+            cursor.execute(f"SELECT * FROM RevokedTokens WHERE id={tokenId};")
             row = cursor.fetchone()
             if(row is None):
                 return False
 
-            cursor.execute(f"INSERT INTO RevokedTokens(jti) VALUES({tokenId})")
+            cursor.execute(f"INSERT INTO RevokedTokens(jti) VALUES({tokenId});")
 
             connection.commit()
             cursor.close()
@@ -231,7 +235,7 @@ class UserController:
             connection = mysql.connector.connect(host="localhost", user="root", password="", database="stocksimulator")
             cursor = connection.cursor()
 
-            cursor.execute(f"SELECT * FROM RevokedTokens WHERE jti={jti}")
+            cursor.execute(f"SELECT * FROM RevokedTokens WHERE jti={jti};")
             row = cursor.fetchone()
 
             if(row is not None):

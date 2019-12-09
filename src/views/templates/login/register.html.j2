@@ -9,25 +9,22 @@
 
 {% block content %}
 
-  <form>
+  <form action="/registration" method="POST">
    <div class="form-container">
      <h2>Register</h2>
      <p>Please fill in this form to create an account.</p>
 
-     <label for="fname"><b>First Name</b></label>
-     <input type="text" placeholder="Enter First Name" name="fname" required>
-
-     <label for="lname"><b>First Name</b></label>
-     <input type="text" placeholder="Enter Last Name" name="lname" required>
-
+     <label for="fname"><b>Username</b></label>
+     <input type="text" placeholder="Enter Username" name="username" required>
+{# 
      <label for="email"><b>Email</b></label>
-     <input type="text" placeholder="Enter Email" name="email" required>
+     <input type="text" placeholder="Enter Email" name="email" required> #}
 
      <label for="pwd"><b>Password</b></label>
-     <input type="password" placeholder="Enter Password" name="pwd" required>
+     <input type="password" placeholder="Enter Password" name="password" required>
 
-     <label for="pwd-repeat"><b>Repeat Password</b></label>
-     <input type="password" placeholder="Repeat Password" name="pwd-repeat" required>
+     {# <label for="pwd-repeat"><b>Repeat Password</b></label>
+     <input type="password" placeholder="Repeat Password" name="pwd-repeat" required> #}
 
      <!-- Do we care? -->
      <p class="terms">By creating an account you agree to our <a href="#" class="terms-link">Terms & Privacy</a>.</p>

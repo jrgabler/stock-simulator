@@ -7,7 +7,7 @@ class MarketProvider:
     API_TOKEN = ""  # NEVER EVER COMMIT THIS
     API_URL = "https://sandbox.tradier.com/v1"     # If you change the API you have to update the objects dumped to
 
-    HEADERS = {"Authorization": API_TOKEN, "Accept": "application/json"}
+    HEADERS = {"Authorization": "Bearer "+API_TOKEN, "Accept": "application/json"}
 
     @classmethod
     def getStock(cls, symbol: str):
