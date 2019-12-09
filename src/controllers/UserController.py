@@ -1,6 +1,16 @@
-import mysql.connector, binascii, hashlib
+# dependencies
+import mysql.connector, binascii, hashlib, os
+from dotenv import load_dotenv
+from pathlib import Path
 
+# LOCAL
 from models import User
+
+# MYSQL CONFIG
+env_path = Path('./config/') / '.env'
+load_dotenv(dotenv_path=env_path)
+MYSQL_USER = os.getenv("MYSQL_USER")
+MYSQL_PASS = os.getenv("MYSQL_PASSWORD")
 
 class UserController:
 
@@ -11,7 +21,7 @@ class UserController:
         connection = None
         user = None
         try:
-            connection = mysql.connector.connect(host="localhost", user="root", password="", database="stocksimulator")
+            connection = mysql.connector.connect(host="localhost", user=MYSQL_USER, password=MYSQL_PASSWORD, database="stocksimulator")
             cursor = connection.cursor()
 
             cursor.execute(f"SELECT * FROM UserTable WHERE username='{username}';")
@@ -35,7 +45,7 @@ class UserController:
     def addBalance(userId: int, amount: float):
         connection = None
         try:
-            connection = mysql.connector.connect(host="localhost", user="root", password="", database="stocksimulator")
+            connection = mysql.connector.connect(host="localhost", user=MYSQL_USER, password=MYSQL_PASSWORD, database="stocksimulator")
             cursor = connection.cursor()
 
             cursor.execute(f"SELECT balance FROM UserTable WHERE id={userId};")
@@ -60,7 +70,7 @@ class UserController:
     def subtractBalance(userId: int, amount: float):
         connection = None
         try:
-            connection = mysql.connector.connect(host="localhost", user="root", password="", database="stocksimulator")
+            connection = mysql.connector.connect(host="localhost", user=MYSQL_USER, password=MYSQL_PASSWORD, database="stocksimulator")
             cursor = connection.cursor()
             cursor.execute(f"SELECT balance FROM UserTable WHERE id={userId};")
             row = cursor.fetchone()
@@ -73,7 +83,6 @@ class UserController:
             connection.commit()
             cursor.close()
         except mysql.connector.Error as error:
-            print(error)
             return {"message": "Something went wrong"}
         finally:
             if(connection is not None):
@@ -84,7 +93,7 @@ class UserController:
     def getUserBalanceHistory(userId):
         connection = None
         try:
-            connection = mysql.connector.connect(host="localhost", user="root", password="", database="stocksimulator")
+            connection = mysql.connector.connect(host="localhost", user=MYSQL_USER, password=MYSQL_PASSWORD, database="stocksimulator")
             cursor = connection.cursor()
 
             cursor.execute(f"SELECT balance FROM UserBalanceHistory WHERE user_id={userId};")
@@ -92,41 +101,56 @@ class UserController:
 
             cursor.close()
         except mysql.connector.Error as error:
-            print(error)
             return {"message": "Something went wrong"}
         finally:
             if(connection is not None):
                 connection.close()
             return history
 
+
     # Adds a new User to the database
     @staticmethod
-    def registration(username: str, password: str):
+    def registration(username: str, password: str): #, email: str):
         connection = None
         try:
-            connection = mysql.connector.connect(host="localhost", user="root", password="", database="stocksimulator")
-            cursor = connection.cursor()
+            # connection = mysql.connector.connect(host="localhost", user=MYSQL_USER, password=MYSQL_PASSWORD, database="stocksimulator")
+            connection = mysql.connector.connect(
+                host="localhost",
+                user="root",
+                password="",
+                database="stocksimulator"
+            )
 
-            cursor.execute(f"SELECT * FROM UserTable WHERE username='{username}';") # TODO
-            row = cursor.fetchone()
-            if(row is not None):
-                return {"Error": "Unable to create new user: Duplicate username"}   # TODO
+            if connection.is_connected():
+                cursor = connection.cursor()
+                cursor.execute(f"SELECT * FROM UserTable WHERE username='{username}';") # TODO
+                row = cursor.fetchone()
+                print(row)
+                if(row is not None):
+                    return {"Error": "Unable to create new user: Duplicate username"}   # TODO
 
             # hashedPassword, salt = hash(password)
+                hashedPassword = "test123"
+                salt = "1"
 
-            hashedPassword = "test123"
-            salt = "1"
+                cursor.execute(f"INSERT INTO UserTable(username) VALUES('{username}');")
+                cursor.execute(f"INSERT INTO LoginData(user_id, password, salt) VALUES((SELECT id FROM UserTable WHERE username='{username}'), '{hashedPassword}', '{salt}');")
 
-            cursor.execute(f"INSERT INTO UserTable(username) VALUES('{username}');")
-            cursor.execute(f"INSERT INTO LoginData(user_id, password, salt) VALUES((SELECT id FROM UserTable WHERE username='{username}'), '{hashedPassword}', '{salt}');")
+                # verify
+                cursor.execute(f"SELECT * FROM UserTable WHERE username='{username}';") # TODO
+                row = cursor.fetchone()
+                print(row)
 
-            connection.commit()
-            cursor.close()
+                if(row is None):
+                    return {"Error": "Something went wrong, please try again."}
+
+                connection.commit()
+                cursor.close()
         except mysql.connector.Error as error:
             print(error)
-            return {"Error": "Unable to create new user"}   # TODO
+            return {"message": "Unable to create new user"}   # TODO
         finally:
-            if(connection is not None):
+            if(connection.is_connected()):
                 connection.close()
             return {"message": "Registration successful"}   # TODO
 
@@ -135,7 +159,7 @@ class UserController:
     def archive(userId: int):
         connection = None
         try:
-            connection = mysql.connector.connect(host="localhost", user="root", password="", database="stocksimulator")
+            connection = mysql.connector.connect(host="localhost", user=MYSQL_USER, password=MYSQL_PASSWORD, database="stocksimulator")
             cursor = connection.cursor()
 
             cursor.execute(f"SELECT * FROM UserTable WHERE id={userId};")
@@ -166,7 +190,7 @@ class UserController:
     def login(username: str, password: str):
         connection = None
         try:
-            connection = mysql.connector.connect(host="localhost", user="root", password="", database="stocksimulator")
+            connection = mysql.connector.connect(host="localhost", user=MYSQL_USER, password=MYSQL_PASSWORD, database="stocksimulator")
             cursor = connection.cursor()
 
             cursor.execute("SELECT * FROM UserTable WHERE username='{username}';")  ### Missing an f before query??
@@ -184,7 +208,7 @@ class UserController:
     def validateLogin(user: User, userId: str, password: str):
         connection = None
         try:
-            connection = mysql.connector.connect(host="localhost", user="root", password="", database="stocksimulator")
+            connection = mysql.connector.connect(host="localhost", user=MYSQL_USER, password=MYSQL_PASSWORD, database="stocksimulator")
             cursor = connection.cursor()
 
             # get the salt and password
@@ -207,7 +231,7 @@ class UserController:
     def logout(user: User, tokenId: str):
         connection = None
         try:
-            connection = mysql.connector.connect(host="localhost", user="root", password="", database="stocksimulator")
+            connection = mysql.connector.connect(host="localhost", user=MYSQL_USER, password=MYSQL_PASSWORD, database="stocksimulator")
             cursor = connection.cursor()
 
             cursor.execute(f"SELECT * FROM RevokedTokens WHERE id={tokenId};")
@@ -231,7 +255,7 @@ class UserController:
     def tokenIsBlacklisted(jti: str):
         connection = None
         try:
-            connection = mysql.connector.connect(host="localhost", user="root", password="", database="stocksimulator")
+            connection = mysql.connector.connect(host="localhost", user=MYSQL_USER, password=MYSQL_PASSWORD, database="stocksimulator")
             cursor = connection.cursor()
 
             cursor.execute(f"SELECT * FROM RevokedTokens WHERE jti={jti};")

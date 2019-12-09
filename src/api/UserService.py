@@ -1,12 +1,14 @@
 from flask_restful import Resource, reqparse
 from flask_jwt_extended import (create_access_token, create_refresh_token, jwt_required, jwt_refresh_token_required, get_jwt_identity, get_raw_jwt)
 
+# LOCAL
 from controllers.UserController import UserController
 from models import User
 
 parser = reqparse.RequestParser()
 parser.add_argument("username", help="This field cannot be blank", required=False)
 parser.add_argument("password", help="This field cannot be blank", required=False)
+parser.add_argument("email", help="This field can be blank", required=False)
 
 class UserRegistration(Resource):
     def post(self):
@@ -17,7 +19,7 @@ class UserRegistration(Resource):
             return {"Message": f"User {data['username']} already exists"}
 
         try:
-            userController.registration(data["username"], data["password"])
+            userController.registration(data["username"], data["password"]) #, data["email"])
             access_token = create_access_token(identity = data["username"])
             refresh_token = create_refresh_token(identity = data["username"])
 
