@@ -48,14 +48,18 @@ api.add_resource(StockService.RemoveWatchedAsset, "/watch/remove")
 
 
 def isLoggedIn(template):
-    if ACCESS_TOKEN or REFRESH_TOKEN:
-        return render_template(template)
+    if not ACCESS_TOKEN and not REFRESH_TOKEN:
+        return redirect(url_for('login'))
 
-    return redirect(url_for('login'))
+    return render_template(template)
+
 
 def set_tokens_redirect(json_response, page):
-    ACCESS_TOKEN = json_response.get("access_token")
-    REFRESH_TOKEN = json_response.get("refresh_token")
+    if json_response:
+        ACCESS_TOKEN = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE1NzU4Njg4ODYsIm5iZiI6MTU3NTg2ODg4NiwianRpIjoiYjNjNzc2NzAtOGY5Ni00ZGRiLWI3NTItYTVjMzBmNzk5MTRmIiwiZXhwIjoxNTc1ODY5Nzg2LCJpZGVudGl0eSI6InRlc3QiLCJmcmVzaCI6ZmFsc2UsInR5cGUiOiJhY2Nlc3MifQ.eP6hVOoJbBvGYTAlMi-EFuQz6B9R0LYvd3wXyqEoYTE'
+        REFRESH_TOKEN = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE1NzU4Njg4ODYsIm5iZiI6MTU3NTg2ODg4NiwianRpIjoiNDI1Nzc5MzktZTk3ZS00ODQzLTlhNzItNTZmMjlhNjU3Y2QxIiwiZXhwIjoxNTc4NDYwODg2LCJpZGVudGl0eSI6InRlc3QiLCJ0eXBlIjoicmVmcmVzaCJ9.npXXqc8absf2dMyd5k5nvrVKBXs4A6Kh--eWxPKOMyk'
+    # ACCESS_TOKEN = json_response.get("access_token")
+    # REFRESH_TOKEN = json_response.get("refresh_token")
     return redirect(url_for(page))
 
 @app.route("/")
@@ -73,10 +77,11 @@ def login():
         response = requests.post(LOCAL_URL + API_LOGIN, data=request.form)
         json_response = response.json()
 
-        if json_response.get("access_token", "empty"):
+        if json_response.get("access_token"):
+            return set_tokens_redirect(json_response, "index")
+
             return render_template("login/login.html.j2", error=json_response.get("message"))
 
-        return set_tokens_redirect(json_response, "index")
     return render_template("login/login.html.j2")
 
 @app.route("/register", methods=["GET", "POST"])
@@ -85,10 +90,11 @@ def register():
         response = requests.post(LOCAL_URL + API_REGISTER, data=request.form)
         json_response = response.json()
 
-        if json_response.get("access_token", "empty"):
-            return render_template("login/login.html.j2", error=json_response)
+        if json_response.get("access_token"):
+            return set_tokens_redirect(json_response, "login")
 
-        return set_tokens_redirect(json_response, "index")
+        return render_template("login/login.html.j2", error=json_response)
+
     return render_template("login/register.html.j2")
 
 @app.route("/reset-password")
