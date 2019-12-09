@@ -4,6 +4,7 @@ from flask import Flask, render_template, redirect, url_for
 from flask import request
 from flask_restful import Api
 from flask_jwt_extended import JWTManager
+from guppy import hpy
 
 from api import UserService, StockService
 from controllers import UserController
