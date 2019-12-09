@@ -17,3 +17,11 @@ class MarketProvider:
         
         stockJson = response.json()
         return Stock.from_json(stockJson)
+
+    @classmethod
+    def getHistoricalData(cls, symbol: str):
+        response = requests.get(cls.API_URL + "/markets/history?symbols=" + symbol,
+        params={"start": "2000-01-01"},
+        headers=cls.HEADERS)
+
+        return response.json()

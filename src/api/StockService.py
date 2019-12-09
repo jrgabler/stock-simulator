@@ -21,6 +21,14 @@ class GetStock(Resource):
         
         return json.loads(stock.to_json())
 
+class GetStockHistoricalData(Resource):
+    def post(self):
+        data = parser.parse_args()
+        marketProvider = MarketProvider()
+        history = marketProvider.getHistoricalData(data["stock_symbol"])
+
+        return history
+
 # Arguments: username, stock symbol
 class PurchaseAsset(Resource):
     @jwt_required
