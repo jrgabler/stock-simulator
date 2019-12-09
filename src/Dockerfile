@@ -9,12 +9,11 @@ COPY requirements.txt .
 RUN pip install -r ./requirements.txt
 
 COPY ./main.py .
-COPY ./api ./api
-COPY ./controllers ./controllers
-COPY ./models ./models
+COPY ./Api ./Api
+COPY ./Controllers ./Controllers
+COPY ./Models ./Models
 COPY ./Resources ./Resources
 COPY ./view ./view
 COPY ./views ./views
 
 CMD ["python", "./main.py"]
-

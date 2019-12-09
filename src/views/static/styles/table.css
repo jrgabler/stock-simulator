@@ -19,6 +19,11 @@ table tr {
   background-color: #FFF;
 }
 
+table tr:nth-child(even) {
+  background-color: #f2f2f2;
+}
+
+
 table th,
 table td {
   padding: .625em;

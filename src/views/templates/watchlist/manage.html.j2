@@ -1,0 +1,51 @@
+{% extends "layout.html.j2" %}
+{% import 'macros/container-macro.html.j2' as macro %}
+{% import 'watchlist/watchlist-table.html.j2' as watchlistMacro %}
+
+{% block title %}Manage WatchList{% endblock %}
+
+{% block head %}
+  {{ super() }}
+  <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/container-macro.css') }}">
+  <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/form.css') }}">
+  <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/table.css') }}">
+  <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/watchlist.css') }}">
+{% endblock %}
+
+<!--  -->
+{% macro watchListForm(action, formname, submitBtn) -%}
+  <form method="post" class="{{ formname }}" action="{{ url_for(action) }}">
+    <div class="error">
+    </div>
+    <div class="form-container watchlist-form">
+       <label for="stock_symbol"><b>Stock Symbol ID</b></label>
+       <input type="text" placeholder="Stock Symbol ID" name="stock_symbol" maxlength="10" required>
+       <button type="submit" class="btn btn-right">{{ submitBtn }}</button>
+    </div>
+  </form>
+{%- endmacro %}
+
+{% block content %}
+  <div class="outer-container">
+    {{ macro.container(
+        watchlistMacro.watchlist(),
+        'Current WatchList',
+        'A stock symbol is an abbreviation used to uniquely identify publicly traded shares of a particular stock on a particular stock market. A stock symbol may consist of letters, numbers or a combination of both.',
+        'container-item--outline container-item--full')
+    }}
+  </div>
+  <div class="outer-container">
+    {{ macro.container(
+        watchListForm('add_stock_watchlist', 'add-form', 'Add'),
+        'Add Stock to WatchList',
+        '',
+        'container-item--outline container-item--half')
+    }}
+    {{ macro.container(
+        watchListForm('remove_stock_watchlist', 'remove-form', 'Remove'),
+        'Remove Stock from WatchList',
+        '',
+        'container-item--outline container-item--half')
+    }}
+  </div>
+{% endblock %}

@@ -32,7 +32,7 @@
 /***********************************/
 /***********************************/
 #content {
-  margin: 30px 75px;
+  margin: 0 75px;
 }
 
 body {
@@ -179,7 +179,6 @@ button {
 /***********************************/
 input[type=text],
 input[type=password] {
-   width: 100%;
    padding: 12px 20px;
    margin: 8px 0;
    display: inline-block;
@@ -188,6 +187,10 @@ input[type=password] {
    outline: 0;
    background: transparent;
    border-bottom: 1px solid #2699FB;
+}
+
+input[type=password] {
+    width: 100%;
 }
 
 input[type=text]:focus,
@@ -219,7 +222,7 @@ input[type="checkbox"] {
 /***********************************/
  @media only screen and (max-width: 1024px) {
    #content {
-     margin: 30px 40px;
+     margin: 0 40px;
    }
  }
 
@@ -230,6 +233,6 @@ input[type="checkbox"] {
  /***********************************/
  @media only screen and (max-width: 480px) {
    #content {
-     margin: 30px 20px;
+     margin: 0 20px;
    }
  }

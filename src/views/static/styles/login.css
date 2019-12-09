@@ -33,5 +33,14 @@ div.pwd {
 }
 
 .login-link {
-  display: block !important;
+  display: flex !important;
+  justify-content: flex-end;
+}
+
+input[type=text]  {
+  width: 100%;
+}
+
+nav {
+  display: none;
 }

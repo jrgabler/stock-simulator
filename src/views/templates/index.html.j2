@@ -1,5 +1,4 @@
 {% extends "layout.html.j2" %}
-{% import 'macros/container-macro.html.j2' as macro %}
 
 {% block title %}Home{% endblock %}
 
@@ -11,91 +10,11 @@
 {% endblock %}
 
 
-{% macro ownedAssetRow(date, symbol, amount, price) -%}
-  <tr>
-      <td data-label="Purchased">{{ date }}</td>
-      <td data-label="Symbol">{{ symbol }}</td>
-      <td data-label="Quantity">{{ amount }}</td>
-      <td data-label="Price">${{ price }}</td>
-  </tr>
-{%- endmacro %}
-
-<!--  -->
-{% macro ownedAssets() -%}
-  <table id="my_asset_table" cellspacing="0">
-      <thead>
-        <tr>
-          <th scope="col">Purchased</th>
-          <th scope="col">Symbol</th>
-          <th scope="col">Quantity</th>
-          <th scope="col">Price</th>
-        </tr>
-      </thead>
-      <tbody>
-        {{ ownedAssetRow('2019-01-19 17:56:23', 'KN', '1446', '151.44') }}
-        {{ ownedAssetRow('2019-01-19 17:56:23', 'KN', '1446', '151.44') }}
-        {{ ownedAssetRow('2019-01-19 17:56:23', 'KN', '1446', '151.44') }}
-      </tbody>
-  </table>
-{%- endmacro %}
-
-{% macro watchlist() -%}
-  <div class="stock_info">
-    <h3 class="caption">High</h3>
-      <table class="card-style">
-        <thead>
-          <tr>
-            <th scope="col">Previous Close</th>
-            <th scope="col">Open</th>
-            <th scope="col">Bid</th>
-            <th scope="col">Ask</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-              <td data-label="Previous Close">227.01</td>
-              <td data-label="Open">226.27</td>
-              <td data-label="Bid">227.12 x 1100</td>
-              <td data-label="Ask">227.44 x 900</td>
-          </tr>
-        </tbody>
-      </table>
-  </div>
-  <div class="stock_info">
-      <h3 class="caption">Low</h3>
-
-      <table class="card-style">
-        <thead>
-          <tr>
-            <th scope="col">Earnings Date</th>
-            <th scope="col">Volume</th>
-            <th scope="col">Avg. Volume</th>
-            <th scope="col">Market Cap</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-              <td data-label="Earnings Date">227.01</td>
-              <td data-label="Volume">226.27</td>
-              <td data-label="Avg. Volume">227.12 x 1100</td>
-              <td data-label="Market">227.44 x 900</td>
-          </tr>
-        </tbody>
-      </table>
-  </div>
-{%- endmacro %}
 
 {% block content %}
-  <div class="outer-container">
-  {{ macro.container(
-      ownedAssets(),
-      'Owned Assets', '', 'container-item--half')
-  }}
-  <!-- refactor to use actual info -->
-  {{ macro.container(
-      watchlist(),
-      'Watch List', '', 'container-item--half')
-  }}
+<div class="outer-container">
+  {% include "stocks/owned-assets-list.html.j2" %}
+  {% include "watchlist/watchlist-cards.html.j2" %}
 </div>
 
 {% endblock %}

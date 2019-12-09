@@ -1,0 +1,52 @@
+{% import 'macros/container-macro.html.j2' as macro %}
+
+{% macro watchlistRow(symbol, close, open, bid, ask, date, vol, avg, market) -%}
+  <tr>
+      <td data-label="Stock Symbol">{{ symbol }}</td>
+      <td data-label="Prev. Close">{{ close }}</td>
+      <td data-label="Open">{{open}}</td>
+      <td data-label="Bid">{{bid}}</td>
+      <td data-label="Ask">{{ask}}</td>
+      <td data-label="Earnings Date">{{date}}</td>
+      <td data-label="Volume">{{vol}}7</td>
+      <td data-label="Avg. Volume">{{avg}}</td>
+      <td data-label="Market">{{market}}</td>
+
+    </tr>
+  </tr>
+{%- endmacro %}
+
+<!--  -->
+{% macro watchlist() -%}
+  <table id="my_asset_table" cellspacing="0">
+      <thead>
+        <tr>
+          <th scope="col">Stock Symbol</th>
+          <th scope="col">Prev. Close</th>
+          <th scope="col">Open</th>
+          <th scope="col">Bid</th>
+          <th scope="col">Ask</th>
+          <th scope="col">Earnings Date</th>
+          <th scope="col">Volume</th>
+          <th scope="col">Avg. Volume</th>
+          <th scope="col">Market Cap</th>
+        </tr>
+        </tr>
+      </thead>
+      <tbody>
+        {{ watchlistRow('GOOGL', '227.01', '226.27', '227.12 x 1100',
+            '227.44 x 900', '227.01', '226.27', '227.12 x 110', '227.44 x 900') }}
+        {{ watchlistRow('GOOGL', '227.01', '226.27', '227.12 x 1100',
+            '227.44 x 900', '227.01', '226.27', '227.12 x 110', '227.44 x 900') }}
+        {{ watchlistRow('GOOGL', '227.01', '226.27', '227.12 x 1100',
+            '227.44 x 900', '227.01', '226.27', '227.12 x 110', '227.44 x 900') }}
+        {{ watchlistRow('GOOGL', '227.01', '226.27', '227.12 x 1100',
+            '227.44 x 900', '227.01', '226.27', '227.12 x 110', '227.44 x 900') }}
+      </tbody>
+  </table>
+{%- endmacro %}
+
+<!-- {{ macro.container(
+    watchlist(),
+    'Current WatchList', '', 'container-item--full')
+}} -->

@@ -1,8 +1,8 @@
 import mysql.connector
 
 from Resources import MarketProvider
-from models.assets import Stock, Asset
-from models import User
+from Models.Assets import Stock, Asset
+from Models import User
 
 class StockController:
 

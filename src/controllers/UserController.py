@@ -1,6 +1,6 @@
 import mysql.connector, binascii, hashlib
 
-from models import User
+from Models import User
 
 class UserController:
 
@@ -61,7 +61,7 @@ class UserController:
         try:
             connection = mysql.connector.connect(host="localhost", user="root", password="", database="stocksimulator")
             cursor = connection.cursor()
-            
+
             cursor.execute(f"SELECT balance FROM UserTable WHERE id={userId}")
             row = cursor.fetchone()
             newBalance = row[0] - amount
