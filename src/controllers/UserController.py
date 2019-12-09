@@ -1,6 +1,6 @@
 import mysql.connector, binascii, hashlib
 
-from Models import User
+from models import User
 
 class UserController:
 

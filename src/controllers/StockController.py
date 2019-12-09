@@ -1,8 +1,8 @@
 import mysql.connector
 
 from Resources import MarketProvider
-from Models.Assets import Stock, Asset
-from Models import User
+from models.assets import Stock, Asset
+from models import User
 
 class StockController:
 
@@ -47,7 +47,7 @@ class StockController:
             return stockId
 
     # Add a reference to Stock table to Watchlist associated with userId
-    @staticmethod    
+    @staticmethod
     def addWatch(stock: Stock, userId: int):
         stockId = insertStock(stock)
         connection = None
