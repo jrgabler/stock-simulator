@@ -10,7 +10,6 @@ RUN pip install -r ./requirements.txt
 
 COPY ./main.py .
 COPY ./api ./api
-COPY ./config ./config
 COPY ./controllers ./controllers
 COPY ./models ./models
 COPY ./Resources ./Resources

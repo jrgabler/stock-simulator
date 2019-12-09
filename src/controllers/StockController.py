@@ -10,7 +10,7 @@ class StockController:
 
     # Inserts a Stock object into the Stock table and returns the generated ID
     # on success, -1 on failure
-    # @staticmethod
+    @staticmethod
     def insertStock(stock: Stock):
         connection = None
         try:

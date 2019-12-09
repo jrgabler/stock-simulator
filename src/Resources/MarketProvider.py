@@ -4,7 +4,7 @@ from models.assets.Stock import Stock
 class MarketProvider:
 
     # GLOBALS
-    API_TOKEN = "4GKnvWS7XAJMIy25Mr8ZFFAGPyTZ"  # NEVER EVER COMMIT THIS
+    API_TOKEN = ""  # NEVER EVER COMMIT THIS
     API_URL = "https://sandbox.tradier.com/v1"     # If you change the API you have to update the objects dumped to
 
     HEADERS = {"Authorization": "Bearer "+API_TOKEN, "Accept": "application/json"}
