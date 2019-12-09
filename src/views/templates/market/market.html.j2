@@ -26,7 +26,10 @@
 
 <div>
     <div class="banner">
-        <i id="search">Search Icon</i>
+        <form action="/stock" method="POST">
+          <input type="text" id="stock_symbol" name="stock_symbol" placeholder="Stock Symbol" size="10">
+          <input type="submit" value="Search">
+        </form>
     </div>
 
     <div class="content-wrapper">
@@ -47,12 +50,10 @@
               </tr>
             </thead>
             <tbody>
-              {{ matchingStockRow( 'AMD', 'Advanced Micro Devices, Inc.', '1.3900', '+0.100', '+7.75%', '67.61M', '55.88M', '2.716B') }}
-              {{ matchingStockRow( 'AMD', 'Advanced Micro Devices, Inc.', '1.3900', '+0.100', '+7.75%', '67.61M', '55.88M', '2.716B') }}
-              {{ matchingStockRow( 'AMD', 'Advanced Micro Devices, Inc.', '1.3900', '+0.100', '+7.75%', '67.61M', '55.88M', '2.716B') }}
+              
+              {{ matchingStockRow("AMD", 'Advanced Micro Devices, Inc.', '1.3900', '+0.100', '+7.75%', '67.61M', '55.88M', '2.716B') }}
             </tbody>
         </table>
     </div>
 </div>
-
 {% endblock %}

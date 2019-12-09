@@ -172,7 +172,6 @@ def remove_stock_watchlist():
 
     return render_template("watchlist/manage.html.j2", error=json_response.get("message"))
 
-
 if __name__ == "__main__":
     app.run(host='0.0.0.0')    # Dockerized
     # app.run(debug=True)    # Debug

@@ -19,20 +19,20 @@ class StockController:
 
             # if symbol exists in Stock table, update pricing from API
             # else, insert new
-            cursor.execute(f"SELECT id FROM Stock WHERE symbol={stock.symbol}")
+            cursor.execute(f"SELECT id FROM Stock WHERE symbol='{stock.symbol}';")
             row = cursor.fetchone()
             stockId = row[0]
             if(stockId is not None):
                 # TODO - potential optimization point
                 updatedStock = MarketProvider().getStock(stock.symbol)
 
-                cursor.execute(f"UPDATE Stock SET open_price={stock.open} close_price={stock.close} high={stock.high} low={stock.low} average_volume={stock.average_volume} peratio={stock.peratio} didend_yield={stock.dividend_yield} asset_type={stock.asset_type} last={stock.last} symbol={stock.symbol} prev_close={stock.prev_close}")
-                cursor.execute(f"SELECT id FROM Stock WHERE symbol={stock.symbol}")
+                cursor.execute(f"UPDATE Stock SET open_price={stock.open} close_price={stock.close} high={stock.high} low={stock.low} average_volume={stock.average_volume} peratio={stock.peratio} didend_yield={stock.dividend_yield} asset_type='{stock.asset_type}' last={stock.last} symbol='{stock.symbol}' prev_close={stock.prev_close};")
+                cursor.execute(f"SELECT id FROM Stock WHERE symbol='{stock.symbol}'")
                 row=cursor.fetchone()
                 stockId = row[0]
             else:
-                cursor.execute(f"INSERT INTO Stock VALUES({stock.open}, {stock.close}, {stock.high}, {stock.low}, {stock.average_volume}, {stock.market_cap}, {stock.peratio}, {stock.dividend_yield}, {stock.asset_type}, {stock.last}, {stock.symbol}, {stock.prev_close})")
-                cursor.execute(f"SELECT LAST_INSERT_ID()")
+                cursor.execute(f"INSERT INTO Stock VALUES({stock.open}, {stock.close}, {stock.high}, {stock.low}, {stock.average_volume}, {stock.market_cap}, {stock.peratio}, {stock.dividend_yield}, '{stock.asset_type}', {stock.last}, '{stock.symbol}', {stock.prev_close});")
+                cursor.execute(f"SELECT LAST_INSERT_ID();")
                 row = cursor.fetchone()
                 stockId = row[0]
 
@@ -55,7 +55,7 @@ class StockController:
             connection = mysql.connector.connect(host="localhost", user="root", password="", database="stocksimulator")
             cursor = connection.cursor()
 
-            cursor.execute(f"INSERT INTO WatchList(stock_id, user_id) VALUES({stockId}, {userId})")
+            cursor.execute(f"INSERT INTO WatchList(stock_id, user_id) VALUES({stockId}, {userId});")
 
             connection.commit()
             cursor.close()
@@ -75,7 +75,7 @@ class StockController:
             connection = mysql.connector.connect(host="localhost", user="root", password="", database="stocksimulator")
             cursor = connection.cursor()
 
-            cursor.execute(f"DELETE FROM WatchList WHERE stock_id={stockId}")
+            cursor.execute(f"DELETE FROM WatchList WHERE stock_id={stockId};")
 
             connection.commit()
             cursor.close()
@@ -93,7 +93,7 @@ class StockController:
             cursor = connection.cursor()
             # there's a lot to do here
             # we need to get the purchase price
-            cursor.execute(f"INSERT INTO Stock VALUES({stock.open}, {stock.close}, {stock.high}, {stock.low}, {stock.average_volume}, {stock.dividend_yield}, {stock.type}, {stock.last}, {stock.symbol}, {stock.prevclose})")
+            cursor.execute(f"INSERT INTO Stock VALUES({stock.open}, {stock.close}, {stock.high}, {stock.low}, {stock.average_volume}, {stock.dividend_yield}, {stock.type}, {stock.last}, '{stock.symbol}', {stock.prevclose});")
         except mysql.connector.Error as error:
             print(error) # TODO - log error
         finally:
