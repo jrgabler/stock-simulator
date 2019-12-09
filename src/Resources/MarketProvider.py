@@ -1,5 +1,5 @@
 import json, requests
-from Models.Assets.Stock import Stock
+from models.assets.Stock import Stock
 
 class MarketProvider:
 

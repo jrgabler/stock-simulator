@@ -5,8 +5,8 @@ from flask import request
 from flask_restful import Api
 from flask_jwt_extended import JWTManager
 
-from Api import UserService, StockService
-from Controllers import UserController
+from api import UserService, StockService
+from controllers import UserController
 
 # refactor into config.py file
 VIEW_DIRECTORY = "./views"
@@ -34,6 +34,10 @@ app.config["JWT_BLACKLIST_TOKEN_CHECKS"] = ["access", "refresh"]
 blacklist = set()
 jwt = JWTManager(app)
 api = Api(app)
+
+# guppy
+h = hpy()
+print(h.heap())
 
 # called every time client tries to access a secure endpoint
 @jwt.token_in_blacklist_loader
