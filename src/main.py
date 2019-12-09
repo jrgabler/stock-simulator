@@ -162,26 +162,11 @@ def manage_stock():
         json_response = response.json()
         return render_template("stocks/sell.html.j2", error=jscon_response.get("message"))
 
-
     return isLoggedIn("stocks/sell.html.j2", request)
 
 @app.route("/watchlist/manage")
 def manage_watchlist():
     return isLoggedIn("watchlist/manage.html.j2", request)
-
-@app.route("/watchlist/manage", methods=["POST"])
-def add_stock_watchlist():
-    response = requests.post(LOCAL_URL + API_WATCHLIST_ADD, data=request.form, headers=get_header(request))
-    json_response = response.json()
-
-    return render_template("watchlist/manage.html.j2", error=json_response.get("message"))
-
-@app.route("/watchlist/manage", methods=["POST"])
-def remove_stock_watchlist():
-    response = requests.post(LOCAL_URL + API_WATCHLIST_REMOVE, data=request.form, headers=get_header(request))
-    json_response = response.json()
-
-    return render_template("watchlist/manage.html.j2", error=json_response.get("message"))
 
 if __name__ == "__main__":
     app.run(host='0.0.0.0')    # Dockerized
