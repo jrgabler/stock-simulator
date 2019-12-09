@@ -16,7 +16,7 @@ class UserRegistration(Resource):
         userController = UserController()
 
         if(userController.findByUsername(data["username"]) != None):
-            return {"Message": f"User {data['username']} already exists"}
+            return {"message": f"User {data['username']} already exists"}
 
         try:
             userController.registration(data["username"], data["password"]) #, data["email"])
@@ -41,7 +41,7 @@ class UserLogin(Resource):
             if (userController.findByUsername(data["username"])) == None:
                 return {"message": f"User {data.username} doesn't exist"}
 
-            if userController.login(data["username"], data["password"]):
+            if userController.login(data["username"], data["password"]) == True:
                 access_token = create_access_token(identity = data["username"])
                 refresh_token = create_refresh_token(identity = data["username"])
 

@@ -14,6 +14,10 @@
      <h2>Register</h2>
      <p>Please fill in this form to create an account.</p>
 
+     {% if error %}
+       <div class="error">{{ error }}</div>
+     {% endif %}
+
      <label for="username"><b>Username</b></label>
      <input type="text" placeholder="Choose a username" name="username" minlength="3" maxlength="15" required>
 

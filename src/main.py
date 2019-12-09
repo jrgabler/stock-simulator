@@ -76,14 +76,11 @@ def isLoggedIn(template, request, data=None):
     if cookie:
         return render_template(template)
     elif request.cookies.get(REFRESH_COOKIE):
-        token = refresh_token(request)
-        # return set_tokens_redirect(request, response, template, True)
-        if data is None:
-            response = make_response(render_template(template))
-        else:
-            response = make_response(render_template(template, data=data))
-
-        response.set_cookie(ACCESS_COOKIE, token.get("access_token"), max_age=900)
+        response = refresh_token(request)
+        response.set_cookie(ACCESS_COOKIE, json_response.get("access_token"), max_age=900)
+        response.set_cookie(REFRESH_COOKIE, json_response.get("refresh_token"))
+        return render_template(template)
+        # return set_tokens_redirect(request, response, template)
 
     return redirect(url_for('login'))
 
@@ -94,7 +91,7 @@ def get_header(request):
         refreshed = refresh_token(request)
         access_token = refreshed.get('access_token')
 
-    return {'Authorization': 'Bearer ' + access_token }
+    return {'Authorization': 'Bearer ' + access_token}
 
 def set_tokens_redirect(request, json_response, page):
     response = make_response(redirect(url_for(page)))
@@ -121,7 +118,7 @@ def login():
         if json_response.get("access_token"):
             return set_tokens_redirect(request, json_response, "index")
 
-            return render_template("login/login.html.j2", error=json_response.get("message"))
+        return render_template("login/login.html.j2", error=json_response.get("message"))
 
     return render_template("login/login.html.j2")
 
@@ -137,7 +134,7 @@ def register():
         if json_response.get("access_token"):
             return set_tokens_redirect(request, json_response, "index")
 
-        return render_template("login/login.html.j2", error=json_response)
+        return render_template("login/register.html.j2", error=json_response.get("message"))
 
     return render_template("login/register.html.j2")
 

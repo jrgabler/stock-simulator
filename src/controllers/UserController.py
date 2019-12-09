@@ -208,19 +208,8 @@ class UserController:
     def login(username: str, password: str):
         connection = None
         try:
-            connection = mysql.connector.connect(host="localhost", user=MYSQL_USER, password=MYSQL_PASSWORD, database="stocksimulator")
-            cursor = connection.cursor()
-
-            cursor.execute(f"SELECT * FROM UserTable WHERE username='{username}';")  ### Missing an f before query??
-            row = cursor.fetchone()
-            if(row is None):
-                return False
-
-            if(validateLogin(User(username), row[0], password)):
-                return True
-        except mysql.connector.Error as error:
-            print(error)
-            return False
+            # connection = mysql.connector.connect(host="localhost", user=MYSQL_USER, password=MYSQL_PASSWORD, database="stocksimulator")
+            connection = mysql.connector.connect(host="localhost", user="root", password="", database="stocksimulator")
 
             if connection.is_connected():
                 cursor = connection.cursor()
@@ -242,10 +231,38 @@ class UserController:
                     user.authenticate()
                     return True
 
-                return False
+            return False
         except mysql.connector.Error as error:
             print(error)
             return False
+
+    # separate function
+    @staticmethod
+    def validate_login(user: User, userId: str, password: str):
+        connection = None
+        try:
+            # connection = mysql.connector.connect(host="localhost", user=MYSQL_USER, password=MYSQL_PASSWORD, database="stocksimulator")
+            connection = mysql.connector.connect(host="localhost", user="root", password="", database="stocksimulator")
+            if connection.is_connected():
+                cursor = connection.cursor()
+
+                # get the salt and password
+                cursor.execute(f"SELECT password, salt FROM LoginData WHERE user_id = {userId}")
+                row = cursor.fetchone()
+
+                dbPassword = row[0]
+                salt = row[1]
+                hashedPassword = hash(password)
+
+                if(hashedPassword == salt + dbPassword):
+                    user.authenticate()
+                    return True
+
+            return False
+        except mysql.connector.Error as error:
+            print(error)
+            return False
+
 
     @staticmethod
     def logout(user: User, tokenId: str):
