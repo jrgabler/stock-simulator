@@ -133,7 +133,7 @@ def logout():
     requests.post(LOCAL_URL + API_LOGOUT)
     requests.post(LOCAL_URL + API_LOGOUT_REFRESH)
 
-    response = make_response(url_for('login'))
+    response = make_response(redirect(url_for('login')))
     response.delete_cookie(ACCESS_COOKIE)
     response.delete_cookie(REFRESH_COOKIE)
     return response
