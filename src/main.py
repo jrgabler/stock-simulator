@@ -80,6 +80,7 @@ def isLoggedIn(template, request):
         response = make_response(render_template(template))
         response.set_cookie(ACCESS_COOKIE, json_response.get("access_token"), max_age=900)
         return response
+
     return redirect(url_for('login'))
 
 def get_header(request):
