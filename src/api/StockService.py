@@ -17,8 +17,9 @@ parser.add_argument("stock_id", help="", required=False)
 class GetStock(Resource):
     def post(self):
         data = parser.parse_args()
-        stock = MarketProvider().getStock(data["stock_symbol"])
-        
+        mp = MarketProvider()
+        stock = mp.getStock(data["stock_symbol"])
+
         return json.loads(stock.to_json())
 
 # Arguments: username, stock symbol
@@ -26,9 +27,9 @@ class PurchaseAsset(Resource):
     @jwt_required
     def post(self):
         data = parser.parse_args()
-        marketProvider = MarketProvider()
+        mp = MarketProvider()
 
-        stock = marketProvider().getStock(data["stock_symbol"])
+        stock = mp.getStock(data["stock_symbol"])
         # This is gonna be a hefty boi
 
 

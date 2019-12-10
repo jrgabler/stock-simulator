@@ -10,7 +10,7 @@ load_dotenv(dotenv_path=env_path)
 class MarketProvider:
 
     # GLOBALS
-    API_TOKEN = os.getenv("TRADIER_API_KEY")
+    API_TOKEN = "4GKnvWS7XAJMIy25Mr8ZFFAGPyTZ" # os.getenv("TRADIER_API_KEY")
      # If you change the API you have to update the objects dumped to
     API_URL = "https://sandbox.tradier.com/v1"
 

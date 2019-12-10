@@ -71,25 +71,26 @@ def refresh_token(request):
     response = requests.post(LOCAL_URL + API_REFRESH, headers=token)
     return response.json()
 
-def isLoggedIn(template, request, data=None):
-    cookie = request.cookies.get(ACCESS_COOKIE)
-    if cookie:
+def isLoggedIn(template, request):
+    access = request.cookies.get(ACCESS_COOKIE)
+    refresh = request.cookies.get(REFRESH_COOKIE)
+    if access:
         return render_template(template)
-    elif request.cookies.get(REFRESH_COOKIE):
-        response = refresh_token(request)
+    elif refresh:
+        json_response = refresh_token(request)
+        response = make_response(render_template(template))
         response.set_cookie(ACCESS_COOKIE, json_response.get("access_token"), max_age=900)
-        response.set_cookie(REFRESH_COOKIE, json_response.get("refresh_token"))
-        return render_template(template)
-        # return set_tokens_redirect(request, response, template)
-
+        return response
     return redirect(url_for('login'))
 
 def get_header(request):
-    access_token = request.cookies.get(ACCESS_COOKIE)
-
-    if not access_token:
-        refreshed = refresh_token(request)
-        access_token = refreshed.get('access_token')
+    try:
+        access_token = request.cookies.get(ACCESS_COOKIE)
+        if not access_token:
+            refreshed = refresh_token(request)
+            access_token = refreshed.get('access_token')
+    except:
+        return None;
 
     return {'Authorization': 'Bearer ' + access_token}
 
@@ -103,7 +104,7 @@ def set_tokens_redirect(request, json_response, page):
 @app.route("/home")
 def index():
     response = requests.post(LOCAL_URL + API_STOCK, data={"stock_symbol": "AAPL"}, headers=get_header(request))
-    return isLoggedIn("index.html.j2", request, data=response.json())
+    return isLoggedIn("index.html.j2", request) #, data=response.json())
 
 @app.route("/market")
 def market():
@@ -158,10 +159,12 @@ def account():
 
 @app.route("/stock/manage", methods=["GET", "POST"])
 def manage_stock():
-    if request.method == "POST":
-        response = requests.post(LOCAL_URL + API_STOCK_PURCHASE_SELL, data=request.form, headers=get_header(request))
-        json_response = response.json()
-        return render_template("stocks/sell.html.j2", error=json_response.get("message"))
+    # if request.method == "POST":
+    #     response = requests.post(LOCAL_URL + API_STOCK_PURCHASE_SELL, data=request.form, headers=get_header(request))
+    #     json_response = response.json()
+    #     if json_response.get("message"):
+    #         return render_template("stocks/sell.html.j2", error=json_response.get("message"))
+    #     return render_template("stocks/sell.html.j2", data=json_response.get("data"))
 
     return isLoggedIn("stocks/sell.html.j2", request)
 
