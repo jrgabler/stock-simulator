@@ -30,8 +30,10 @@ API_LOGOUT = "/logout/access"
 API_LOGOUT_REFRESH = "/logout/refresh"
 API_STOCK_PURCHASE_SELL = "/stock/purchase"
 API_STOCK = "/stock"
+API_USER_INFO = "/user/info"
 ACCESS_COOKIE = 'user_access'
 REFRESH_COOKIE = 'user_refresh'
+USER_COOKIE = 'user_info'
 
 app = Flask(__name__, template_folder=TEMPLATE_FOLDER, static_folder=STATIC_FOLDER)
 
@@ -60,6 +62,7 @@ api.add_resource(UserService.UserLogin, API_LOGIN)
 api.add_resource(UserService.UserLogoutAccess, API_LOGOUT)
 api.add_resource(UserService.UserLogoutRefresh, API_LOGOUT_REFRESH)
 api.add_resource(UserService.TokenRefresh, API_REFRESH)
+api.add_resource(UserService.UserInfo, API_USER_INFO)
 # Stock Service
 api.add_resource(StockService.GetStock, API_STOCK)
 api.add_resource(StockService.PurchaseAsset, API_STOCK_PURCHASE_SELL)
@@ -94,8 +97,9 @@ def get_header(request):
 
     return {'Authorization': 'Bearer ' + access_token}
 
-def set_tokens_redirect(request, json_response, page):
+def set_tokens_redirect(request, json_response, username, page):
     response = make_response(redirect(url_for(page)))
+    response.set_cookie(USER_COOKIE, username)
     response.set_cookie(ACCESS_COOKIE, json_response.get("access_token"), max_age=900)
     response.set_cookie(REFRESH_COOKIE, json_response.get("refresh_token"))
     return response
@@ -145,6 +149,7 @@ def logout():
     requests.post(LOCAL_URL + API_LOGOUT_REFRESH)
 
     response = make_response(redirect(url_for('login')))
+    response.delete_cookie(USER_COOKIE)
     response.delete_cookie(ACCESS_COOKIE)
     response.delete_cookie(REFRESH_COOKIE)
     return response
@@ -159,14 +164,21 @@ def account():
 
 @app.route("/stock/manage", methods=["GET", "POST"])
 def manage_stock():
-    # if request.method == "POST":
-    #     response = requests.post(LOCAL_URL + API_STOCK_PURCHASE_SELL, data=request.form, headers=get_header(request))
-    #     json_response = response.json()
-    #     if json_response.get("message"):
-    #         return render_template("stocks/sell.html.j2", error=json_response.get("message"))
-    #     return render_template("stocks/sell.html.j2", data=json_response.get("data"))
+    if request.method == "POST":
+        response = requests.post(LOCAL_URL + API_STOCK_PURCHASE_SELL, data=request.form, headers=get_header(request))
+        json_response = response.json()
+        # print(json_response)
+        if json_response is not None:
+        #     return render_template("stocks/sell.html.j2", error=json_response.get("message"))
+        # elif json_response.get("data"):
+            return render_template("stocks/sell.html.j2", data=json_response)
 
     return isLoggedIn("stocks/sell.html.j2", request)
+
+def get_user_info(request):
+    data = {"username" : request.cookies.get(USER_COOKIE)}
+    response = requests.post(LOCAL_URL + API_USER_INFO, data=data, headers=get_header(request))
+    return response.json()
 
 # manage watch list + add / remove stock from watchlist
 @app.route("/watchlist/manage")
@@ -176,16 +188,22 @@ def manage_watchlist():
 @app.route("/watchlist/manage", methods=["POST"])
 def remove_stock_watchlist():
     if request.method == "POST":
-        response = requests.post(LOCAL_URL + API_WATCHLIST_REMOVE, data=request.form, headers=get_header(request))
-        json_response = response.json()
-        return render_template("stocks/sell.html.j2", error=json_response.get("message"))
+        user_info = get_user_info(request)
+        user = {"user_id" : user_info["user_id"]}
+        data = {**request.form, **user}
+        response = requests.post(LOCAL_URL + API_WATCHLIST_REMOVE, data=data, headers=get_header(request))
+        return render_template("watchlist/manage.html.j2", data=response.json())
+    return render_template("watchlist/manage.html.j2")
 
 @app.route("/watchlist/manage", methods=["POST"])
 def add_stock_watchlist():
     if request.method == "POST":
-        response = requests.post(LOCAL_URL + API_WATCHLIST_ADD, data=request.form, headers=get_header(request))
-        json_response = response.json()
-        return render_template("stocks/sell.html.j2", error=json_response.get("message"))
+        user_info = get_user_info(request)
+        user = {"user_id" : user_info["user_id"]}
+        data = {**request.form, **user}
+        response = requests.post(LOCAL_URL + API_WATCHLIST_ADD, data=data, headers=get_header(request))
+        return render_template("watchlist/manage.html.j2", data=response.json())
+    return render_template("watchlist/manage.html.j2")
 
 
 if __name__ == "__main__":

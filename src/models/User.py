@@ -1,7 +1,7 @@
 class User:
 
-    def __init__(self, userId: int, username: str):
-        self.userId = userId
+    def __init__(self, user_id: int, username: str):
+        self.user_id = user_id
         self.username = username
         self.isAuthenticated = False
 
@@ -9,7 +9,7 @@ class User:
         return self.username
 
     def getUserId(self):
-        return self.userId
+        return self.user_id
 
     def isAuthenticated(self):
         return self.isAuthenticated

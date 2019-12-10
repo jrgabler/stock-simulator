@@ -46,7 +46,7 @@ class UserController:
 
     # Add balance to user account
     @staticmethod
-    def addBalance(userId: int, amount: float):
+    def addBalance(user_id: int, amount: float):
         connection = None
         try:
             # connection = mysql.connector.connect(host="localhost", user=MYSQL_USER, password=MYSQL_PASSWORD, database="stocksimulator")
@@ -54,15 +54,15 @@ class UserController:
 
             cursor = connection.cursor()
 
-            cursor.execute(f"SELECT balance FROM UserTable WHERE id={userId};")
+            cursor.execute(f"SELECT balance FROM UserTable WHERE id={user_id};")
             row = cursor.fetchone()
             print("addBalance")
             print(row)
 
             newBalance = row[0] + amount
-            cursor.execute(f"UPDATE UserTable SET balance={newBalance} WHERE id={userId};")
+            cursor.execute(f"UPDATE UserTable SET balance={newBalance} WHERE id={user_id};")
             # TODO - this could be turned into a MySQL procedure
-            cursor.execute(f"INSERT INTO UserBalanceHistory (user_id, balance) VALUES({userId}, {newBalance});")
+            cursor.execute(f"INSERT INTO UserBalanceHistory (user_id, balance) VALUES({user_id}, {newBalance});")
 
             connection.commit()
             cursor.close()
@@ -76,14 +76,14 @@ class UserController:
 
     # Subtract balance from user account
     @staticmethod
-    def subtractBalance(userId: int, amount: float):
+    def subtractBalance(user_id: int, amount: float):
         connection = None
         try:
             # connection = mysql.connector.connect(host="localhost", user=MYSQL_USER, password=MYSQL_PASSWORD, database="stocksimulator")
             connection = mysql.connector.connect(host="localhost", user="root", password="", database="stocksimulator")
 
             cursor = connection.cursor()
-            cursor.execute(f"SELECT balance FROM UserTable WHERE id={userId};")
+            cursor.execute(f"SELECT balance FROM UserTable WHERE id={user_id};")
             row = cursor.fetchone()
             print("subtractBalance")
             print(row)
@@ -92,7 +92,7 @@ class UserController:
             # TODO - where/how do we want to handle overdrawing?
             cursor.execute(f"UPDATE UserTable SET balance={newBalance};")
             # TODO
-            cursor.execute(f"INSERT INTO UserBalanceHistory (user_id, balance) VALUES({userId}, {newBalance});")
+            cursor.execute(f"INSERT INTO UserBalanceHistory (user_id, balance) VALUES({user_id}, {newBalance});")
 
             connection.commit()
             cursor.close()
@@ -104,7 +104,7 @@ class UserController:
             return {"message": "Subtract balance successful"}
 
     @staticmethod
-    def getUserBalanceHistory(userId):
+    def getUserBalanceHistory(user_id):
         connection = None
         try:
             # connection = mysql.connector.connect(host="localhost", user=MYSQL_USER, password=MYSQL_PASSWORD, database="stocksimulator")
@@ -112,7 +112,7 @@ class UserController:
 
             cursor = connection.cursor()
 
-            cursor.execute(f"SELECT balance FROM UserBalanceHistory WHERE user_id={userId};")
+            cursor.execute(f"SELECT balance FROM UserBalanceHistory WHERE user_id={user_id};")
             history = cursor.fetchall()
 
             cursor.close()
@@ -169,7 +169,7 @@ class UserController:
 
     # Marks existing user as archived
     @staticmethod
-    def archive(userId: int):
+    def archive(user_id: int):
         connection = None
         try:
             # connection = mysql.connector.connect(host="localhost", user=MYSQL_USER, password=MYSQL_PASSWORD, database="stocksimulator")
@@ -177,7 +177,7 @@ class UserController:
 
             cursor = connection.cursor()
 
-            cursor.execute(f"SELECT * FROM UserTable WHERE id={userId};")
+            cursor.execute(f"SELECT * FROM UserTable WHERE id={user_id};")
             row = cursor.fetchone()
             print("archive")
             print(row)
@@ -238,7 +238,7 @@ class UserController:
 
     # separate function
     @staticmethod
-    def validate_login(user: User, userId: str, password: str):
+    def validate_login(user: User, user_id: str, password: str):
         connection = None
         try:
             # connection = mysql.connector.connect(host="localhost", user=MYSQL_USER, password=MYSQL_PASSWORD, database="stocksimulator")
@@ -247,7 +247,7 @@ class UserController:
                 cursor = connection.cursor()
 
                 # get the salt and password
-                cursor.execute(f"SELECT password, salt FROM LoginData WHERE user_id = {userId}")
+                cursor.execute(f"SELECT password, salt FROM LoginData WHERE user_id = {user_id}")
                 row = cursor.fetchone()
 
                 dbPassword = row[0]

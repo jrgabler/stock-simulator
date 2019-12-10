@@ -24,5 +24,6 @@ class Stock():
 
     @classmethod
     def from_json(cls, json_str):
-        stockJson = json_str["quotes"]["quote"]
-        return Stock(stockJson["open"], stockJson["close"], stockJson["high"], stockJson["low"], 0.0, 0.0, 0.0, 0.0, stockJson["type"], stockJson["last"], stockJson["symbol"], stockJson["prevclose"])
+        stockJson = json_str.get("quotes").get("quote")
+        print(stockJson)
+        return Stock(stockJson["open"], stockJson["close"], stockJson["high"], stockJson["low"], stockJson["average_volume"], 0.0, 0.0, 0.0, stockJson["type"], stockJson["last"], stockJson["symbol"], stockJson["prevclose"])
