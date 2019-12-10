@@ -1,16 +1,9 @@
 # dependencies
 import mysql.connector, binascii, hashlib, os
-from dotenv import load_dotenv
-from pathlib import Path
 
 # LOCAL
 from models import User
-
-# MYSQL CONFIG
-env_path = Path('./config/') / '.env'
-load_dotenv(dotenv_path=env_path)
-MYSQL_USER = os.getenv("MYSQL_USER") or "root"
-MYSQL_PASS = os.getenv("MYSQL_PASSWORD") or ""
+from settings import MYSQL_USER, MYSQL_PASSWORD
 
 class UserController:
 
@@ -21,8 +14,7 @@ class UserController:
         connection = None
 
         try:
-            # connection = mysql.connector.connect(host="localhost", user=MYSQL_USER, password=MYSQL_PASSWORD, database="stocksimulator")
-            connection = mysql.connector.connect(host="localhost", user="root", password="", database="stocksimulator")
+            connection = mysql.connector.connect(host="localhost", user=MYSQL_USER, password=MYSQL_PASSWORD, database="stocksimulator")
             user = None
             cursor = connection.cursor()
 
@@ -49,8 +41,7 @@ class UserController:
     def addBalance(user_id: int, amount: float):
         connection = None
         try:
-            # connection = mysql.connector.connect(host="localhost", user=MYSQL_USER, password=MYSQL_PASSWORD, database="stocksimulator")
-            connection = mysql.connector.connect(host="localhost", user="root", password="", database="stocksimulator")
+            connection = mysql.connector.connect(host="localhost", user=MYSQL_USER, password=MYSQL_PASSWORD, database="stocksimulator")
 
             cursor = connection.cursor()
 
@@ -129,21 +120,17 @@ class UserController:
     def registration(username: str, password: str): #, email: str):
         connection = None
         try:
-            # connection = mysql.connector.connect(host="localhost", user=MYSQL_USER, password=MYSQL_PASSWORD, database="stocksimulator")
-            connection = mysql.connector.connect(host="localhost", user="root", password="", database="stocksimulator")
+            connection = mysql.connector.connect(host="localhost", user=MYSQL_USER, password=MYSQL_PASSWORD, database="stocksimulator")
 
             if connection.is_connected():
                 cursor = connection.cursor()
                 cursor.execute(f"SELECT * FROM UserTable WHERE username='{username}';") # TODO
                 row = cursor.fetchone()
-                print("registration")
                 print(row)
                 if(row is not None):
                     return {"Error": "Unable to create new user: Duplicate username"}   # TODO
 
-            # hashedPassword, salt = hash(password)
-                hashedPassword = "test123"
-                salt = "1"
+                hashedPassword, salt = hash(password)
 
                 cursor.execute(f"INSERT INTO UserTable(username) VALUES('{username}');")
                 cursor.execute(f"INSERT INTO LoginData(user_id, password, salt) VALUES((SELECT id FROM UserTable WHERE username='{username}'), '{hashedPassword}', '{salt}');")
@@ -172,8 +159,7 @@ class UserController:
     def archive(user_id: int):
         connection = None
         try:
-            # connection = mysql.connector.connect(host="localhost", user=MYSQL_USER, password=MYSQL_PASSWORD, database="stocksimulator")
-            connection = mysql.connector.connect(host="localhost", user="root", password="", database="stocksimulator")
+            connection = mysql.connector.connect(host="localhost", user=MYSQL_USER, password=MYSQL_PASSWORD, database="stocksimulator")
 
             cursor = connection.cursor()
 
@@ -208,8 +194,7 @@ class UserController:
     def login(username: str, password: str):
         connection = None
         try:
-            # connection = mysql.connector.connect(host="localhost", user=MYSQL_USER, password=MYSQL_PASSWORD, database="stocksimulator")
-            connection = mysql.connector.connect(host="localhost", user="root", password="", database="stocksimulator")
+            connection = mysql.connector.connect(host="localhost", user=MYSQL_USER, password=MYSQL_PASSWORD, database="stocksimulator")
 
             if connection.is_connected():
                 cursor = connection.cursor()
@@ -241,8 +226,7 @@ class UserController:
     def validate_login(user: User, user_id: str, password: str):
         connection = None
         try:
-            # connection = mysql.connector.connect(host="localhost", user=MYSQL_USER, password=MYSQL_PASSWORD, database="stocksimulator")
-            connection = mysql.connector.connect(host="localhost", user="root", password="", database="stocksimulator")
+            connection = mysql.connector.connect(host="localhost", user=MYSQL_USER, password=MYSQL_PASSWORD, database="stocksimulator")
             if connection.is_connected():
                 cursor = connection.cursor()
 
@@ -252,7 +236,9 @@ class UserController:
 
                 dbPassword = row[0]
                 salt = row[1]
-                hashedPassword = hash(password)
+
+                hashedPassword, salt = hash(password)
+                hashedPassword = salt + hashedPassword
 
                 if(hashedPassword == salt + dbPassword):
                     user.authenticate()
@@ -268,8 +254,7 @@ class UserController:
     def logout(user: User, tokenId: str):
         connection = None
         try:
-            # connection = mysql.connector.connect(host="localhost", user=MYSQL_USER, password=MYSQL_PASSWORD, database="stocksimulator")
-            connection = mysql.connector.connect(host="localhost", user="root", password="", database="stocksimulator")
+            connection = mysql.connector.connect(host="localhost", user=MYSQL_USER, password=MYSQL_PASSWORD, database="stocksimulator")
 
             cursor = connection.cursor()
 
@@ -297,8 +282,7 @@ class UserController:
     def tokenIsBlacklisted(jti: str):
         connection = None
         try:
-            # connection = mysql.connector.connect(host="localhost", user=MYSQL_USER, password=MYSQL_PASSWORD, database="stocksimulator")
-            connection = mysql.connector.connect(host="localhost", user="root", password="", database="stocksimulator")
+            connection = mysql.connector.connect(host="localhost", user=MYSQL_USER, password=MYSQL_PASSWORD, database="stocksimulator")
 
             cursor = connection.cursor()
 

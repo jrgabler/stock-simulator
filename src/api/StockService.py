@@ -19,9 +19,8 @@ class GetStock(Resource):
         mp = MarketProvider()
         stock = mp.getStock(data["stock_symbol"])
 
-        lastid = controller.insertStock(stock)
         controller = StockController()
-        controller.insertStock(stock)
+        lastid = controller.insertStock(stock)
 
         return json.loads(stock.to_json())
 

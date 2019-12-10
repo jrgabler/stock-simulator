@@ -1,17 +1,11 @@
 # dependencies
 import mysql.connector, os
-from dotenv import load_dotenv
-from pathlib import Path
 
 # LOCAL
 from Resources import MarketProvider
 from models.assets import Stock, Asset
 from models.User import User
-# MYSQL CONFIG
-env_path = Path('./config/') / '.env'
-load_dotenv(dotenv_path=env_path)
-MYSQL_USER = os.getenv("MYSQL_USER")
-MYSQL_PASS = os.getenv("MYSQL_PASSWORD")
+from settings import MYSQL_USER, MYSQL_PASSWORD
 
 class StockController:
 
@@ -24,7 +18,7 @@ class StockController:
         connection = None
         stockId = None
         try:
-            connection = mysql.connector.connect(host="localhost", user=MYSQL_USER, password=MYSQL_PASS, database="stocksimulator")
+            connection = mysql.connector.connect(host="localhost", user=MYSQL_USER, password=MYSQL_PASSWORDWORD, database="stocksimulator")
             cursor = connection.cursor()
 
             # if symbol exists in Stock table, update pricing from API
@@ -63,8 +57,7 @@ class StockController:
         stockId = insertStock(stock)
         connection = None
         try:
-            # connection = mysql.connector.connect(host="localhost", user=MYSQL_USER, password=MYSQL_PASS, database="stocksimulator")
-            connection = mysql.connector.connect(host="localhost", user="root", password="", database="stocksimulator")
+            connection = mysql.connector.connect(host="localhost", user=MYSQL_USER, password=MYSQL_PASSWORD, database="stocksimulator")
             cursor = connection.cursor()
 
             cursor.execute(f"INSERT INTO WatchList(stock_id, user_id) VALUES({stockId}, {user_id});")
@@ -84,8 +77,7 @@ class StockController:
     def removeWatch(stockId: int, user_id: int):
         connection = None
         try:
-            connection = mysql.connector.connect(host="localhost", user="root", password="", database="stocksimulator")
-            # connection = mysql.connector.connect(host="localhost", user=MYSQL_USER, password=MYSQL_PASS, database="stocksimulator")
+            connection = mysql.connector.connect(host="localhost", user=MYSQL_USER, password=MYSQL_PASSWORD, database="stocksimulator")
             cursor = connection.cursor()
 
             cursor.execute(f"DELETE FROM WatchList WHERE stock_id={stockId};")
@@ -103,7 +95,7 @@ class StockController:
     #     connection = None
     #     try:
     #         connection = mysql.connector.connect(host="localhost", user="root", password="", database="stocksimulator")
-    #         # connection = mysql.connector.connect(host="localhost", user=MYSQL_USER, password=MYSQL_PASS, database="stocksimulator")
+    #         # connection = mysql.connector.connect(host="localhost", user=MYSQL_USER, password=MYSQL_PASSWORD, database="stocksimulator")
     #         cursor = connection.cursor()
     #
     #         cursor.execute(f"SELECT stock_id FROM WatchList WHERE user_id={user_id};")
@@ -133,8 +125,7 @@ class StockController:
     def purchaseAsset(stock: Stock, user: User):
         connection = None
         try:
-            # connection = mysql.connector.connect(host="localhost", user=MYSQL_USER, password=MYSQL_PASS, database="stocksimulator")
-            connection = mysql.connector.connect(host="localhost", user="root", password="", database="stocksimulator")
+            connection = mysql.connector.connect(host="localhost", user=MYSQL_USER, password=MYSQL_PASSWORD, database="stocksimulator")
             cursor = connection.cursor()
             # there's a lot to do here
             # we need to get the purchase price

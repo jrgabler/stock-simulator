@@ -4,15 +4,11 @@ from flask import Flask, render_template, redirect, url_for, request, make_respo
 from flask_restful import Api
 from flask_jwt_extended import JWTManager
 from guppy import hpy
-from dotenv import load_dotenv
-from pathlib import Path
 
 # Local
 from api import UserService, StockService
 from controllers.UserController import UserController
-
-env_path = Path('./config/') / '.env'
-load_dotenv(dotenv_path=env_path)
+from settings import JWT_SECRET_KEY
 
 # refactor into config.py file
 VIEW_DIRECTORY = "./views"
@@ -37,7 +33,7 @@ USER_COOKIE = 'user_info'
 
 app = Flask(__name__, template_folder=TEMPLATE_FOLDER, static_folder=STATIC_FOLDER)
 
-app.config["JWT_SECRET_KEY"] = os.getenv("JWT_SECRET_KEY")
+app.config["JWT_SECRET_KEY"] = JWT_SECRET_KEY
 app.config["JWT_BLACKLIST_ENABLED"] = True
 app.config["JWT_BLACKLIST_TOKEN_CHECKS"] = ["access", "refresh"]
 
@@ -97,7 +93,7 @@ def get_header(request):
 
     return {'Authorization': 'Bearer ' + access_token}
 
-def set_tokens_redirect(request, json_response, username, page):
+def set_tokens_redirect(request, json_response, page, username):
     response = make_response(redirect(url_for(page)))
     response.set_cookie(USER_COOKIE, username)
     response.set_cookie(ACCESS_COOKIE, json_response.get("access_token"), max_age=900)
@@ -121,7 +117,7 @@ def login():
         json_response = response.json()
 
         if json_response.get("access_token"):
-            return set_tokens_redirect(request, json_response, "index")
+            return set_tokens_redirect(request, json_response, "index", request.form["username"])
 
         return render_template("login/login.html.j2", error=json_response.get("message"))
 
@@ -137,7 +133,7 @@ def register():
         json_response = response.json()
 
         if json_response.get("access_token"):
-            return set_tokens_redirect(request, json_response, "index")
+            return set_tokens_redirect(request, json_response, "index", request.form["username"])
 
         return render_template("login/register.html.j2", error=json_response.get("message"))
 
@@ -145,8 +141,9 @@ def register():
 
 @app.route("/logout")
 def logout():
-    requests.post(LOCAL_URL + API_LOGOUT)
-    requests.post(LOCAL_URL + API_LOGOUT_REFRESH)
+    header = get_header(request)
+    requests.post(LOCAL_URL + API_LOGOUT, headers=header)
+    requests.post(LOCAL_URL + API_LOGOUT_REFRESH, headers=header)
 
     response = make_response(redirect(url_for('login')))
     response.delete_cookie(USER_COOKIE)
