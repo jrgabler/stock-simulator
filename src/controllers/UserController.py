@@ -139,11 +139,9 @@ class UserController:
                 print("registration")
                 print(row)
                 if(row is not None):
-                    return {"Error": "Unable to create new user: Duplicate username"}   # TODO
+                    return {"message": "Unable to create new user: Duplicate username"}   # TODO
 
-            # hashedPassword, salt = hash(password)
-                hashedPassword = "test123"
-                salt = "1"
+                hashedPassword, salt = hash(password)
 
                 cursor.execute(f"INSERT INTO UserTable(username) VALUES('{username}');")
                 cursor.execute(f"INSERT INTO LoginData(user_id, password, salt) VALUES((SELECT id FROM UserTable WHERE username='{username}'), '{hashedPassword}', '{salt}');")
@@ -151,11 +149,10 @@ class UserController:
                 # verify
                 cursor.execute(f"SELECT * FROM UserTable WHERE username='{username}';") # TODO
                 row = cursor.fetchone()
-                print("registration pt2")
                 print(row)
 
                 if(row is None):
-                    return {"Error": "Something went wrong, please try again."}
+                    return {"message": "Something went wrong, please try again."}
 
                 connection.commit()
                 cursor.close()
@@ -225,8 +222,9 @@ class UserController:
                 row = cursor.fetchone()
                 dbPassword = row[0]
                 salt = row[1]
+                hashedPassword = hash(password)
 
-                if(password == salt + dbPassword):
+                if(hashedPassword == salt + dbPassword):
                     user = User.User(row[0], username)
                     user.authenticate()
                     return True
