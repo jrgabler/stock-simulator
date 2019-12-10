@@ -10,11 +10,12 @@ RUN pip install -r ./requirements.txt
 
 COPY ./main.py .
 COPY ./api ./api
-COPY ./config ./config
 COPY ./controllers ./controllers
 COPY ./models ./models
 COPY ./Resources ./Resources
 COPY ./view ./view
 COPY ./views ./views
+COPY ./settings.py .
+COPY ./.env .
 
 CMD ["python", "./main.py"]

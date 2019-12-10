@@ -1,5 +1,6 @@
 from flask_restful import Resource, reqparse
 from flask_jwt_extended import (create_access_token, create_refresh_token, jwt_required, jwt_refresh_token_required, get_jwt_identity, get_raw_jwt)
+import json
 
 # LOCAL
 from controllers.UserController import UserController
@@ -55,6 +56,14 @@ class UserLogin(Resource):
 
         except:
             return {"message": "Something went wrong, please try again"}
+
+class UserInfo(Resource):
+    @jwt_required
+    def post(self):
+        data = parser.parse_args()
+        userController = UserController()
+        user_info = userController.findByUsername(data["username"])
+        return user_info.__dict__
 
 class UserLogoutAccess(Resource):
     @jwt_required

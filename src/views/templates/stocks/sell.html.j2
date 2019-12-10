@@ -13,13 +13,11 @@
 {% macro transactionForm() -%}
   <form method="post" action="{{ url_for('manage_stock')}}">
     <div class="form-container">
-      <h2>Login</h2>
+      {# }<!-- {% if data.message %}
+        <div class="error">{{ data.message }}</div>
+      {% endif %} --> #}
 
-      {% if error %}
-        <div class="error">{{ error }}</div>
-      {% endif %}
-
-       <label for="stock_symbol"><b>Username</b></label>
+       <label for="stock_symbol"><b>Stock Symbol</b></label>
        <input type="text" placeholder="Stock Symbol ID" name="stock_symbol" maxlength="5" required>
 
        <label for="quantity"><b>Quantity</b></label>
