@@ -222,7 +222,8 @@ class UserController:
                 row = cursor.fetchone()
                 dbPassword = row[0]
                 salt = row[1]
-                hashedPassword = hash(password)
+                hashedPassword, salt = hash(password)
+                hashedPassword = salt + hashedPassword
 
                 if(hashedPassword == salt + dbPassword):
                     user = User.User(row[0], username)
