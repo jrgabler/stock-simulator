@@ -52,9 +52,9 @@ class StockController:
             return stockId
 
     # Add a reference to Stock table to Watchlist associated with user_id
-    @staticmethod
-    def addWatch(stock: Stock, user_id: int):
-        stockId = insertStock(stock)
+    @classmethod
+    def addWatch(cls, stock: Stock, user_id: int):
+        stockId = cls.insertStock(stock)
         connection = None
         try:
             connection = mysql.connector.connect(host="localhost", user=MYSQL_USER, password=MYSQL_PASSWORD, database="stocksimulator")
